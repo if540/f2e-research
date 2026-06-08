@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Skills 熱門排行 — 2026-06-08</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #21262d;
+      --border: #30363d;
+      --accent-blue: #58a6ff;
+      --accent-purple: #bc8cff;
+      --accent-green: #3fb950;
+      --accent-orange: #f0883e;
+      --accent-pink: #ff7b72;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --claude: #c084fc;
+      --copilot: #3b82f6;
+      --codex: #10b981;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1c2128 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(88,166,255,.12), transparent);
+      pointer-events: none;
+    }
+    .header-meta {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      margin-bottom: .75rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .25rem .65rem;
+      border-radius: 999px;
+      border: 1px solid;
+    }
+    .badge-date   { color: var(--accent-blue);   border-color: rgba(88,166,255,.35);   background: rgba(88,166,255,.08); }
+    .badge-report { color: var(--accent-purple);  border-color: rgba(188,140,255,.35);  background: rgba(188,140,255,.08); }
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      margin-bottom: .5rem;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: .95rem;
+    }
+
+    /* ─── Platform Legend ─────────────────────────── */
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 1rem 1.5rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .dot-claude  { background: var(--claude); }
+    .dot-copilot { background: var(--copilot); }
+    .dot-codex   { background: var(--codex); }
+
+    /* ─── Summary Cards ───────────────────────────── */
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      text-align: center;
+    }
+    .card-num {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: .3rem;
+    }
+    .card-label { color: var(--text-muted); font-size: .82rem; }
+
+    /* ─── Section Title ───────────────────────────── */
+    .section-title {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: .5rem 1.5rem 1rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      border-top: 1px solid var(--border);
+      margin-top: .5rem;
+    }
+
+    /* ─── Ranking Table ───────────────────────────── */
+    .table-wrap {
+      max-width: 1100px;
+      margin: 0 auto 2rem;
+      padding: 0 1.5rem;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+    thead tr {
+      background: var(--surface2);
+      border-bottom: 2px solid var(--border);
+    }
+    th {
+      padding: .8rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      white-space: nowrap;
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .15s;
+    }
+    tbody tr:hover { background: rgba(255,255,255,.03); }
+    td { padding: .85rem 1rem; vertical-align: top; }
+
+    .rank {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-muted);
+      min-width: 36px;
+    }
+    .rank.top1 { color: #ffd700; }
+    .rank.top2 { color: #c0c0c0; }
+    .rank.top3 { color: #cd7f32; }
+
+    .skill-name {
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .cmd {
+      display: inline-block;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: .78rem;
+      background: rgba(110,118,129,.15);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: .1rem .4rem;
+      color: var(--accent-blue);
+      margin-top: .2rem;
+    }
+
+    .platform-tag {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 700;
+      padding: .15rem .55rem;
+      border-radius: 999px;
+      border: 1px solid;
+      white-space: nowrap;
+    }
+    .tag-claude  { color: var(--claude);  border-color: rgba(192,132,252,.4); background: rgba(192,132,252,.1); }
+    .tag-copilot { color: var(--copilot); border-color: rgba(59,130,246,.4);  background: rgba(59,130,246,.1); }
+    .tag-codex   { color: var(--codex);   border-color: rgba(16,185,129,.4);  background: rgba(16,185,129,.1); }
+
+    .desc { color: var(--text-muted); font-size: .83rem; line-height: 1.55; }
+    .use-case { color: var(--accent-orange); font-size: .78rem; margin-top: .3rem; }
+
+    .heat {
+      display: flex;
+      gap: 2px;
+      align-items: center;
+      white-space: nowrap;
+    }
+    .heat-bar {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border);
+      width: 70px;
+      overflow: hidden;
+    }
+    .heat-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+    }
+    .heat-num {
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      min-width: 30px;
+      text-align: right;
+    }
+
+    .trend {
+      font-size: .8rem;
+      font-weight: 700;
+    }
+    .trend-up   { color: var(--accent-green); }
+    .trend-new  { color: var(--accent-orange); }
+    .trend-hot  { color: var(--accent-pink); }
+
+    /* ─── Highlight Cards ─────────────────────────── */
+    .highlights {
+      max-width: 1100px;
+      margin: 0 auto 2rem;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    .hl-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      border-left: 3px solid;
+    }
+    .hl-card.claude-hl  { border-left-color: var(--claude); }
+    .hl-card.copilot-hl { border-left-color: var(--copilot); }
+    .hl-card.codex-hl   { border-left-color: var(--codex); }
+    .hl-title {
+      font-weight: 700;
+      font-size: .95rem;
+      margin-bottom: .6rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .hl-icon { font-size: 1.1rem; }
+    .hl-body { color: var(--text-muted); font-size: .83rem; line-height: 1.6; }
+    .hl-body strong { color: var(--text); }
+
+    /* ─── Footer ──────────────────────────────────── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--text-muted);
+      font-size: .78rem;
+    }
+    footer a { color: var(--accent-blue); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .heat-bar { width: 40px; }
+      td, th { padding: .65rem .6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Header ─────────────────────────────────────────── -->
+<header>
+  <div class="header-meta">
+    <span class="badge badge-date">2026-06-08</span>
+    <span class="badge badge-report">Daily AI Skills Report</span>
+  </div>
+  <h1>熱門 AI Skills &amp; 自動化指令排行</h1>
+  <p class="subtitle">Claude Code · GitHub Copilot · OpenAI Codex — 今日最受歡迎技能與自動化指令綜合排行</p>
+</header>
+
+<!-- ─── Platform Legend ─────────────────────────────────── -->
+<div class="legend">
+  <div class="legend-item"><span class="dot dot-claude"></span> Claude Code</div>
+  <div class="legend-item"><span class="dot dot-copilot"></span> GitHub Copilot</div>
+  <div class="legend-item"><span class="dot dot-codex"></span> OpenAI Codex</div>
+</div>
+
+<!-- ─── Summary Cards ──────────────────────────────────── -->
+<div class="summary">
+  <div class="card">
+    <div class="card-num" style="color:var(--accent-blue)">20</div>
+    <div class="card-label">精選 Skills</div>
+  </div>
+  <div class="card">
+    <div class="card-num" style="color:var(--claude)">3</div>
+    <div class="card-label">平台覆蓋</div>
+  </div>
+  <div class="card">
+    <div class="card-num" style="color:var(--accent-green)">2,300<span style="font-size:1rem">+</span></div>
+    <div class="card-label">Claude Skills 生態系</div>
+  </div>
+  <div class="card">
+    <div class="card-num" style="color:var(--accent-orange)">↑ 6</div>
+    <div class="card-label">今日新晉熱門</div>
+  </div>
+</div>
+
+<!-- ─── Platform Highlights ────────────────────────────── -->
+<div class="section-title">平台重點觀察</div>
+<div class="highlights">
+  <div class="hl-card claude-hl">
+    <div class="hl-title"><span class="hl-icon">⚡</span> Claude Code</div>
+    <div class="hl-body">
+      Skills 生態系從空白到 <strong>2,300+ 免費技能</strong>，成長只花 6 個月。
+      <strong>/review</strong>、<strong>/plan</strong>、<strong>/commit</strong> 是當前使用率最高的三大指令。
+      自訂 hooks 機制讓團隊能將 CI/CD 流程無縫嵌入 Claude Code 工作流程。
+    </div>
+  </div>
+  <div class="hl-card copilot-hl">
+    <div class="hl-title"><span class="hl-icon">🤖</span> GitHub Copilot</div>
+    <div class="hl-body">
+      Agent Skills 成為 <strong>可重用 AI 工作流程</strong>的核心機制，跨 VS Code、CLI、雲端代理統一運作。
+      <strong>acquire-codebase-knowledge</strong> 與 <strong>code-tour</strong> 在大型團隊 onboarding 場景爆發成長。
+    </div>
+  </div>
+  <div class="hl-card codex-hl">
+    <div class="hl-title"><span class="hl-icon">🛠</span> OpenAI Codex</div>
+    <div class="hl-body">
+      <strong>codex exec</strong> 成為 CI/CD 腳本化首選，可完成 <strong>1,000+ 連續 tool calls</strong> 不中斷。
+      GUI 桌面自動化（讀取螢幕 + 操作應用）是本週最受討論的新能力。
+    </div>
+  </div>
+</div>
+
+<!-- ─── Main Ranking Table ──────────────────────────────── -->
+<div class="section-title">TOP 20 熱門排行</div>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>技能 / 指令</th>
+        <th>平台</th>
+        <th>說明</th>
+        <th>熱度</th>
+        <th>趨勢</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- 1 -->
+      <tr>
+        <td><span class="rank top1">01</span></td>
+        <td>
+          <div class="skill-name">/review</div>
+          <span class="cmd">/review</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">審查變更程式碼的 Bug、安全漏洞與風格問題。支援 <code>--comment</code> 直接在 PR 留評論，或 <code>--fix</code> 自動套用修正。</div>
+          <div class="use-case">▶ Code review 自動化、PR 品質把關</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:100%"></div></div><span class="heat-num">100</span></div></td>
+        <td><span class="trend trend-hot">🔥 爆紅</span></td>
+      </tr>
+
+      <!-- 2 -->
+      <tr>
+        <td><span class="rank top2">02</span></td>
+        <td>
+          <div class="skill-name">Agent Skills</div>
+          <span class="cmd">/&lt;skill-name&gt;</span>
+        </td>
+        <td><span class="platform-tag tag-copilot">Copilot</span></td>
+        <td>
+          <div class="desc">將可重用開發流程（如「建立 React 元件」、「遷移舊 endpoint」）封裝成一鍵指令，跨 VS Code、CLI、雲端代理統一觸發。</div>
+          <div class="use-case">▶ 團隊標準化工作流、快速 onboarding</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:95%"></div></div><span class="heat-num">95</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 3 -->
+      <tr>
+        <td><span class="rank top3">03</span></td>
+        <td>
+          <div class="skill-name">codex exec</div>
+          <span class="cmd">codex exec / codex e</span>
+        </td>
+        <td><span class="platform-tag tag-codex">Codex</span></td>
+        <td>
+          <div class="desc">無人值守的腳本化/CI 執行模式，一次可完成 1,000+ 連續 tool calls。適合 changelog 自動更新、issue 排序、PR 前審查。</div>
+          <div class="use-case">▶ CI/CD 自動化、無監督批次任務</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:92%"></div></div><span class="heat-num">92</span></div></td>
+        <td><span class="trend trend-hot">🔥 爆紅</span></td>
+      </tr>
+
+      <!-- 4 -->
+      <tr>
+        <td><span class="rank">04</span></td>
+        <td>
+          <div class="skill-name">/plan</div>
+          <span class="cmd">/plan</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">在寫程式前先探索程式庫、辨識受影響檔案並提出實作計畫。對複雜變更避免「先射後瞄」問題。</div>
+          <div class="use-case">▶ 大型重構前期規劃、架構決策輔助</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:88%"></div></div><span class="heat-num">88</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 5 -->
+      <tr>
+        <td><span class="rank">05</span></td>
+        <td>
+          <div class="skill-name">acquire-codebase-knowledge</div>
+          <span class="cmd">/acquire-codebase-knowledge</span>
+        </td>
+        <td><span class="platform-tag tag-copilot">Copilot</span></td>
+        <td>
+          <div class="desc">自動掃描、映射並記錄整個程式庫結構，包含掃描工具與模板，為新成員或 AI 代理快速建立知識地圖。</div>
+          <div class="use-case">▶ 新人 onboarding、大型 monorepo 導覽</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:85%"></div></div><span class="heat-num">85</span></div></td>
+        <td><span class="trend trend-new">★ 新晉</span></td>
+      </tr>
+
+      <!-- 6 -->
+      <tr>
+        <td><span class="rank">06</span></td>
+        <td>
+          <div class="skill-name">/commit</div>
+          <span class="cmd">/commit</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">從暫存變更自動生成符合 repo 風格的 commit message，消除手寫訊息的摩擦，保持 git log 可讀性。</div>
+          <div class="use-case">▶ 版本控制自動化、commit 訊息標準化</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:84%"></div></div><span class="heat-num">84</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 7 -->
+      <tr>
+        <td><span class="rank">07</span></td>
+        <td>
+          <div class="skill-name">/security-audit</div>
+          <span class="cmd">/security-audit</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">深度安全審查：注入向量、Auth bypass、程式碼中的 secrets、依賴漏洞。比 /review 更全面且專注資安。</div>
+          <div class="use-case">▶ 上線前安全檢查、OWASP Top 10 掃描</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:80%"></div></div><span class="heat-num">80</span></div></td>
+        <td><span class="trend trend-hot">🔥 爆紅</span></td>
+      </tr>
+
+      <!-- 8 -->
+      <tr>
+        <td><span class="rank">08</span></td>
+        <td>
+          <div class="skill-name">codex cloud</div>
+          <span class="cmd">codex cloud</span>
+        </td>
+        <td><span class="platform-tag tag-codex">Codex</span></td>
+        <td>
+          <div class="desc">不離開終端即可分流、啟動雲端 Codex 任務，以互動式選擇器瀏覽進行中/已完成任務，並將結果套用至本地專案。</div>
+          <div class="use-case">▶ 雲端代理任務管理、本地雲端混合開發</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:78%"></div></div><span class="heat-num">78</span></div></td>
+        <td><span class="trend trend-new">★ 新晉</span></td>
+      </tr>
+
+      <!-- 9 -->
+      <tr>
+        <td><span class="rank">09</span></td>
+        <td>
+          <div class="skill-name">code-tour</div>
+          <span class="cmd">/code-tour</span>
+        </td>
+        <td><span class="platform-tag tag-copilot">Copilot</span></td>
+        <td>
+          <div class="desc">建立連結至特定檔案與行號的導覽路線，支援 20 種開發者人設，讓 onboarding 文件與知識傳遞更有結構。</div>
+          <div class="use-case">▶ 技術文件、新人導覽、知識傳承</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:74%"></div></div><span class="heat-num">74</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 10 -->
+      <tr>
+        <td><span class="rank">10</span></td>
+        <td>
+          <div class="skill-name">/test</div>
+          <span class="cmd">/test</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">分析特定檔案或函式的實作與邊緣案例，自動生成符合專案測試框架（Jest、Pytest 等）的測試案例。</div>
+          <div class="use-case">▶ TDD 加速、覆蓋率提升</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:72%"></div></div><span class="heat-num">72</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 11 -->
+      <tr>
+        <td><span class="rank">11</span></td>
+        <td>
+          <div class="skill-name">architecture-blueprint-generator</div>
+          <span class="cmd">/architecture-blueprint-generator</span>
+        </td>
+        <td><span class="platform-tag tag-copilot">Copilot</span></td>
+        <td>
+          <div class="desc">自動偵測技術棧與架構模式，生成視覺化架構圖並記錄實作模式。支援微服務、monolith 等多種架構風格。</div>
+          <div class="use-case">▶ 系統架構文件、技術棧評估</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:69%"></div></div><span class="heat-num">69</span></div></td>
+        <td><span class="trend trend-new">★ 新晉</span></td>
+      </tr>
+
+      <!-- 12 -->
+      <tr>
+        <td><span class="rank">12</span></td>
+        <td>
+          <div class="skill-name">/simplify</div>
+          <span class="cmd">/simplify</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">掃描最近變更的程式碼，找出不必要的複雜度、重複邏輯、過早的抽象化，並直接套用修正。</div>
+          <div class="use-case">▶ 重構、技術債清理、程式碼品質提升</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:66%"></div></div><span class="heat-num">66</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 13 -->
+      <tr>
+        <td><span class="rank">13</span></td>
+        <td>
+          <div class="skill-name">GUI 桌面自動化</div>
+          <span class="cmd">codex (computer use)</span>
+        </td>
+        <td><span class="platform-tag tag-codex">Codex</span></td>
+        <td>
+          <div class="desc">Codex 現可讀取螢幕內容並操作任意桌面應用程式，解鎖 GUI 測試、端到端 QA 流程與桌面應用自動化。</div>
+          <div class="use-case">▶ E2E 測試自動化、GUI 回歸測試</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:64%"></div></div><span class="heat-num">64</span></div></td>
+        <td><span class="trend trend-new">★ 新晉</span></td>
+      </tr>
+
+      <!-- 14 -->
+      <tr>
+        <td><span class="rank">14</span></td>
+        <td>
+          <div class="skill-name">/architect</div>
+          <span class="cmd">/architect</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">專注系統設計：映射資料流並在實作前提出架構方案。避免 AI 直接寫程式而忽略架構一致性的問題。</div>
+          <div class="use-case">▶ 新功能設計、API 設計、系統規劃</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:62%"></div></div><span class="heat-num">62</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 15 -->
+      <tr>
+        <td><span class="rank">15</span></td>
+        <td>
+          <div class="skill-name">agent-governance</div>
+          <span class="cmd">/agent-governance</span>
+        </td>
+        <td><span class="platform-tag tag-copilot">Copilot</span></td>
+        <td>
+          <div class="desc">為呼叫外部工具的 AI Agent 系統加入治理、安全性與信任控制，包含語意意圖分類與稽核軌跡。</div>
+          <div class="use-case">▶ AI 代理治理、企業安全合規</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:59%"></div></div><span class="heat-num">59</span></div></td>
+        <td><span class="trend trend-new">★ 新晉</span></td>
+      </tr>
+
+      <!-- 16 -->
+      <tr>
+        <td><span class="rank">16</span></td>
+        <td>
+          <div class="skill-name">/create-pr</div>
+          <span class="cmd">/create-pr</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">使用完整 diff 上下文自動建立 PR，包含結構化標題、摘要與測試計畫，大幅降低 PR 建立摩擦。</div>
+          <div class="use-case">▶ PR 自動化、開發流程加速</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:56%"></div></div><span class="heat-num">56</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 17 -->
+      <tr>
+        <td><span class="rank">17</span></td>
+        <td>
+          <div class="skill-name">ai-ready</div>
+          <span class="cmd">/ai-ready</span>
+        </td>
+        <td><span class="platform-tag tag-copilot">Copilot</span></td>
+        <td>
+          <div class="desc">將 repo 轉化為 AI 協作優化環境，自動生成設定檔、CI 工作流程與對應技術棧的 instruction 文件。</div>
+          <div class="use-case">▶ Repo AI 就緒化、Copilot 最佳化設定</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:53%"></div></div><span class="heat-num">53</span></div></td>
+        <td><span class="trend trend-new">★ 新晉</span></td>
+      </tr>
+
+      <!-- 18 -->
+      <tr>
+        <td><span class="rank">18</span></td>
+        <td>
+          <div class="skill-name">/test-coverage</div>
+          <span class="cmd">/test-coverage</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">辨識未測試的程式碼路徑並生成對應測試，配合專案測試框架風格，提升覆蓋率報告的實際有效性。</div>
+          <div class="use-case">▶ 覆蓋率補強、死角程式碼偵測</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:49%"></div></div><span class="heat-num">49</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 19 -->
+      <tr>
+        <td><span class="rank">19</span></td>
+        <td>
+          <div class="skill-name">MCP 工具整合</div>
+          <span class="cmd">codex --mcp / Claude MCP</span>
+        </td>
+        <td>
+          <span class="platform-tag tag-codex">Codex</span>
+          <span class="platform-tag tag-claude" style="margin-left:4px">Claude Code</span>
+        </td>
+        <td>
+          <div class="desc">透過 Model Context Protocol 接入第三方工具與資料來源，Codex 與 Claude Code 均已支援，成為代理工具整合的 USB-C 標準。</div>
+          <div class="use-case">▶ 資料庫連接、外部 API 整合、工具擴充</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:46%"></div></div><span class="heat-num">46</span></div></td>
+        <td><span class="trend trend-hot">🔥 爆紅</span></td>
+      </tr>
+
+      <!-- 20 -->
+      <tr>
+        <td><span class="rank">20</span></td>
+        <td>
+          <div class="skill-name">/document</div>
+          <span class="cmd">/document</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">為檔案、模組或函式生成文件，自動配合專案既有文件風格（JSDoc、docstring、README 等）。</div>
+          <div class="use-case">▶ API 文件自動化、技術債文件補強</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:42%"></div></div><span class="heat-num">42</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- ─── Footer ─────────────────────────────────────────── -->
+<footer>
+  <p>資料來源：
+    <a href="https://code.claude.com/docs/en/skills" target="_blank">Claude Code Docs</a> ·
+    <a href="https://docs.github.com/en/copilot/concepts/agents/about-agent-skills" target="_blank">GitHub Copilot Agent Skills</a> ·
+    <a href="https://developers.openai.com/codex/cli" target="_blank">OpenAI Codex CLI</a> ·
+    <a href="https://toolradar.com/blog/best-claude-code-skills-2026" target="_blank">Toolradar 2026</a>
+  </p>
+  <p style="margin-top:.5rem">報告生成時間：2026-06-08 ·
+    <a href="https://if540.github.io/f2e-research/" target="_blank">if540/f2e-research</a>
+  </p>
+</footer>
+
+</body>
+</html>
