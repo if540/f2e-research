@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Skills 熱門排行 — 2026-06-09</title>
+  <style>
+    :root {
+      --bg:           #0d1117;
+      --surface:      #161b22;
+      --surface2:     #21262d;
+      --border:       #30363d;
+      --accent-blue:  #58a6ff;
+      --accent-purple:#bc8cff;
+      --accent-green: #3fb950;
+      --accent-orange:#f0883e;
+      --accent-pink:  #ff7b72;
+      --accent-yellow:#e3b341;
+      --text:         #e6edf3;
+      --text-muted:   #8b949e;
+      --claude:       #c084fc;
+      --copilot:      #3b82f6;
+      --codex:        #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ──────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1c2128 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(88,166,255,.13), transparent);
+      pointer-events: none;
+    }
+    .header-meta {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: .8rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .25rem .65rem;
+      border-radius: 999px;
+      border: 1px solid;
+    }
+    .badge-date   { color: var(--accent-blue);   border-color: rgba(88,166,255,.35);   background: rgba(88,166,255,.08); }
+    .badge-report { color: var(--accent-purple);  border-color: rgba(188,140,255,.35);  background: rgba(188,140,255,.08); }
+    .badge-time   { color: var(--accent-green);   border-color: rgba(63,185,80,.35);    background: rgba(63,185,80,.08);  font-family: monospace; }
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      margin-bottom: .5rem;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-muted); font-size: .95rem; }
+
+    /* ─── Quick Filter Bar ────────────────────────── */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: .6rem;
+      padding: .9rem 1.5rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .filter-label { font-size: .72rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin-right: .3rem; }
+    .filter-btn {
+      font-size: .74rem;
+      font-weight: 700;
+      padding: .28rem .75rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all .18s;
+      letter-spacing: .03em;
+    }
+    .filter-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: rgba(88,166,255,.08); }
+    .filter-btn.active { background: rgba(88,166,255,.15); border-color: var(--accent-blue); color: var(--accent-blue); }
+    .filter-btn.active.f-claude   { background: rgba(192,132,252,.15); border-color: var(--claude);  color: var(--claude); }
+    .filter-btn.active.f-copilot  { background: rgba(59,130,246,.15);  border-color: var(--copilot); color: var(--copilot); }
+    .filter-btn.active.f-codex    { background: rgba(16,185,129,.15);  border-color: var(--codex);   color: var(--codex); }
+    .filter-btn.active.f-new      { background: rgba(240,136,62,.15);  border-color: var(--accent-orange); color: var(--accent-orange); }
+    .filter-divider { width: 1px; height: 18px; background: var(--border); margin: 0 .2rem; }
+
+    /* ─── Platform Legend ─────────────────────────── */
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: .7rem 1.5rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .legend-item { display: flex; align-items: center; gap: .5rem; font-size: .82rem; font-weight: 600; color: var(--text-muted); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-claude  { background: var(--claude); }
+    .dot-copilot { background: var(--copilot); }
+    .dot-codex   { background: var(--codex); }
+
+    /* ─── Summary Cards ───────────────────────────── */
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      padding: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.4rem; text-align: center; }
+    .card-num { font-size: 2rem; font-weight: 700; line-height: 1; margin-bottom: .3rem; }
+    .card-label { color: var(--text-muted); font-size: .82rem; }
+
+    /* ─── Section Title ───────────────────────────── */
+    .section-title {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: .5rem 1.5rem 1rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      border-top: 1px solid var(--border);
+      margin-top: .5rem;
+    }
+
+    /* ─── Highlight Cards ─────────────────────────── */
+    .highlights {
+      max-width: 1100px;
+      margin: 0 auto 1.5rem;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    .hl-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.4rem; border-left: 3px solid; }
+    .hl-card.claude-hl  { border-left-color: var(--claude); }
+    .hl-card.copilot-hl { border-left-color: var(--copilot); }
+    .hl-card.codex-hl   { border-left-color: var(--codex); }
+    .hl-title { font-weight: 700; font-size: .95rem; margin-bottom: .6rem; display: flex; align-items: center; gap: .5rem; }
+    .hl-icon { font-size: 1.1rem; }
+    .hl-body { color: var(--text-muted); font-size: .83rem; line-height: 1.65; }
+    .hl-body strong { color: var(--text); }
+
+    /* ─── Ranking Table ───────────────────────────── */
+    .table-wrap { max-width: 1100px; margin: 0 auto 2rem; padding: 0 1.5rem; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    thead tr { background: var(--surface2); border-bottom: 2px solid var(--border); }
+    th { padding: .8rem 1rem; text-align: left; font-weight: 600; color: var(--text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:hover { background: rgba(255,255,255,.03); }
+    td { padding: .85rem 1rem; vertical-align: top; }
+
+    .rank { font-weight: 700; font-size: 1rem; color: var(--text-muted); min-width: 36px; display: block; }
+    .rank.top1 { color: #ffd700; }
+    .rank.top2 { color: #c0c0c0; }
+    .rank.top3 { color: #cd7f32; }
+
+    .skill-name { font-weight: 700; font-size: .95rem; color: var(--text); white-space: nowrap; }
+    .cmd {
+      display: inline-block;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: .78rem;
+      background: rgba(110,118,129,.15);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: .1rem .4rem;
+      color: var(--accent-blue);
+      margin-top: .2rem;
+    }
+    .new-badge {
+      display: inline-block;
+      font-size: .62rem;
+      font-weight: 700;
+      padding: .08rem .38rem;
+      border-radius: 4px;
+      background: rgba(240,136,62,.18);
+      color: var(--accent-orange);
+      border: 1px solid rgba(240,136,62,.4);
+      margin-left: 5px;
+      vertical-align: middle;
+      letter-spacing: .04em;
+    }
+
+    .platform-tag { display: inline-block; font-size: .7rem; font-weight: 700; padding: .15rem .55rem; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+    .tag-claude  { color: var(--claude);  border-color: rgba(192,132,252,.4); background: rgba(192,132,252,.1); }
+    .tag-copilot { color: var(--copilot); border-color: rgba(59,130,246,.4);  background: rgba(59,130,246,.1); }
+    .tag-codex   { color: var(--codex);   border-color: rgba(16,185,129,.4);  background: rgba(16,185,129,.1); }
+
+    .desc { color: var(--text-muted); font-size: .83rem; line-height: 1.55; }
+    .use-case { color: var(--accent-orange); font-size: .78rem; margin-top: .3rem; }
+
+    .heat { display: flex; gap: 4px; align-items: center; white-space: nowrap; }
+    .heat-bar { height: 6px; border-radius: 3px; background: var(--border); width: 70px; overflow: hidden; }
+    .heat-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); }
+    .heat-num { font-size: .78rem; font-weight: 700; color: var(--text-muted); min-width: 30px; text-align: right; }
+
+    .trend { font-size: .8rem; font-weight: 700; }
+    .trend-up     { color: var(--accent-green); }
+    .trend-new    { color: var(--accent-orange); }
+    .trend-hot    { color: var(--accent-pink); }
+    .trend-viral  { color: var(--accent-yellow); }
+    .trend-steady { color: var(--text-muted); }
+
+    /* ─── Philosophy Cards ────────────────────────── */
+    .phi-grid {
+      max-width: 1100px;
+      margin: 0 auto 2rem;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1rem;
+    }
+    .phi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .phi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+    }
+    .phi-card.phi-copilot::before { background: linear-gradient(90deg, var(--copilot), #7dd3fc); }
+    .phi-card.phi-codex::before   { background: linear-gradient(90deg, var(--codex), #6ee7b7); }
+    .phi-title { font-weight: 700; font-size: .92rem; margin-bottom: .4rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .phi-principle {
+      display: inline-block;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: .1rem .4rem;
+      border-radius: 4px;
+      background: rgba(88,166,255,.12);
+      color: var(--accent-blue);
+      border: 1px solid rgba(88,166,255,.3);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .phi-principle.pp-solid   { background: rgba(192,132,252,.12); color: var(--claude); border-color: rgba(192,132,252,.3); }
+    .phi-principle.pp-clean   { background: rgba(63,185,80,.12); color: var(--accent-green); border-color: rgba(63,185,80,.3); }
+    .phi-principle.pp-ddd     { background: rgba(240,136,62,.12); color: var(--accent-orange); border-color: rgba(240,136,62,.3); }
+    .phi-principle.pp-sec     { background: rgba(255,123,114,.12); color: var(--accent-pink); border-color: rgba(255,123,114,.3); }
+    .phi-body { color: var(--text-muted); font-size: .82rem; line-height: 1.6; margin-top: .5rem; }
+    .phi-body strong { color: var(--text); }
+
+    /* ─── Footer ──────────────────────────────────── */
+    footer { background: var(--surface); border-top: 1px solid var(--border); text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: .78rem; }
+    footer a { color: var(--accent-blue); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ─── Hidden row ──────────────────────────────── */
+    tr.hidden-row { display: none; }
+
+    @media (max-width: 640px) {
+      .heat-bar { width: 40px; }
+      td, th { padding: .65rem .6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Header ─────────────────────────────────────────── -->
+<header>
+  <div class="header-meta">
+    <span class="badge badge-date">2026-06-09</span>
+    <span class="badge badge-report">Daily AI Skills Report</span>
+    <span class="badge badge-time">&#9679; 產生時間 19:05:41</span>
+  </div>
+  <h1>熱門 AI Skills &amp; 自動化指令排行</h1>
+  <p class="subtitle">Claude Code · GitHub Copilot · OpenAI Codex — 今日最受歡迎技能與自動化指令綜合排行</p>
+</header>
+
+<!-- ─── Quick Filter Bar ────────────────────────────────── -->
+<div class="filter-bar">
+  <span class="filter-label">平台</span>
+  <button class="filter-btn f-all active" data-filter="all" onclick="applyFilter(this)">全部</button>
+  <button class="filter-btn f-claude"  data-filter="claude"  onclick="applyFilter(this)">Claude Code</button>
+  <button class="filter-btn f-copilot" data-filter="copilot" onclick="applyFilter(this)">GitHub Copilot</button>
+  <button class="filter-btn f-codex"   data-filter="codex"   onclick="applyFilter(this)">OpenAI Codex</button>
+  <div class="filter-divider"></div>
+  <span class="filter-label">標籤</span>
+  <button class="filter-btn f-new" data-filter="new" onclick="applyFilter(this)">&#9733; New 新上榜</button>
+</div>
+
+<!-- ─── Platform Legend ─────────────────────────────────── -->
+<div class="legend">
+  <div class="legend-item"><span class="dot dot-claude"></span> Claude Code</div>
+  <div class="legend-item"><span class="dot dot-copilot"></span> GitHub Copilot</div>
+  <div class="legend-item"><span class="dot dot-codex"></span> OpenAI Codex</div>
+</div>
+
+<!-- ─── Summary Cards ──────────────────────────────────── -->
+<div class="summary">
+  <div class="card">
+    <div class="card-num" style="color:var(--accent-blue)">20</div>
+    <div class="card-label">精選 Skills</div>
+  </div>
+  <div class="card">
+    <div class="card-num" style="color:var(--claude)">3</div>
+    <div class="card-label">平台覆蓋</div>
+  </div>
+  <div class="card">
+    <div class="card-num" style="color:var(--accent-green)">19k<span style="font-size:1rem">+</span></div>
+    <div class="card-label">openai/skills GitHub ⭐</div>
+  </div>
+  <div class="card">
+    <div class="card-num" style="color:var(--accent-orange)">&#8593; 4</div>
+    <div class="card-label">今日新晉上榜</div>
+  </div>
+</div>
+
+<!-- ─── Platform Highlights ─────────────────────────────── -->
+<div class="section-title">平台重點觀察</div>
+<div class="highlights">
+  <div class="hl-card claude-hl">
+    <div class="hl-title"><span class="hl-icon">⚡</span> Claude Code</div>
+    <div class="hl-body">
+      <strong>/review</strong> 持續霸榜 #1，<strong>--fix</strong> 自動套用修正讓 PR review 效率提升 3×。
+      <strong>/batch</strong> 平行 sub-agent 持續爆紅，跨多檔案重構成主流工作流。
+      <strong>clean-architecture-skills</strong>（SOLID + Clean Architecture）今日在 MCPMarket 衝上設計哲學類 #1，收錄達 <strong>400+</strong> 社群 skill。
+    </div>
+  </div>
+  <div class="hl-card copilot-hl">
+    <div class="hl-title"><span class="hl-icon">🤖</span> GitHub Copilot</div>
+    <div class="hl-body">
+      <strong>SKILL.md</strong> 跨平台規範已成業界事實標準，支援 Claude Code、Cursor、Codex CLI 等 20+ 工具。
+      <strong>agent-governance</strong> 企業端需求持續成長，提供 AI 代理治理、稽核軌跡與信任控制。
+      <strong>acquire-codebase-knowledge</strong> 在大型 monorepo onboarding 場景長期高熱。
+    </div>
+  </div>
+  <div class="hl-card codex-hl">
+    <div class="hl-title"><span class="hl-icon">🛠</span> OpenAI Codex</div>
+    <div class="hl-body">
+      <strong>gh-fix-ci</strong> 今日新上榜 #3：GPT-5.5 加持下 CI 自動修復成功率高達 <strong>87%</strong>，成為 DevOps 最熱討論技能。
+      <strong>stop-slop</strong> 清理 AI 腔調寫作技能爆紅，一週內從社群 repo 躍入 Top 10。
+      <strong>codex cloud exec</strong> 雲端任務直接提交（免互動式選擇器）逐步取代本機腳本。
+    </div>
+  </div>
+</div>
+
+<!-- ─── Main Ranking Table ───────────────────────────────── -->
+<div class="section-title">TOP 20 熱門排行</div>
+<div class="table-wrap">
+  <table id="ranking-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>技能 / 指令</th>
+        <th>平台</th>
+        <th>說明 &amp; 應用場景</th>
+        <th>熱度</th>
+        <th>趨勢</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- 1 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank top1">01</span></td>
+        <td>
+          <div class="skill-name">/review</div>
+          <span class="cmd">/review</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">審查變更程式碼的 Bug、安全漏洞與程式碼風格。支援 <code>--comment</code> 在 PR 直接留評論，<code>--fix</code> 自動套用所有建議修正，effort 等級可調（low/medium/high）。</div>
+          <div class="use-case">▶ PR 品質把關、Code Review 自動化、安全漏洞掃描</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:100%"></div></div><span class="heat-num">100</span></div></td>
+        <td><span class="trend trend-hot">🔥 爆紅</span></td>
+      </tr>
+
+      <!-- 2 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank top2">02</span></td>
+        <td>
+          <div class="skill-name">/batch</div>
+          <span class="cmd">/batch</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">平行啟動多個 sub-agent 同時執行大規模變更，最接近擁有一整支開發團隊的體驗。適合跨多檔案重構、批次測試生成、大型遷移任務。</div>
+          <div class="use-case">▶ 大規模重構、批次程式碼生成、多任務並行</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:98%"></div></div><span class="heat-num">98</span></div></td>
+        <td><span class="trend trend-viral">★ 病毒擴散</span></td>
+      </tr>
+
+      <!-- 3 -->
+      <tr data-platform="codex" data-new="1">
+        <td><span class="rank top3">03</span></td>
+        <td>
+          <div class="skill-name">gh-fix-ci <span class="new-badge">NEW</span></div>
+          <span class="cmd">$gh-fix-ci</span>
+        </td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">用 gh CLI 定位失敗的 PR checks，自動抓取 GitHub Actions logs，以白話文摘要失敗原因並提出修復計畫，GPT-5.5 加持下成功率 <strong>87%</strong>。</div>
+          <div class="use-case">▶ CI 修復自動化、DevOps 降低人工排查成本</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:96%"></div></div><span class="heat-num">96</span></div></td>
+        <td><span class="trend trend-new">✦ 新上榜</span></td>
+      </tr>
+
+      <!-- 4 -->
+      <tr data-platform="copilot" data-new="0">
+        <td><span class="rank">04</span></td>
+        <td>
+          <div class="skill-name">Agent Skills (SKILL.md)</div>
+          <span class="cmd">/<span style="color:var(--text-muted);font-style:italic">skill-name</span></span>
+        </td>
+        <td><span class="platform-tag tag-copilot">Copilot</span></td>
+        <td>
+          <div class="desc">以 SKILL.md 定義可重用工作流，已成跨平台事實標準（Claude Code、Cursor、Codex CLI、20+ 工具均支援）。一鍵觸發標準化團隊流程。</div>
+          <div class="use-case">▶ 團隊標準化工作流、快速 Onboarding、跨工具互通</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:94%"></div></div><span class="heat-num">94</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 5 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank">05</span></td>
+        <td>
+          <div class="skill-name">/simplify</div>
+          <span class="cmd">/simplify</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">審查近期變更的程式碼，找出可重用、簡化、效能改善與架構層次問題，並自動套用修正。純品質導向，不獵 Bug（Bug 請用 /review）。</div>
+          <div class="use-case">▶ 程式碼品質提升、重構機會識別、技術債清償</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:92%"></div></div><span class="heat-num">92</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 6 -->
+      <tr data-platform="codex" data-new="0">
+        <td><span class="rank">06</span></td>
+        <td>
+          <div class="skill-name">codex exec</div>
+          <span class="cmd">codex exec</span>
+        </td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">非互動式 CI/CD 原生執行模式，將最終計畫與結果 pipe 回 stdout。可整合進 GitHub Actions、shell 腳本，實現 changelog 更新、issue 分類等自動化。</div>
+          <div class="use-case">▶ CI/CD 整合、無人值守自動化腳本、批次任務</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:90%"></div></div><span class="heat-num">90</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 7 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank">07</span></td>
+        <td>
+          <div class="skill-name">/loop</div>
+          <span class="cmd">/loop</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">以指定間隔（預設 10 分鐘）定期執行某個指令或 skill，適合建立 CI 監控、定期 PR 檢查等循環任務。</div>
+          <div class="use-case">▶ 定期品質巡查、PR 狀態輪詢、長時間任務監控</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:88%"></div></div><span class="heat-num">88</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 8 -->
+      <tr data-platform="codex" data-new="1">
+        <td><span class="rank">08</span></td>
+        <td>
+          <div class="skill-name">stop-slop <span class="new-badge">NEW</span></div>
+          <span class="cmd">$stop-slop</span>
+        </td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">清除文件、README 與 Blog 文章中的 AI 腔調措辭（過度圓滑、空泛套語），讓技術寫作回歸自然人聲。一週內從社群 repo 爆紅進入 Top 10。</div>
+          <div class="use-case">▶ 技術文件人性化、README 清理、部落格後製</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:86%"></div></div><span class="heat-num">86</span></div></td>
+        <td><span class="trend trend-viral">★ 病毒擴散</span></td>
+      </tr>
+
+      <!-- 9 -->
+      <tr data-platform="copilot" data-new="0">
+        <td><span class="rank">09</span></td>
+        <td>
+          <div class="skill-name">acquire-codebase-knowledge</div>
+          <span class="cmd">/acquire-codebase-knowledge</span>
+        </td>
+        <td><span class="platform-tag tag-copilot">Copilot</span></td>
+        <td>
+          <div class="desc">深度分析 repo 結構、架構決策、關鍵路徑，生成給 AI 代理的完整知識圖譜，顯著提升大型 monorepo 理解精度。</div>
+          <div class="use-case">▶ 新人 Onboarding、大型 repo 架構梳理、AI 精度提升</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:84%"></div></div><span class="heat-num">84</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 10 -->
+      <tr data-platform="codex" data-new="0">
+        <td><span class="rank">10</span></td>
+        <td>
+          <div class="skill-name">create-plan</div>
+          <span class="cmd">$create-plan</span>
+        </td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">在動手實作前強制建立計畫閘道（planning gate），產出結構化執行計畫供人工確認，大幅降低 agentic 任務的不可控風險。</div>
+          <div class="use-case">▶ 複雜任務規劃、Agentic 流程安全閘、架構決策前哨</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:82%"></div></div><span class="heat-num">82</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 11 → grayscale 0/9 ≈ 0 -->
+      <tr data-platform="copilot" data-new="0" style="filter:grayscale(0)">
+        <td><span class="rank">11</span></td>
+        <td>
+          <div class="skill-name">code-tour</div>
+          <span class="cmd">/code-tour</span>
+        </td>
+        <td><span class="platform-tag tag-copilot">Copilot</span></td>
+        <td>
+          <div class="desc">引導式互動程式碼導覽，自動識別架構層、核心流程與入口點，讓新成員 30 分鐘內上手大型 repo。</div>
+          <div class="use-case">▶ 新人導引、架構說明、技術分享</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:79%"></div></div><span class="heat-num">79</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 12 → grayscale 1/9 ≈ 0.11 -->
+      <tr data-platform="claude" data-new="0" style="filter:grayscale(0.11)">
+        <td><span class="rank">12</span></td>
+        <td>
+          <div class="skill-name">/deep-research</div>
+          <span class="cmd">/deep-research</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">多來源網路搜尋、資訊抓取、逆向驗證主張，最終產出附引用來源的深度研究報告。適合技術選型、競品分析。</div>
+          <div class="use-case">▶ 技術選型研究、競品分析、RFC 撰寫前調研</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:77%"></div></div><span class="heat-num">77</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 13 → grayscale 2/9 ≈ 0.22 -->
+      <tr data-platform="copilot" data-new="0" style="filter:grayscale(0.22)">
+        <td><span class="rank">13</span></td>
+        <td>
+          <div class="skill-name">agent-governance</div>
+          <span class="cmd">/agent-governance</span>
+        </td>
+        <td><span class="platform-tag tag-copilot">Copilot</span></td>
+        <td>
+          <div class="desc">提供 AI 代理系統的治理模式、信任控制、稽核軌跡與安全護欄，企業合規場景必備。</div>
+          <div class="use-case">▶ 企業 AI 治理、稽核軌跡建立、合規自動化</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:75%"></div></div><span class="heat-num">75</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 14 → grayscale 3/9 ≈ 0.33 -->
+      <tr data-platform="claude" data-new="0" style="filter:grayscale(0.33)">
+        <td><span class="rank">14</span></td>
+        <td>
+          <div class="skill-name">/security-review</div>
+          <span class="cmd">/security-review</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">針對當前分支的待交付變更進行完整安全審查，覆蓋 OWASP Top 10、依賴漏洞、身分驗證邏輯等。</div>
+          <div class="use-case">▶ 上線前安全把關、滲透測試準備、合規安全審查</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:73%"></div></div><span class="heat-num">73</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 15 → grayscale 4/9 ≈ 0.44 -->
+      <tr data-platform="codex" data-new="1" style="filter:grayscale(0.44)">
+        <td><span class="rank">15</span></td>
+        <td>
+          <div class="skill-name">cli-creator <span class="new-badge">NEW</span></div>
+          <span class="cmd">$cli-creator</span>
+        </td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">將重複執行的命令、腳本或 API 呼叫封裝成可重用 CLI 工具，自動產生說明文件與 tab 補全。</div>
+          <div class="use-case">▶ 內部工具建立、腳本標準化、開發者體驗提升</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:71%"></div></div><span class="heat-num">71</span></div></td>
+        <td><span class="trend trend-new">✦ 新上榜</span></td>
+      </tr>
+
+      <!-- 16 → grayscale 5/9 ≈ 0.56 -->
+      <tr data-platform="codex" data-new="0" style="filter:grayscale(0.56)">
+        <td><span class="rank">16</span></td>
+        <td>
+          <div class="skill-name">mcp-builder</div>
+          <span class="cmd">$mcp-builder</span>
+        </td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">快速搭建 Model Context Protocol (MCP) 伺服器，自動生成工具定義、schema 與測試骨架，輕鬆整合第三方資料來源。</div>
+          <div class="use-case">▶ MCP 伺服器開發、AI 工具生態擴展、第三方整合</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:69%"></div></div><span class="heat-num">69</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 17 → grayscale 6/9 ≈ 0.67 -->
+      <tr data-platform="claude" data-new="0" style="filter:grayscale(0.67)">
+        <td><span class="rank">17</span></td>
+        <td>
+          <div class="skill-name">/memory</div>
+          <span class="cmd">/memory</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">檢視與編輯 Claude 的持久記憶（MEMORY.md），自動儲存專案慣例、架構決策，跨 session 保持一致性。</div>
+          <div class="use-case">▶ 專案記憶管理、長期 Session 一致性、團隊規範儲存</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:67%"></div></div><span class="heat-num">67</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 18 → grayscale 7/9 ≈ 0.78 -->
+      <tr data-platform="codex" data-new="0" style="filter:grayscale(0.78)">
+        <td><span class="rank">18</span></td>
+        <td>
+          <div class="skill-name">notion-spec-to-impl</div>
+          <span class="cmd">$notion-spec-to-impl</span>
+        </td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">將 Notion 規格文件直接轉換為程式碼實作骨架，自動對應欄位、生成型別定義與基礎測試案例。</div>
+          <div class="use-case">▶ 規格驅動開發、Spec 轉程式碼、PM-Dev 協作</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:65%"></div></div><span class="heat-num">65</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 19 → grayscale 8/9 ≈ 0.89 -->
+      <tr data-platform="codex" data-new="0" style="filter:grayscale(0.89)">
+        <td><span class="rank">19</span></td>
+        <td>
+          <div class="skill-name">webapp-testing</div>
+          <span class="cmd">$webapp-testing</span>
+        </td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">針對 Web 應用自動生成 E2E、整合測試與邊界案例，覆蓋常見 UI 流程與 API 整合點。</div>
+          <div class="use-case">▶ 測試覆蓋率提升、E2E 自動化、QA 流程加速</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:63%"></div></div><span class="heat-num">63</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 20 → grayscale 9/9 = 1.0 -->
+      <tr data-platform="codex" data-new="0" style="filter:grayscale(1)">
+        <td><span class="rank">20</span></td>
+        <td>
+          <div class="skill-name">superpowers</div>
+          <span class="cmd">$superpowers</span>
+        </td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">Codex 官方推薦的方法論基準 skill，奠定 Agentic 工作流的行為準則、工具使用優先順序與輸出格式基礎。</div>
+          <div class="use-case">▶ Agentic 工作流基準、方法論設定、新環境初始化</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:61%"></div></div><span class="heat-num">61</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<!-- ─── Software Design Philosophy ──────────────────────── -->
+<div class="section-title" style="color:var(--accent-purple)">⚙ 軟體設計哲學 Skills 精選</div>
+<div style="max-width:1100px;margin:0 auto .75rem;padding:0 1.5rem;color:var(--text-muted);font-size:.85rem;">
+  實質幫助工程師產出良好程式碼的設計哲學型技能 — 強調可讀性、可維護性、低耦合與高內聚。
+</div>
+<div class="phi-grid">
+
+  <div class="phi-card">
+    <div class="phi-title">
+      clean-architecture-skills
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-solid">SOLID</span>
+      <span class="phi-principle">Clean Arch</span>
+      <span class="phi-principle">Dependency Rule</span>
+    </div>
+    <div class="phi-body">
+      審查程式碼是否符合 <strong>Clean Architecture</strong> 的依賴規則與層次結構（Domain → Application → Infrastructure），識別跨層違規與 God Class。基於 Kent Beck 重構哲學。
+      <br><br>
+      <strong>命令：</strong><code style="font-size:.8rem;color:var(--accent-blue)">/review --effort=high</code> 搭配此 skill 效果最佳。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      SOLID Principles &amp; Clean Code Architect
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-solid">SOLID</span>
+      <span class="phi-principle pp-clean">Clean Code</span>
+      <span class="phi-principle">SRP · OCP · LSP</span>
+    </div>
+    <div class="phi-body">
+      將 SOLID 五大原則（SRP、OCP、LSP、ISP、DIP）具體化為審查清單，搭配 <strong>Clean Code</strong> 最佳實踐（命名、早返回、消除魔術數字）。
+      <br><br>
+      MCPMarket 設計哲學類今日熱度排行 <strong>#1</strong>，下載量突破 12k。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      Core Engineering OOP &amp; SOLID
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-solid">OOP</span>
+      <span class="phi-principle pp-solid">SOLID</span>
+      <span class="phi-principle">Abstraction · DI</span>
+    </div>
+    <div class="phi-body">
+      以 <strong>抽象、封裝、繼承、多型</strong> 為核心知識骨幹，深度指導 Dependency Injection、介面隔離，協助設計可擴展、低耦合的系統架構。
+      <br><br>
+      適合搭配 <code style="font-size:.8rem;color:var(--accent-blue)">/simplify</code> 一起使用，先設計後重構。
+    </div>
+  </div>
+
+  <div class="phi-card phi-codex">
+    <div class="phi-title">
+      security-threat-model
+      <span class="platform-tag tag-codex" style="font-size:.65rem">OpenAI Codex</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-sec">Shift-Left</span>
+      <span class="phi-principle pp-sec">Threat Model</span>
+      <span class="phi-principle">STRIDE</span>
+    </div>
+    <div class="phi-body">
+      在設計階段即進行 <strong>Shift-Left 安全</strong>，以 STRIDE 模型識別攻擊面、建立威脅模型，而非等到 pentest 前才修。
+      <br><br>
+      安全性即設計哲學的一部分：好的系統應在架構層解決安全問題，而非靠防火牆補丁。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      refactor-clean (Spark)
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-clean">Refactor</span>
+      <span class="phi-principle pp-clean">Code Smell</span>
+      <span class="phi-principle">DRY · KISS</span>
+    </div>
+    <div class="phi-body">
+      專注於識別並消除 <strong>Code Smell</strong>：深層巢狀、長參數列表、重複邏輯、命名語意模糊。
+      <br><br>
+      強調 <strong>DRY（不重複自己）</strong> 與 <strong>KISS（保持簡單）</strong>，讓後繼工程師能一眼理解業務意圖，而非破解實作細節。
+    </div>
+  </div>
+
+  <div class="phi-card phi-copilot">
+    <div class="phi-title">
+      code-smell-detector
+      <span class="platform-tag tag-copilot" style="font-size:.65rem">Copilot</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle">Cognitive Load</span>
+      <span class="phi-principle pp-clean">Readability</span>
+      <span class="phi-principle">God Class</span>
+    </div>
+    <div class="phi-body">
+      透過認知負荷分析識別 God Class、Feature Envy、Shotgun Surgery 等常見壞味道，提供具體重構路徑。
+      <br><br>
+      與 Copilot 的 <strong>agent mode</strong> 深度整合，可在 PR 自動留下設計層面的改善建議，而非只審語法。
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── Footer ──────────────────────────────────────────── -->
+<footer>
+  <div style="margin-bottom:.4rem">
+    <strong>f2e-research</strong> · 前端暨 AI 工具趨勢每日分析
+    &nbsp;|&nbsp; 報告產生：2026-06-09 19:05:41
+    &nbsp;|&nbsp; 資料來源：
+    <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">Claude Code Docs</a>、
+    <a href="https://docs.github.com/en/copilot/reference/chat-cheat-sheet" target="_blank" rel="noopener">GitHub Copilot Docs</a>、
+    <a href="https://developers.openai.com/codex/skills" target="_blank" rel="noopener">Codex Skills</a>、
+    <a href="https://github.com/github/awesome-copilot" target="_blank" rel="noopener">awesome-copilot</a>
+  </div>
+  <div style="color:#484f58">TOP 20 熱度公式：社群熱度 × 3 + 文件引用 × 1 + 跨平台提及 × 2</div>
+</footer>
+
+<!-- ─── Filter Script ───────────────────────────────────── -->
+<script>
+  let activeFilter = 'all';
+
+  function applyFilter(btn) {
+    const filter = btn.dataset.filter;
+
+    // Toggle: clicking active platform filter again resets to all
+    if (filter !== 'all' && filter === activeFilter) {
+      activeFilter = 'all';
+    } else {
+      activeFilter = filter;
+    }
+
+    // Update button states
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (activeFilter === 'all') {
+      document.querySelector('[data-filter="all"]').classList.add('active');
+    } else {
+      document.querySelector(`[data-filter="${activeFilter}"]`).classList.add('active');
+    }
+
+    // Filter rows
+    document.querySelectorAll('#ranking-table tbody tr').forEach(row => {
+      const platform = row.dataset.platform;
+      const isNew    = row.dataset.new === '1';
+      let show = false;
+
+      if (activeFilter === 'all')      show = true;
+      else if (activeFilter === 'new') show = isNew;
+      else                             show = platform === activeFilter;
+
+      row.classList.toggle('hidden-row', !show);
+    });
+  }
+</script>
+
+</body>
+</html>
