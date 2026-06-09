@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>石垣島旅遊指南 2026 — 精選 20 大景點</title>
+  <style>
+    :root {
+      --ocean-dark: #0077b6;
+      --ocean:      #00b4d8;
+      --ocean-light:#90e0ef;
+      --sand:       #f4a261;
+      --coral:      #e76f51;
+      --nature:     #2d6a4f;
+      --culture:    #7b2d8b;
+      --food:       #c1440e;
+      --activity:   #3d5ef5;
+      --text:       #1a2233;
+      --text-sub:   #4a5568;
+      --bg:         #f0f8ff;
+      --white:      #ffffff;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+
+    body{
+      font-family:"Noto Sans TC","Noto Sans JP",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.7;
+    }
+
+    /* ─── HERO ─── */
+    .hero{
+      position:relative;
+      overflow:hidden;
+      padding:90px 24px 70px;
+      text-align:center;
+      background:linear-gradient(140deg,#023e8a 0%,#0077b6 30%,#00b4d8 60%,#48cae4 85%,#90e0ef 100%);
+    }
+    .hero::after{
+      content:"";position:absolute;bottom:-1px;left:0;right:0;height:64px;
+      background:var(--bg);clip-path:ellipse(65% 100% at 50% 100%);
+    }
+    /* wave decoration */
+    .hero-waves{position:absolute;bottom:0;left:0;right:0;opacity:.15;font-size:6rem;user-select:none;line-height:1}
+    .hero-label{
+      display:inline-block;
+      background:rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.35);
+      color:#fff;border-radius:20px;
+      padding:4px 18px;font-size:.8rem;letter-spacing:.08em;
+      margin-bottom:18px;
+    }
+    .hero h1{
+      font-size:clamp(2rem,5.5vw,3.8rem);font-weight:900;
+      color:#fff;text-shadow:0 3px 14px rgba(0,0,0,.25);
+      margin-bottom:10px;
+    }
+    .hero h1 span{display:block;font-size:clamp(1rem,2.5vw,1.5rem);font-weight:400;opacity:.85;margin-top:6px}
+    .hero-desc{font-size:1.05rem;color:rgba(255,255,255,.9);max-width:620px;margin:0 auto 18px}
+    .hero-meta{font-size:.82rem;color:rgba(255,255,255,.65)}
+    .hero-stats{
+      display:flex;gap:32px;justify-content:center;flex-wrap:wrap;
+      margin-top:28px;
+    }
+    .hero-stat{color:rgba(255,255,255,.9);text-align:center}
+    .hero-stat strong{display:block;font-size:1.8rem;font-weight:900;color:#fff}
+    .hero-stat span{font-size:.8rem;opacity:.8}
+
+    /* ─── NAV ─── */
+    .cat-nav{
+      position:sticky;top:0;z-index:200;
+      background:rgba(255,255,255,.96);
+      backdrop-filter:blur(10px);
+      box-shadow:0 2px 12px rgba(0,0,0,.08);
+    }
+    .cat-nav-inner{
+      max-width:1200px;margin:0 auto;
+      padding:0 20px;
+      display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;
+    }
+    .cat-nav-inner::-webkit-scrollbar{display:none}
+    .cat-btn{
+      flex-shrink:0;padding:14px 18px;
+      font-size:.88rem;font-weight:700;
+      border:none;background:none;cursor:pointer;
+      color:var(--text-sub);
+      border-bottom:3px solid transparent;
+      transition:all .2s;white-space:nowrap;
+    }
+    .cat-btn:hover{color:var(--ocean-dark)}
+    .cat-btn.active{color:var(--ocean-dark);border-bottom-color:var(--ocean-dark)}
+
+    /* ─── MAIN ─── */
+    main{max-width:1200px;margin:0 auto;padding:48px 20px 100px}
+
+    .section{margin-bottom:72px;scroll-margin-top:60px}
+    .section-header{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+    .section-icon{
+      width:52px;height:52px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.6rem;flex-shrink:0;
+    }
+    .section-header h2{font-size:1.7rem;font-weight:900;line-height:1.2}
+    .section-header .cat-label{
+      font-size:.78rem;font-weight:700;letter-spacing:.06em;
+      padding:2px 10px;border-radius:10px;
+    }
+
+    /* Beach */
+    #beach .section-icon{background:#e0f7ff;color:#0077b6}
+    #beach .section-header h2{color:#0077b6}
+    #beach .cat-label{background:#e0f7ff;color:#0077b6}
+
+    /* Nature */
+    #nature .section-icon{background:#e8f5e9;color:#2d6a4f}
+    #nature .section-header h2{color:#1b4332}
+    #nature .cat-label{background:#e8f5e9;color:#2d6a4f}
+
+    /* Culture */
+    #culture .section-icon{background:#f3e5f5;color:#7b2d8b}
+    #culture .section-header h2{color:#4a0072}
+    #culture .cat-label{background:#f3e5f5;color:#7b2d8b}
+
+    /* Food */
+    #food .section-icon{background:#fff3e0;color:#c1440e}
+    #food .section-header h2{color:#9d2b00}
+    #food .cat-label{background:#fff3e0;color:#c1440e}
+
+    /* Activity */
+    #activity .section-icon{background:#e8eafe;color:#3d5ef5}
+    #activity .section-header h2{color:#1a2fa0}
+    #activity .cat-label{background:#e8eafe;color:#3d5ef5}
+
+    /* ─── CARDS ─── */
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+      gap:24px;
+    }
+    .card{
+      background:var(--white);border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 4px 20px rgba(0,0,0,.09);
+      transition:transform .25s,box-shadow .25s;
+    }
+    .card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 14px 32px rgba(0,0,0,.14);
+    }
+
+    /* Card image area: CSS gradient + emoji */
+    .card-visual{
+      height:190px;width:100%;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      position:relative;overflow:hidden;
+    }
+    .card-visual .vis-emoji{font-size:4rem;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2));z-index:1}
+    .card-visual .vis-num{
+      position:absolute;top:12px;left:14px;
+      background:rgba(0,0,0,.3);color:#fff;
+      font-size:.72rem;font-weight:700;letter-spacing:.06em;
+      padding:2px 8px;border-radius:8px;
+    }
+    .card-visual .vis-tag{
+      position:absolute;bottom:12px;right:14px;
+      background:rgba(255,255,255,.25);backdrop-filter:blur(4px);
+      color:#fff;font-size:.72rem;font-weight:700;
+      padding:2px 9px;border-radius:8px;border:1px solid rgba(255,255,255,.35);
+    }
+
+    /* gradient presets */
+    .g-kabira{background:linear-gradient(135deg,#023e8a,#0096c7,#48cae4)}
+    .g-yonehara{background:linear-gradient(135deg,#0077b6,#00b4d8,#90e0ef)}
+    .g-sukuji{background:linear-gradient(135deg,#1d7874,#52b788,#b7e4c7)}
+    .g-shiraho{background:linear-gradient(135deg,#184e77,#1e6091,#76c893)}
+    .g-hamajima{background:linear-gradient(135deg,#48cae4,#ade8f4,#f4e285)}
+    .g-cave{background:linear-gradient(135deg,#240046,#5a189a,#9d4edd)}
+    .g-lighthouse{background:linear-gradient(135deg,#0077b6,#4cc9f0,#f8f9fa)}
+    .g-tamatorizaki{background:linear-gradient(135deg,#2d6a4f,#52b788,#f4a261)}
+    .g-nagura{background:linear-gradient(135deg,#1b4332,#40916c,#74c69d)}
+    .g-miyara{background:linear-gradient(135deg,#4a0072,#7b2d8b,#c77dff)}
+    .g-torin{background:linear-gradient(135deg,#370617,#9d0208,#e85d04)}
+    .g-market{background:linear-gradient(135deg,#4d4d00,#aaaa00,#ffd60a)}
+    .g-soba{background:linear-gradient(135deg,#6b3a2a,#c1440e,#f4a261)}
+    .g-beef{background:linear-gradient(135deg,#780000,#c1121f,#e63946)}
+    .g-tofu{background:linear-gradient(135deg,#dad7cd,#a3b18a,#588157)}
+    .g-awamori{background:linear-gradient(135deg,#3a0ca3,#7209b7,#f72585)}
+    .g-snorkel{background:linear-gradient(135deg,#0077b6,#00b4d8,#023e8a)}
+    .g-kayak{background:linear-gradient(135deg,#1b4332,#40916c,#00b4d8)}
+    .g-star{background:linear-gradient(135deg,#03045e,#023e8a,#7209b7)}
+    .g-sunset{background:linear-gradient(135deg,#e85d04,#f4a261,#ffba08)}
+
+    .card-body{padding:20px}
+    .card-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+    .badge{
+      padding:3px 10px;border-radius:20px;
+      font-size:.72rem;font-weight:700;letter-spacing:.04em;
+    }
+    .badge-beach{background:#e0f7ff;color:#0077b6}
+    .badge-nature{background:#e8f5e9;color:#2d6a4f}
+    .badge-culture{background:#f3e5f5;color:#6a0dad}
+    .badge-food{background:#fff3e0;color:#c1440e}
+    .badge-activity{background:#e8eafe;color:#3d5ef5}
+    .badge-top{background:#fff3cd;color:#856404}
+    .badge-must{background:#fde8e8;color:#9b1c1c}
+
+    .card-name{font-size:1.15rem;font-weight:800;margin-bottom:3px}
+    .card-name-ja{font-size:.78rem;color:var(--text-sub);margin-bottom:10px;font-style:italic}
+    .card-desc{font-size:.88rem;color:var(--text-sub);line-height:1.65;margin-bottom:14px}
+
+    .card-highlights{list-style:none}
+    .card-highlights li{
+      font-size:.82rem;color:var(--text);
+      padding:3px 0 3px 20px;position:relative;
+    }
+    .card-highlights li::before{
+      content:"✓";position:absolute;left:0;
+      font-weight:700;color:var(--ocean-dark);
+    }
+    #nature  .card-highlights li::before{color:var(--nature)}
+    #culture .card-highlights li::before{color:var(--culture)}
+    #food    .card-highlights li::before{color:var(--food)}
+    #activity .card-highlights li::before{color:var(--activity)}
+
+    /* ─── FOOTER NAV ─── */
+    .footer-nav{
+      max-width:1200px;margin:0 auto;
+      padding:24px 20px 60px;
+      border-top:1px solid #dce8f0;
+      display:flex;align-items:center;justify-content:space-between;
+      flex-wrap:wrap;gap:16px;
+    }
+    .footer-nav a{color:var(--ocean-dark);text-decoration:none;font-weight:600;font-size:.9rem}
+    .footer-nav a:hover{text-decoration:underline}
+    .footer-nav .copy{font-size:.78rem;color:var(--text-sub)}
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:640px){
+      .hero{padding:70px 16px 50px}
+      .cards{grid-template-columns:1fr}
+      .hero-stats{gap:20px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<header class="hero">
+  <div class="hero-label">🌺 沖縄県 · 八重山諸島 · Ishigaki Island</div>
+  <h1>石垣島旅遊指南
+    <span>Ishigaki-jima Travel Guide 2026</span>
+  </h1>
+  <p class="hero-desc">
+    日本最南端的離島天堂 — 米其林三星海灣、絕美珊瑚礁、熱帶叢林、頂級和牛與道地八重山美食，一次盡覽。
+  </p>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>20</strong><span>精選景點</span></div>
+    <div class="hero-stat"><strong>5</strong><span>主題分類</span></div>
+    <div class="hero-stat"><strong>★★★</strong><span>米其林認證</span></div>
+    <div class="hero-stat"><strong>2026</strong><span>最新版本</span></div>
+  </div>
+  <div class="hero-meta">資料更新：2026-06-08 · 繁體中文版</div>
+</header>
+
+<!-- ═══ CATEGORY NAV ═══ -->
+<nav class="cat-nav" id="top-nav">
+  <div class="cat-nav-inner">
+    <button class="cat-btn active" onclick="setActive(this,'beach')">🏖️ 海灘</button>
+    <button class="cat-btn" onclick="setActive(this,'nature')">🌿 自然景觀</button>
+    <button class="cat-btn" onclick="setActive(this,'culture')">⛩️ 文化景點</button>
+    <button class="cat-btn" onclick="setActive(this,'food')">🍜 餐飲美食</button>
+    <button class="cat-btn" onclick="setActive(this,'activity')">🤿 活動體驗</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════
+     🏖️  海灘
+     ═══════════════════════════════ -->
+<section class="section" id="beach">
+  <div class="section-header">
+    <div class="section-icon">🏖️</div>
+    <div>
+      <span class="cat-label">BEACHES</span>
+      <h2>海灘 · Beach</h2>
+    </div>
+  </div>
+  <div class="cards">
+
+    <!-- 1. 川平湾 -->
+    <div class="card">
+      <div class="card-visual g-kabira">
+        <div class="vis-num">#1</div>
+        <div class="vis-emoji">🌊</div>
+        <div class="vis-tag">米其林 ★★★</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-beach">海灘</span>
+          <span class="badge badge-top">🏆 必訪TOP</span>
+          <span class="badge badge-must">米其林三星</span>
+        </div>
+        <div class="card-name">川平湾</div>
+        <div class="card-name-ja">Kabira Bay · かびらわん</div>
+        <p class="card-desc">
+          石垣島最具代表性的絕景，獲沖繩首個米其林綠色指南三星認證。
+          「川平藍」的七彩漸層海水讓人屏息，玻璃船在珊瑚礁間緩緩滑行，彷彿置身水族館。
+          此灣由於急流，禁止游泳，卻絲毫不減其震撼之美。
+        </p>
+        <ul class="card-highlights">
+          <li>玻璃底船觀珊瑚礁與熱帶魚</li>
+          <li>展望台俯瞰全景 — 攝影最佳位置</li>
+          <li>國家名勝地定、日本百景之一</li>
+          <li>周邊有餐廳、紀念品店及停車場</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2. 米原ビーチ -->
+    <div class="card">
+      <div class="card-visual g-yonehara">
+        <div class="vis-num">#2</div>
+        <div class="vis-emoji">🐠</div>
+        <div class="vis-tag">浮潛天堂</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-beach">海灘</span>
+          <span class="badge badge-top">浮潛聖地</span>
+        </div>
+        <div class="card-name">米原ビーチ</div>
+        <div class="card-name-ja">Yonehara Beach · よねはらびーち</div>
+        <p class="card-desc">
+          島內首屈一指的浮潛勝地，岸邊即有豐富珊瑚礁群，
+          多種色彩斑斕的熱帶魚與海龜游弋其間。
+          海灘面對西北方，黃昏時海面被夕陽染成金紅，景色如畫。
+        </p>
+        <ul class="card-highlights">
+          <li>從岸邊直接下水即見珊瑚礁</li>
+          <li>常可遇見野生海龜</li>
+          <li>附設沖淋設施與器材出租</li>
+          <li>夕陽攝影絕佳角度</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3. 底地ビーチ -->
+    <div class="card">
+      <div class="card-visual g-sukuji">
+        <div class="vis-num">#3</div>
+        <div class="vis-emoji">🏄</div>
+        <div class="vis-tag">家庭首選</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-beach">海灘</span>
+          <span class="badge badge-top">家庭友好</span>
+        </div>
+        <div class="card-name">底地ビーチ</div>
+        <div class="card-name-ja">Sukuji Beach · すくじびーち</div>
+        <p class="card-desc">
+          綿延約 1 公里的白色沙灘，位於西表石垣國立公園內。
+          海浪平緩、水深漸進，是帶幼兒旅遊的最佳選擇，
+          也是觀賞夕陽西下於東海的絕美舞台。
+        </p>
+        <ul class="card-highlights">
+          <li>淺灘區適合幼兒安全戲水</li>
+          <li>沙質細白，徒步散步極舒適</li>
+          <li>夕陽觀賞熱門地點</li>
+          <li>鄰近川平湾，可規劃同日遊</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4. 白保海岸 -->
+    <div class="card">
+      <div class="card-visual g-shiraho">
+        <div class="vis-num">#4</div>
+        <div class="vis-emoji">🪸</div>
+        <div class="vis-tag">藍珊瑚群落</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-beach">海灘</span>
+          <span class="badge badge-must">世界稀有</span>
+        </div>
+        <div class="card-name">白保海岸</div>
+        <div class="card-name-ja">Shiraho Coast · しらほかいがん</div>
+        <p class="card-desc">
+          緊鄰新石垣空港，卻擁有長達 10 公里的天然白沙灘。
+          近岸海域是全球最大的青珊瑚（Ao-sango）群落，世界自然保育聯盟特別關注地。
+          WWF 在此設有海洋保護區，生態保育意識濃厚。
+        </p>
+        <ul class="card-highlights">
+          <li>全球最大青珊瑚（アオサンゴ）群落</li>
+          <li>距新石垣空港僅 5 分鐘車程</li>
+          <li>WWF 認定海洋保護區</li>
+          <li>海色清澈，靜態觀賞自然生態</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 5. 幻の島 -->
+    <div class="card">
+      <div class="card-visual g-hamajima">
+        <div class="vis-num">#5</div>
+        <div class="vis-emoji">🏝️</div>
+        <div class="vis-tag">夢幻奇景</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-beach">海灘</span>
+          <span class="badge badge-must">限時存在</span>
+        </div>
+        <div class="card-name">幻の島（浜島）</div>
+        <div class="card-name-ja">Phantom Island · はまじま</div>
+        <p class="card-desc">
+          退潮時才從海面浮現的神秘沙洲，宛如天上掉落的白色珍珠。
+          四周被碧藍海水環繞，是石垣島最具話題性的打卡景點，
+          唯有搭船才能抵達，通常與浮潛行程搭配。
+        </p>
+        <ul class="card-highlights">
+          <li>退潮時才顯現，每次形狀略有不同</li>
+          <li>周圍海水透明度極高，顏色絕美</li>
+          <li>需搭乘導覽船，含浮潛行程約 4 小時</li>
+          <li>全球熱門IG打卡聖地之一</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /cards -->
+</section>
+
+<!-- ═══════════════════════════════
+     🌿  自然景觀
+     ═══════════════════════════════ -->
+<section class="section" id="nature">
+  <div class="section-header">
+    <div class="section-icon">🌿</div>
+    <div>
+      <span class="cat-label">NATURE</span>
+      <h2>自然景觀 · Nature</h2>
+    </div>
+  </div>
+  <div class="cards">
+
+    <!-- 6. 石垣島鍾乳洞 -->
+    <div class="card">
+      <div class="card-visual g-cave">
+        <div class="vis-num">#6</div>
+        <div class="vis-emoji">🦇</div>
+        <div class="vis-tag">20萬年地下奇景</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-nature">自然</span>
+          <span class="badge badge-top">室內景點</span>
+        </div>
+        <div class="card-name">石垣島鍾乳洞</div>
+        <div class="card-name-ja">Ishigaki-jima Stalactite Cave · せきしょうどう</div>
+        <p class="card-desc">
+          耗費 20 萬年時光由大自然雕琢而成的石垣島最大鍾乳洞，全長約 3.2 公里，
+          開放觀光段約 660 公尺。洞內溫度常年保持 23°C，
+          五彩燈光映照千奇百怪的石筍與鐘乳石，宛如地底宮殿。
+        </p>
+        <ul class="card-highlights">
+          <li>洞內常年 23°C，雨天避暑首選</li>
+          <li>最高石筍超過 2 公尺</li>
+          <li>附設泡盛酒窖（使用洞穴恆溫熟成）</li>
+          <li>距市區約 10 分鐘車程</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 7. 平久保崎灯台 -->
+    <div class="card">
+      <div class="card-visual g-lighthouse">
+        <div class="vis-num">#7</div>
+        <div class="vis-emoji">🗼</div>
+        <div class="vis-tag">島最北端</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-nature">自然</span>
+          <span class="badge badge-top">360° 絕景</span>
+        </div>
+        <div class="card-name">平久保崎灯台</div>
+        <div class="card-name-ja">Hirakubo Cape Lighthouse · ひらくぼざきとうだい</div>
+        <p class="card-desc">
+          石垣島最北端的白色燈塔，三面環海，視野開闊。
+          晴天時可遠眺多良間島，碧藍海洋延伸至天際線，
+          被列為「日本燈塔 50 選」，也是觀賞日出的絕佳地點。
+        </p>
+        <ul class="card-highlights">
+          <li>三面環海，360 度全景視野</li>
+          <li>日本燈塔 50 選之一</li>
+          <li>日出攝影人氣地點</li>
+          <li>途中能欣賞石垣島北部原始丘陵地形</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 8. 玉取崎展望台 -->
+    <div class="card">
+      <div class="card-visual g-tamatorizaki">
+        <div class="vis-num">#8</div>
+        <div class="vis-emoji">🌺</div>
+        <div class="vis-tag">木槿花海</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-nature">自然</span>
+          <span class="badge badge-top">花卉景觀</span>
+        </div>
+        <div class="card-name">玉取崎展望台</div>
+        <div class="card-name-ja">Tamatorizaki Observation Deck · たまとりざきてんぼうだい</div>
+        <p class="card-desc">
+          一路通往展望台的步道兩側盛開著石垣島縣花「大紅花（扶桑花）」，
+          鮮豔的紅花與翠綠草坪映著湛藍大海，構成南國最浪漫的畫面。
+          展望台可同時俯瞰東中國海與太平洋，絕景令人難忘。
+        </p>
+        <ul class="card-highlights">
+          <li>步道兩旁大紅花（扶桑花）全年盛開</li>
+          <li>可同時望見東中國海與太平洋</li>
+          <li>免費入場，停車場完備</li>
+          <li>適合漫步散策，約 30 分鐘可逛完</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 9. 名蔵湾 -->
+    <div class="card">
+      <div class="card-visual g-nagura">
+        <div class="vis-num">#9</div>
+        <div class="vis-emoji">🦜</div>
+        <div class="vis-tag">拉姆薩爾濕地</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-nature">自然</span>
+          <span class="badge badge-must">世界認定</span>
+        </div>
+        <div class="card-name">名蔵湾・アンパル</div>
+        <div class="card-name-ja">Nagura Bay Anparu · なぐらわん</div>
+        <p class="card-desc">
+          石垣島最大的海灣，也是八重山諸島唯一的拉姆薩爾公約登錄濕地。
+          廣大的紅樹林與干潟（潮間帶）是眾多水鳥的棲息地，
+          每年 10 月至隔年 3 月可觀察遷徙候鳥，生態豐富迷人。
+        </p>
+        <ul class="card-highlights">
+          <li>拉姆薩爾公約指定濕地（2005年）</li>
+          <li>超過 300 種鳥類棲息於此</li>
+          <li>紅樹林獨木舟導覽行程</li>
+          <li>干潟散步體驗，觀察招潮蟹等生物</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     ⛩️  文化景點
+     ═══════════════════════════════ -->
+<section class="section" id="culture">
+  <div class="section-header">
+    <div class="section-icon">⛩️</div>
+    <div>
+      <span class="cat-label">CULTURE</span>
+      <h2>文化景點 · Culture</h2>
+    </div>
+  </div>
+  <div class="cards">
+
+    <!-- 10. 宮良殿内 -->
+    <div class="card">
+      <div class="card-visual g-miyara">
+        <div class="vis-num">#10</div>
+        <div class="vis-emoji">🏯</div>
+        <div class="vis-tag">國家重要文化財</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-culture">文化</span>
+          <span class="badge badge-must">重要文化財</span>
+        </div>
+        <div class="card-name">宮良殿内</div>
+        <div class="card-name-ja">Miyara Dunchi · みやらどぅんち</div>
+        <p class="card-desc">
+          建於 1819 年的琉球貴族宅邸，是八重山群島唯一現存的琉球式庭園建築，
+          被指定為日本國家重要文化財。石墻、岩石庭院、古民居保存完好，
+          訴說著琉球王國時代的貴族生活風貌。
+        </p>
+        <ul class="card-highlights">
+          <li>日本國家指定重要文化財</li>
+          <li>八重山唯一現存琉球貴族宅邸</li>
+          <li>1819 年建造，保存極為完整</li>
+          <li>附設導覽說明，了解琉球文化</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 11. 桃林寺 -->
+    <div class="card">
+      <div class="card-visual g-torin">
+        <div class="vis-num">#11</div>
+        <div class="vis-emoji">🏮</div>
+        <div class="vis-tag">最古老神社</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-culture">文化</span>
+          <span class="badge badge-top">八重山最古</span>
+        </div>
+        <div class="card-name">桃林寺</div>
+        <div class="card-name-ja">Torin-ji Temple · とうりんじ</div>
+        <p class="card-desc">
+          建立於 1614 年的臨濟宗寺院，是八重山群島歷史最悠久的寺廟。
+          山門口守護的一對仁王像與獅子（狛犬）雕刻精細，
+          為沖縄县指定文化財，散發著濃厚的歷史靜謐氛圍。
+        </p>
+        <ul class="card-highlights">
+          <li>八重山最古老寺廟（1614 年創建）</li>
+          <li>仁王像與石獅為縣指定文化財</li>
+          <li>鄰近宮良殿内，可規劃同日文化遊</li>
+          <li>免費參拜，市區中心位置方便</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 12. 石垣市公設市場 -->
+    <div class="card">
+      <div class="card-visual g-market">
+        <div class="vis-num">#12</div>
+        <div class="vis-emoji">🛒</div>
+        <div class="vis-tag">在地生活文化</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-culture">文化</span>
+          <span class="badge badge-food">市場・グルメ</span>
+        </div>
+        <div class="card-name">石垣市公設市場</div>
+        <div class="card-name-ja">Ishigaki Public Market · いしがきしこうせついちば</div>
+        <p class="card-desc">
+          石垣島市中心的傳統市場，販售島產蔬果、鮮魚海鮮、
+          醃漬品及各式特產伴手禮。市場二樓有多間食堂，
+          可以把在一樓買的食材帶上去請廚師料理，體驗最道地的島嶼飲食文化。
+        </p>
+        <ul class="card-highlights">
+          <li>一樓購食材、二樓請廚師料理的獨特文化</li>
+          <li>島産鮮魚、熱帶水果、泡盛一應俱全</li>
+          <li>八重山傳統布料「八重山ミンサー」</li>
+          <li>觀光客與在地人共聚的活力場所</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 13. 八重山民俗園 -->
+    <div class="card">
+      <div class="card-visual" style="background:linear-gradient(135deg,#2a4858,#4a7c59,#8fbc8f);height:190px;display:flex;align-items:center;justify-content:center;position:relative">
+        <div class="vis-num">#13</div>
+        <div class="vis-emoji">🎭</div>
+        <div class="vis-tag">文化展演</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-culture">文化</span>
+          <span class="badge badge-top">傳統藝能</span>
+        </div>
+        <div class="card-name">八重山民俗園</div>
+        <div class="card-name-ja">Yaeyama Folk Museum · やえやまみんぞくえん</div>
+        <p class="card-desc">
+          以天然叢林為背景的戶外民俗博物館，園內移建了多棟傳統琉球古民宅，
+          並定期舉辦八重山民謠演奏、獅子舞等表演。
+          孔雀、石垣島特有鳥類在園內自由行走，自然與文化完美融合。
+        </p>
+        <ul class="card-highlights">
+          <li>移建保存的傳統琉球古民居群</li>
+          <li>每日定時八重山民謠與獅子舞表演</li>
+          <li>孔雀、石垣島特有鳥類自由漫步</li>
+          <li>親子皆宜，室外展示搭配自然生態</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     🍜  餐飲美食
+     ═══════════════════════════════ -->
+<section class="section" id="food">
+  <div class="section-header">
+    <div class="section-icon">🍜</div>
+    <div>
+      <span class="cat-label">FOOD &amp; DRINK</span>
+      <h2>餐飲美食 · Food &amp; Drink</h2>
+    </div>
+  </div>
+  <div class="cards">
+
+    <!-- 14. 八重山そば -->
+    <div class="card">
+      <div class="card-visual g-soba">
+        <div class="vis-num">#14</div>
+        <div class="vis-emoji">🍝</div>
+        <div class="vis-tag">石垣靈魂美食</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-food">美食</span>
+          <span class="badge badge-must">必嚐</span>
+        </div>
+        <div class="card-name">八重山そば</div>
+        <div class="card-name-ja">Yaeyama Soba · やえやまそば</div>
+        <p class="card-desc">
+          石垣島的靈魂食物，有別於沖繩本島的粗麵，八重山そば使用細圓麵條，
+          搭配以豚骨與柴魚熬煮的清澈琥珀湯頭，上覆三層肉、魚板與島蔥，
+          清爽而層次豐富。加入「コーレーグース」泡盛辣椒更添風味。
+        </p>
+        <ul class="card-highlights">
+          <li>細麵清湯，口感清爽不油膩</li>
+          <li>推薦名店：明石食堂、来夏世、一番地</li>
+          <li>加入島産ピパーツ（胡椒）提升層次</li>
+          <li>一碗約 800–900 日圓，性價比極高</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 15. 石垣牛 -->
+    <div class="card">
+      <div class="card-visual g-beef">
+        <div class="vis-num">#15</div>
+        <div class="vis-emoji">🥩</div>
+        <div class="vis-tag">島産頂級和牛</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-food">美食</span>
+          <span class="badge badge-top">頂級牛肉</span>
+        </div>
+        <div class="card-name">石垣牛</div>
+        <div class="card-name-ja">Ishigaki Beef · いしがきぎゅう</div>
+        <p class="card-desc">
+          在石垣島廣闊牧場以無農藥牧草放牧飼育的和牛，
+          以肉質細膩、油花均勻著稱，多次榮獲全國和牛枚舉評選大賞，
+          燒肉、牛排、鐵板燒等多種形式，皆能感受其頂級鮮甜。
+        </p>
+        <ul class="card-highlights">
+          <li>石垣島特産和牛，全國評選屢獲大賞</li>
+          <li>推薦料理：燒肉、石垣牛ステーキ、壽喜燒</li>
+          <li>推薦店：DINING KITCHEN 島やさい食堂</li>
+          <li>島内超市可購買生鮮帶回（需注意攜帶規定）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 16. ゆし豆腐 -->
+    <div class="card">
+      <div class="card-visual g-tofu">
+        <div class="vis-num">#16</div>
+        <div class="vis-emoji">🥣</div>
+        <div class="vis-tag">石垣朝食名物</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-food">美食</span>
+          <span class="badge badge-top">早餐必嚐</span>
+        </div>
+        <div class="card-name">ゆし豆腐（とうふの比嘉）</div>
+        <div class="card-name-ja">Yushi Tofu · Higa Tofu Shop</div>
+        <p class="card-desc">
+          「とうふの比嘉」是石垣島最知名的豆腐老鋪，
+          每天清晨現做的「ゆし豆腐」（未凝固的嫩豆腐）搭配特製醬油，
+          豆香濃郁、口感如雲朵般柔嫩，是島民早餐最愛，
+          旅客常需一早排隊。
+        </p>
+        <ul class="card-highlights">
+          <li>石垣島最具人氣的豆腐專賣店</li>
+          <li>每日限量現做，需早起排隊</li>
+          <li>清晨 6 時起開始販售</li>
+          <li>售完即關門，建議 6–7 時前往</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 17. 泡盛 & 島料理 -->
+    <div class="card">
+      <div class="card-visual g-awamori">
+        <div class="vis-num">#17</div>
+        <div class="vis-emoji">🍶</div>
+        <div class="vis-tag">沖繩傳統蒸餾酒</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-food">美食</span>
+          <span class="badge badge-food">地酒</span>
+        </div>
+        <div class="card-name">泡盛 &amp; 八重山島料理</div>
+        <div class="card-name-ja">Awamori &amp; Shima Ryori · あわもり</div>
+        <p class="card-desc">
+          沖繩特産蒸餾酒「泡盛」以泰国米為原料、黑麴菌發酵，
+          風味獨特。搭配島豆腐、島らっきょう（石垣蒜）、
+          スクガラス（小魚醬）等八重山小菜，是道地的在地飲食體驗。
+        </p>
+        <ul class="card-highlights">
+          <li>請嚐試石垣島産泡盛「於茂登」「玉之露」</li>
+          <li>島料理推薦：島豆腐、海ぶどう（海葡萄）</li>
+          <li>夜間居酒屋文化，與在地人共飲的絕佳氛圍</li>
+          <li>石垣島鍾乳洞內設有泡盛熟成窖可試飲購買</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     🤿  活動體驗
+     ═══════════════════════════════ -->
+<section class="section" id="activity">
+  <div class="section-header">
+    <div class="section-icon">🤿</div>
+    <div>
+      <span class="cat-label">ACTIVITIES</span>
+      <h2>活動體驗 · Activities</h2>
+    </div>
+  </div>
+  <div class="cards">
+
+    <!-- 18. シュノーケリング -->
+    <div class="card">
+      <div class="card-visual g-snorkel">
+        <div class="vis-num">#18</div>
+        <div class="vis-emoji">🤿</div>
+        <div class="vis-tag">海洋體驗</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-activity">體驗</span>
+          <span class="badge badge-must">必體驗</span>
+        </div>
+        <div class="card-name">シュノーケリング</div>
+        <div class="card-name-ja">Snorkeling · シュノーケリング</div>
+        <p class="card-desc">
+          石垣島及周邊離島擁有世界頂級的珊瑚礁生態系，
+          浮潛可近距離觀賞曼波魚、海龜、蝠鱝及數百種熱帶魚。
+          幻の島行程、米原ビーチ和川平湾是三大熱門浮潛地點。
+        </p>
+        <ul class="card-highlights">
+          <li>幻の島半日行程（含浮潛），約 ¥8,000–12,000</li>
+          <li>米原ビーチ自由浮潛，器材可租借</li>
+          <li>常可遇見野生海龜（アオウミガメ）</li>
+          <li>珊瑚礁覆蓋率高，海洋生態豐富多樣</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 19. マングローブカヤック -->
+    <div class="card">
+      <div class="card-visual g-kayak">
+        <div class="vis-num">#19</div>
+        <div class="vis-emoji">🛶</div>
+        <div class="vis-tag">紅樹林探索</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-activity">體驗</span>
+          <span class="badge badge-nature">生態</span>
+        </div>
+        <div class="card-name">マングローブカヤック</div>
+        <div class="card-name-ja">Mangrove Kayaking · まんぐろーぶかやっく</div>
+        <p class="card-desc">
+          在名蔵湾或吹通川的紅樹林水道中輕輕划行，
+          穿越根系交錯的綠色隧道，近距離觀察招潮蟹、
+          彈塗魚與各類水鳥，是融合運動與自然探索的絕佳體驗。
+        </p>
+        <ul class="card-highlights">
+          <li>半日或一日導覽行程，適合初學者</li>
+          <li>可見招潮蟹、彈塗魚、翠鳥等生物</li>
+          <li>名蔵湾為拉姆薩爾濕地，生態格外豐富</li>
+          <li>附導覽解說，深度了解紅樹林生態</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 20. 星空観察 -->
+    <div class="card">
+      <div class="card-visual g-star">
+        <div class="vis-num">#20</div>
+        <div class="vis-emoji">🌌</div>
+        <div class="vis-tag">日本最美星空</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-activity">體驗</span>
+          <span class="badge badge-top">夜間推薦</span>
+        </div>
+        <div class="card-name">星空観察</div>
+        <div class="card-name-ja">Stargazing · ほしぞらかんさつ</div>
+        <p class="card-desc">
+          石垣島是日本最南端的有人島，遠離都市光污染，
+          夜空中銀河清晰可見。南十字星幾乎全年可觀測，
+          是日本國內罕見的絕佳觀星地點，有多家業者提供專業導覽行程。
+        </p>
+        <ul class="card-highlights">
+          <li>日本最容易看見南十字星的地點</li>
+          <li>銀河肉眼清晰可見，無需望遠鏡</li>
+          <li>推薦觀星地：川平湾、平久保崎周邊</li>
+          <li>導覽行程提供天文望遠鏡，約 ¥4,000–6,000</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bonus: サンセットクルーズ -->
+    <div class="card">
+      <div class="card-visual g-sunset">
+        <div class="vis-num">🎁</div>
+        <div class="vis-emoji">🌅</div>
+        <div class="vis-tag">浪漫加選</div>
+      </div>
+      <div class="card-body">
+        <div class="card-badges">
+          <span class="badge badge-activity">體驗</span>
+          <span class="badge badge-top">浪漫推薦</span>
+        </div>
+        <div class="card-name">サンセットクルーズ</div>
+        <div class="card-name-ja">Sunset Cruise · さんせっとくるーず</div>
+        <p class="card-desc">
+          搭乘帆船或遊艇在東海上欣賞落日，
+          天空與海面被染成金橙玫瑰的漸層光彩，
+          搭配泡盛與輕音樂，是石垣島最浪漫的旅行收尾方式，
+          深受蜜月與紀念日旅客喜愛。
+        </p>
+        <ul class="card-highlights">
+          <li>帆船或大型遊艇可選，部分含餐飲</li>
+          <li>觀賞時間約 1.5–2 小時</li>
+          <li>出發地：石垣港離島ターミナル</li>
+          <li>費用約 ¥4,000–8,000，建議提前預約</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main><!-- /main -->
+
+<!-- ─── FOOTER NAV ─── -->
+<footer class="footer-nav">
+  <div>
+    <a href="../index.html">← 返回入口網站</a>
+  </div>
+  <div class="copy">石垣島旅遊指南 2026 · 資料來源：newt.net、orion-tour.co.jp、seachan-ishigakijima.com、ishigaki-pipi.com</div>
+</footer>
+
+<script>
+function setActive(btn, id) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});
+}
+// Highlight active section on scroll
+const sections = ['beach','nature','culture','food','activity'];
+const btns = document.querySelectorAll('.cat-btn');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const idx = sections.indexOf(e.target.id);
+      if (idx !== -1) {
+        btns.forEach(b => b.classList.remove('active'));
+        btns[idx].classList.add('active');
+      }
+    }
+  });
+}, {rootMargin:'-50% 0px -45% 0px'});
+sections.forEach(id => { const el = document.getElementById(id); if(el) observer.observe(el); });
+</script>
+</body>
+</html>
