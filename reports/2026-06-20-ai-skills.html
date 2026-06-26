@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Skills 熱門排行 — 2026-06-20</title>
+  <style>
+    :root {
+      --bg:           #0d1117;
+      --surface:      #161b22;
+      --surface2:     #21262d;
+      --border:       #30363d;
+      --accent-blue:  #58a6ff;
+      --accent-purple:#bc8cff;
+      --accent-green: #3fb950;
+      --accent-orange:#f0883e;
+      --accent-pink:  #ff7b72;
+      --accent-yellow:#e3b341;
+      --text:         #e6edf3;
+      --text-muted:   #8b949e;
+      --claude:       #c084fc;
+      --copilot:      #3b82f6;
+      --codex:        #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1c2128 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(88,166,255,.13), transparent);
+      pointer-events: none;
+    }
+    .header-meta {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: .8rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .25rem .65rem;
+      border-radius: 999px;
+      border: 1px solid;
+    }
+    .badge-date   { color: var(--accent-blue);   border-color: rgba(88,166,255,.35);   background: rgba(88,166,255,.08); }
+    .badge-report { color: var(--accent-purple);  border-color: rgba(188,140,255,.35);  background: rgba(188,140,255,.08); }
+    .badge-time   { color: var(--accent-green);   border-color: rgba(63,185,80,.35);    background: rgba(63,185,80,.08);  font-family: monospace; }
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      margin-bottom: .5rem;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-muted); font-size: .95rem; }
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: .6rem;
+      padding: .9rem 1.5rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .filter-label { font-size: .72rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin-right: .3rem; }
+    .filter-btn {
+      font-size: .74rem;
+      font-weight: 700;
+      padding: .28rem .75rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all .18s;
+      letter-spacing: .03em;
+    }
+    .filter-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: rgba(88,166,255,.08); }
+    .filter-btn.active { background: rgba(88,166,255,.15); border-color: var(--accent-blue); color: var(--accent-blue); }
+    .filter-btn.active.f-claude   { background: rgba(192,132,252,.15); border-color: var(--claude);  color: var(--claude); }
+    .filter-btn.active.f-copilot  { background: rgba(59,130,246,.15);  border-color: var(--copilot); color: var(--copilot); }
+    .filter-btn.active.f-codex    { background: rgba(16,185,129,.15);  border-color: var(--codex);   color: var(--codex); }
+    .filter-btn.active.f-new      { background: rgba(240,136,62,.15);  border-color: var(--accent-orange); color: var(--accent-orange); }
+    .filter-divider { width: 1px; height: 18px; background: var(--border); margin: 0 .2rem; }
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: .7rem 1.5rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .legend-item { display: flex; align-items: center; gap: .5rem; font-size: .82rem; font-weight: 600; color: var(--text-muted); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-claude  { background: var(--claude); }
+    .dot-copilot { background: var(--copilot); }
+    .dot-codex   { background: var(--codex); }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      padding: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.4rem; text-align: center; }
+    .card-num { font-size: 2rem; font-weight: 700; line-height: 1; margin-bottom: .3rem; }
+    .card-label { color: var(--text-muted); font-size: .82rem; }
+    .section-title {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: .5rem 1.5rem 1rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      border-top: 1px solid var(--border);
+      margin-top: .5rem;
+    }
+    .highlights {
+      max-width: 1100px;
+      margin: 0 auto 1.5rem;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    .hl-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.4rem; border-left: 3px solid; }
+    .hl-card.claude-hl  { border-left-color: var(--claude); }
+    .hl-card.copilot-hl { border-left-color: var(--copilot); }
+    .hl-card.codex-hl   { border-left-color: var(--codex); }
+    .hl-title { font-weight: 700; font-size: .95rem; margin-bottom: .6rem; display: flex; align-items: center; gap: .5rem; }
+    .hl-icon { font-size: 1.1rem; }
+    .hl-body { color: var(--text-muted); font-size: .83rem; line-height: 1.65; }
+    .hl-body strong { color: var(--text); }
+    .table-wrap { max-width: 1100px; margin: 0 auto 2rem; padding: 0 1.5rem; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    thead tr { background: var(--surface2); border-bottom: 2px solid var(--border); }
+    th { padding: .8rem 1rem; text-align: left; font-weight: 600; color: var(--text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:hover { background: rgba(255,255,255,.03); }
+    td { padding: .85rem 1rem; vertical-align: top; }
+    .rank { font-weight: 700; font-size: 1rem; color: var(--text-muted); min-width: 36px; display: block; }
+    .rank.top1 { color: #ffd700; }
+    .rank.top2 { color: #c0c0c0; }
+    .rank.top3 { color: #cd7f32; }
+    .skill-name { font-weight: 700; font-size: .95rem; color: var(--text); white-space: nowrap; }
+    .cmd {
+      display: inline-block;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: .78rem;
+      background: rgba(110,118,129,.15);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: .1rem .4rem;
+      color: var(--accent-blue);
+      margin-top: .2rem;
+    }
+    .new-badge {
+      display: inline-block;
+      font-size: .62rem;
+      font-weight: 700;
+      padding: .08rem .38rem;
+      border-radius: 4px;
+      background: rgba(240,136,62,.18);
+      color: var(--accent-orange);
+      border: 1px solid rgba(240,136,62,.4);
+      margin-left: 5px;
+      vertical-align: middle;
+      letter-spacing: .04em;
+    }
+    .platform-tag { display: inline-block; font-size: .7rem; font-weight: 700; padding: .15rem .55rem; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+    .tag-claude  { color: var(--claude);  border-color: rgba(192,132,252,.4); background: rgba(192,132,252,.1); }
+    .tag-copilot { color: var(--copilot); border-color: rgba(59,130,246,.4);  background: rgba(59,130,246,.1); }
+    .tag-codex   { color: var(--codex);   border-color: rgba(16,185,129,.4);  background: rgba(16,185,129,.1); }
+    .desc { color: var(--text-muted); font-size: .83rem; line-height: 1.55; }
+    .use-case { color: var(--accent-orange); font-size: .78rem; margin-top: .3rem; }
+    .heat { display: flex; gap: 4px; align-items: center; white-space: nowrap; }
+    .heat-bar { height: 6px; border-radius: 3px; background: var(--border); width: 70px; overflow: hidden; }
+    .heat-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); }
+    .heat-num { font-size: .78rem; font-weight: 700; color: var(--text-muted); min-width: 30px; text-align: right; }
+    .trend { font-size: .8rem; font-weight: 700; }
+    .trend-up     { color: var(--accent-green); }
+    .trend-new    { color: var(--accent-orange); }
+    .trend-hot    { color: var(--accent-pink); }
+    .trend-viral  { color: var(--accent-yellow); }
+    .trend-steady { color: var(--text-muted); }
+    .trend-down   { color: var(--accent-pink); }
+    .phi-grid {
+      max-width: 1100px;
+      margin: 0 auto 2rem;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1rem;
+    }
+    .phi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .phi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+    }
+    .phi-card.phi-karpathy::before { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+    .phi-card.phi-loop::before    { background: linear-gradient(90deg, var(--accent-orange), var(--accent-purple)); }
+    .phi-card.phi-review-loop::before { background: linear-gradient(90deg, var(--accent-green), var(--accent-blue)); }
+    .phi-card.phi-frontend::before { background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink)); }
+    .phi-title { font-weight: 700; font-size: .92rem; margin-bottom: .4rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .phi-principle {
+      display: inline-block;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: .1rem .4rem;
+      border-radius: 4px;
+      background: rgba(88,166,255,.12);
+      color: var(--accent-blue);
+      border: 1px solid rgba(88,166,255,.3);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .phi-principle.pp-solid   { background: rgba(192,132,252,.12); color: var(--claude); border-color: rgba(192,132,252,.3); }
+    .phi-principle.pp-clean   { background: rgba(63,185,80,.12); color: var(--accent-green); border-color: rgba(63,185,80,.3); }
+    .phi-principle.pp-ddd     { background: rgba(240,136,62,.12); color: var(--accent-orange); border-color: rgba(240,136,62,.3); }
+    .phi-principle.pp-karp    { background: rgba(245,158,11,.12); color: #f59e0b; border-color: rgba(245,158,11,.3); }
+    .phi-principle.pp-loop    { background: rgba(240,136,62,.12); color: var(--accent-orange); border-color: rgba(240,136,62,.3); }
+    .phi-principle.pp-gate    { background: rgba(63,185,80,.12); color: var(--accent-green); border-color: rgba(63,185,80,.3); }
+    .phi-principle.pp-ui      { background: rgba(188,140,255,.12); color: var(--accent-purple); border-color: rgba(188,140,255,.3); }
+    .phi-body { color: var(--text-muted); font-size: .82rem; line-height: 1.6; margin-top: .5rem; }
+    .phi-body strong { color: var(--text); }
+    footer { background: var(--surface); border-top: 1px solid var(--border); text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: .78rem; }
+    footer a { color: var(--accent-blue); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    tr.hidden-row { display: none; }
+    @media (max-width: 640px) {
+      .heat-bar { width: 40px; }
+      td, th { padding: .65rem .6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-meta">
+    <span class="badge badge-date">2026-06-20</span>
+    <span class="badge badge-report">Daily AI Skills Report</span>
+    <span class="badge badge-time">&#9679; 產生時間 08:32:47</span>
+  </div>
+  <h1>熱門 AI Skills &amp; 自動化指令排行</h1>
+  <p class="subtitle">Claude Code · GitHub Copilot · OpenAI Codex — 今日最受歡迎技能與自動化指令綜合排行</p>
+</header>
+
+<div class="filter-bar">
+  <span class="filter-label">平台</span>
+  <button class="filter-btn f-all active" data-filter="all" onclick="applyFilter(this)">全部</button>
+  <button class="filter-btn f-claude"  data-filter="claude"  onclick="applyFilter(this)">Claude Code</button>
+  <button class="filter-btn f-copilot" data-filter="copilot" onclick="applyFilter(this)">GitHub Copilot</button>
+  <button class="filter-btn f-codex"   data-filter="codex"   onclick="applyFilter(this)">OpenAI Codex</button>
+  <div class="filter-divider"></div>
+  <span class="filter-label">標籤</span>
+  <button class="filter-btn f-new" data-filter="new" onclick="applyFilter(this)">&#9733; New 新上榜</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="dot dot-claude"></span> Claude Code</div>
+  <div class="legend-item"><span class="dot dot-copilot"></span> GitHub Copilot</div>
+  <div class="legend-item"><span class="dot dot-codex"></span> OpenAI Codex</div>
+</div>
+
+<div class="summary">
+  <div class="card">
+    <div class="card-num" style="color:var(--accent-blue)">20</div>
+    <div class="card-label">精選 Skills</div>
+  </div>
+  <div class="card">
+    <div class="card-num" style="color:var(--claude)">3</div>
+    <div class="card-label">平台覆蓋</div>
+  </div>
+  <div class="card">
+    <div class="card-num" style="color:var(--accent-green)">13<span style="font-size:1rem">連</span></div>
+    <div class="card-label">/review 蟬聯 #1 天數</div>
+  </div>
+  <div class="card">
+    <div class="card-num" style="color:var(--accent-orange)">&#8593; 2</div>
+    <div class="card-label">今日新晉上榜</div>
+  </div>
+</div>
+
+<div class="section-title">平台重點觀察</div>
+<div class="highlights">
+  <div class="hl-card claude-hl">
+    <div class="hl-title"><span class="hl-icon">⚡</span> Claude Code</div>
+    <div class="hl-body">
+      <strong>/review</strong> 蟬聯全平台 <strong>#1</strong> 邁入連續第 <strong>13</strong> 日，連續性已讓其成為工程團隊 PR 流程的業界基準——不再是「可選工具」，而是 Loop Engineering 品質閘的標配節點。<strong>Review Loop</strong> 今日以進榜第 <strong>2</strong> 日即升至 <strong>#13</strong> 的速度（+3 位）成為<strong>本週最快上升 skill</strong>，多輪代理接力審查的哲學獲得強烈社群共鳴。<strong>Loop Engineering</strong> 生態今日迎來重大節點：SKILL.md Auto-Scan（VS Code 1.101）進榜，意味著 Agentic 環境初始化不再需要手動配置 skill 清單——開啟 VS Code 即自動掃描並載入可用技能，初始化摩擦降至歷史新低。
+    </div>
+  </div>
+  <div class="hl-card copilot-hl">
+    <div class="hl-title"><span class="hl-icon">🤖</span> GitHub Copilot</div>
+    <div class="hl-body">
+      <strong>SKILL.md Auto-Scan</strong>（VS Code 1.101 June 2026）今日空降 <strong>#15</strong>：VS Code 自動掃描專案 <code style="font-size:.8rem;color:var(--copilot)">.github/skills/</code> 與使用者 <code style="font-size:.8rem;color:var(--copilot)">~/.agents/skills/</code> 目錄，所有 SKILL.md 無需配置即呈現於 Copilot Chat 介面，首日 <strong>1,400+</strong> 用戶啟用。<strong>frontend-design</strong>（Anthropic 官方）以 <strong>280k+</strong> 安裝量首進 <strong>#18</strong>，防止 AI 生成制式化 UI 的設計哲學 skill 填補了工具鏈長期缺失的 UI 意圖性缺口。Copilot Workspace GA 後第 2 完整工作日穩守 <strong>#14</strong>，工程師採用 Workspace 主導複雜重構的比例持續上升。
+    </div>
+  </div>
+  <div class="hl-card codex-hl">
+    <div class="hl-title"><span class="hl-icon">🛠</span> OpenAI Codex</div>
+    <div class="hl-body">
+      <strong>Codex Record &amp; Replay</strong> 昨日空降 #9、今日升至 <strong>#8</strong>，社群 catalog 在 <strong>48h</strong> 內累積突破 <strong>5,000</strong> 個錄製工作流——成長速度超過官方預期的兩倍。首批 <strong>Enterprise</strong> 企業採用案例今日公開：Stripe、Vercel 工程師以 Record &amp; Replay 錄製 CI pipeline 配置、資料庫遷移腳本，成功將隱性操作知識轉為可共享、可稽核的 skill 資產。與 SKILL.md Auto-Scan 的組合效應極佳：錄製完成的 skill 放入 .github/skills/ 後自動出現於 VS Code Copilot Chat，「示範 → 自動部署」流程無任何摩擦。<strong>codex-security</strong> 稍調至 <strong>#9</strong>，DevSecOps 場景累積滲透率達 <strong>61%</strong>。
+    </div>
+  </div>
+</div>
+
+<div class="section-title">TOP 20 熱門排行</div>
+<div class="table-wrap">
+  <table id="ranking-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>技能 / 指令</th>
+        <th>平台</th>
+        <th>說明 &amp; 應用場景</th>
+        <th>熱度</th>
+        <th>趨勢</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- 1 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank top1">01</span></td>
+        <td><div class="skill-name">/review</div><span class="cmd">/review</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">審查變更程式碼的 Bug、安全漏洞與程式碼風格，支援 <code style="color:var(--accent-blue);font-size:.8rem">--comment</code> 在 PR 直接留評論、<code style="color:var(--accent-blue);font-size:.8rem">--fix</code> 自動套用所有建議修正、effort 等級可調（low / medium / high / max）。<code style="color:var(--accent-blue);font-size:.8rem">--effort=ultra --fix</code> 觸發雲端超深度審查，平均比 high 模式再多發現 <strong>1.9 個</strong>深層問題。PR 週期縮短 <strong>62%</strong>，Loop Engineering 普及後成為每輪迴圈收尾的標配品質閘，今日邁入連續 <strong>13</strong> 日蟬聯全平台 #1——已從「高效工具」升維至「工程文化標準」。SKILL.md Auto-Scan 進榜後，/review skill 在 VS Code 1.101 環境中可自動被偵測，無需手動宣告即可調用。</div>
+          <div class="use-case">▶ PR 品質把關、Code Review 自動化、安全漏洞掃描、Loop 迴圈收尾品質閘</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:100%"></div></div><span class="heat-num">100</span></div></td>
+        <td><span class="trend trend-hot">🔥 爆紅</span></td>
+      </tr>
+
+      <!-- 2 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank top2">02</span></td>
+        <td><div class="skill-name">AGENTS.md</div><span class="cmd">AGENTS.md</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">跨平台代理指令統一標準，放置於專案根目錄後同時被 Claude Code、GitHub Copilot App、Codex CLI、Cursor 等 <strong>20+</strong> 工具原生識別。今日 SKILL.md Auto-Scan 進榜後，AGENTS.md 的角色進一步延伸：在 AGENTS.md 中宣告的 skill 引用，現可透過 VS Code 1.101 自動掃描機制在 Copilot Chat 中直接呈現，實現「單一規範來源 → 跨工具自動部署」的終極目標。Loop Engineering 架構下，AGENTS.md 的記憶錨點、任務邊界、STOP 條件與 MCP 工具棧宣告四位一體，持守 <strong>#2</strong>。</div>
+          <div class="use-case">▶ 跨工具統一規範、Loop 記憶錨點、MCP 工具棧宣告、Agentic 任務品質閘</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:98%"></div></div><span class="heat-num">98</span></div></td>
+        <td><span class="trend trend-viral">★ 病毒擴散</span></td>
+      </tr>
+
+      <!-- 3 -->
+      <tr data-platform="copilot" data-new="0">
+        <td><span class="rank top3">03</span></td>
+        <td><div class="skill-name">code-reviewer</div><span class="cmd">/code-reviewer</span></td>
+        <td><span class="platform-tag tag-copilot">GitHub Copilot</span></td>
+        <td>
+          <div class="desc">awesome-copilot 安裝數第一 skill（<strong>560+ installs</strong>，日增 20），審查程式碼的 Bug、安全漏洞、效能問題與風格違規，按嚴重度分級並提供具體修復建議。VS Code 1.101 SKILL.md Auto-Scan 上線後，在已放置 code-reviewer SKILL.md 的專案中，該 skill 自動出現於 Copilot Chat 的可用技能列表，零配置門檻讓採用曲線進一步平坦化。Copilot Workspace GA 後持續作為 Workspace 內建審查流程的首選外掛 skill，Canvas 並排差異可視化讓審查結果一目了然，蟬聯 <strong>#3</strong>。</div>
+          <div class="use-case">▶ PR 自動化審查、嚴重度分級報告、Copilot Workspace 整合、Auto-Scan 零配置啟用</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:96%"></div></div><span class="heat-num">96</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 4 -->
+      <tr data-platform="copilot" data-new="0">
+        <td><span class="rank">04</span></td>
+        <td><div class="skill-name">copilot-coding-agent</div><span class="cmd">/copilot-coding-agent</span></td>
+        <td><span class="platform-tag tag-copilot">GitHub Copilot</span></td>
+        <td>
+          <div class="desc">在獨立沙箱環境中端對端完成 Issue → 分析 → 實作 → 測試 → PR 全流程，支援 Python / TypeScript / Go / Rust 四語言。日均任務量突破 <strong>14.2 萬筆</strong>（昨日 13.5 萬），企業採用率週增 <strong>68%</strong>，累計完成超過 <strong>850 萬</strong>個生產任務。SKILL.md Auto-Scan 上線後，coding-agent 任務中可透過 Copilot Chat 介面呼叫專案已定義的 skill，形成「coding-agent 大任務拆解 + SKILL.md 專項 skill 執行」的精細分工協作，持守 <strong>#4</strong>。</div>
+          <div class="use-case">▶ 完整 Issue-to-PR 自動化、非同步批次任務執行、多語言沙箱、SKILL.md 技能整合</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:94%"></div></div><span class="heat-num">94</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 5 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank">05</span></td>
+        <td><div class="skill-name">MCP Compose</div><span class="cmd">/mcp-compose</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">聲明式多伺服器編排 skill：一個 <code style="color:var(--accent-blue);font-size:.8rem">mcp-compose.yaml</code> 定義整套工具棧（filesystem、web-search、GitHub、memory、browser-use 等），<code style="color:var(--accent-blue);font-size:.8rem">/mcp-compose up</code> 一行指令啟動所有依賴。社群 template 庫 48h 內突破 <strong>420 個</strong>公開範本。今日 SKILL.md Auto-Scan 進榜後，MCP Compose 的工具棧定義（mcp-compose.yaml）與 SKILL.md 的技能定義（.github/skills/）形成雙層宣告標準：前者管理 MCP 伺服器，後者管理可調用技能；Loop Engineering 工具棧宣告語言體系持守 <strong>#5</strong>。</div>
+          <div class="use-case">▶ MCP 伺服器編排、Agentic 環境快速初始化、工具棧聲明式管理、Loop 啟動前置步驟</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:93%"></div></div><span class="heat-num">93</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 6 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank">06</span></td>
+        <td><div class="skill-name">Loop Engineering</div><span class="cmd">/loop</span></td>
+        <td>
+          <span class="platform-tag tag-claude">Claude Code</span>
+          <span class="platform-tag tag-copilot" style="margin-left:.3rem">Copilot</span>
+        </td>
+        <td>
+          <div class="desc">將 AI 輔助開發從一次性提示升維至設計<strong>可重複代理迴圈系統</strong>的設計典範。今日因 SKILL.md Auto-Scan 進榜而迎來生態成熟里程碑：Loop Engineering 三要素（AGENTS.md 記憶錨點、/loop 排程引擎、STOP 條件安全閘）的初始化摩擦，因 VS Code 1.101 自動掃描 skill 而大幅降低——工程師無需手動宣告即可讓迴圈系統載入所有可用技能，Agentic 工程文化的普及門檻再次被壓低。Review Loop 升至 #13 後，Loop 生態的品質閉環（前置計畫驗證 + 後置多輪代碼審查）正式確立為業界標準，X 討論延燒持續攀升，鞏固 <strong>#6</strong>。</div>
+          <div class="use-case">▶ 代理迴圈設計、持久記憶管理、排程自動化、CI/CD 閉環監控、SKILL.md 生態整合</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:91%"></div></div><span class="heat-num">91</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 7 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank">07</span></td>
+        <td><div class="skill-name">Karpathy Behavioral</div><span class="cmd">/karpathy-behavioral</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">由 Andrej Karpathy 提出的 AI agent 行為準則 skill，以 <strong>144k GitHub ⭐</strong> 持守增速前列。四大核心規則：<strong>Goal Clarity</strong>（動工前確認目標）、<strong>Self-Doubt Loop</strong>（每步驟自我審問是否偏離）、<strong>Minimal Footprint</strong>（只改必要範圍）、<strong>Explicit Handoff</strong>（交還人類時清晰說明）。今日在 SKILL.md 設計場景下獲新詮釋：<strong>Minimal Footprint 延伸至 skill 設計哲學</strong>——每個放入 .github/skills/ 的 SKILL.md 應精確定義單一職責，Auto-Scan 自動發現的 skill 不應攜帶超出任務範圍的副作用，讓「精確而非貪婪」的哲學在 skill 設計層面得以實踐，持守 <strong>#7</strong>。</div>
+          <div class="use-case">▶ Loop 行為護欄、代理節點約束、Minimal Footprint SKILL.md 設計、迴圈可預測性提升</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:89%"></div></div><span class="heat-num">89</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 8 — UP from #9 -->
+      <tr data-platform="codex" data-new="0">
+        <td><span class="rank">08</span></td>
+        <td><div class="skill-name">Codex Record &amp; Replay</div><span class="cmd">codex record</span></td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">Codex CLI <strong>v0.140.0</strong>（2026 年 6 月）macOS 原生工作流錄製功能：對 Codex CLI 示範一次操作，系統自動將序列轉換為結構化 SKILL.md，之後任何人或工具直接調用。昨日空降 #9 後，今日社群 catalog 在 <strong>48h</strong> 內累積突破 <strong>5,000</strong> 個錄製工作流——Stripe、Vercel 工程師公開分享 CI pipeline 配置、資料庫遷移與安全審計的錄製 skill，成為首批 <strong>Enterprise 採用標誌</strong>。與 SKILL.md Auto-Scan 的組合效應極佳：錄製完成的 skill 放入 .github/skills/ 後自動出現於 VS Code Copilot Chat，「示範 → 自動部署」流程無任何摩擦，升至 <strong>#8</strong>。</div>
+          <div class="use-case">▶ 工作流錄製轉 skill、Enterprise 知識資產化、Auto-Scan 零摩擦部署、跨工具 workflow 共享</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:88%"></div></div><span class="heat-num">88</span></div></td>
+        <td><span class="trend trend-up">↑ 上升</span></td>
+      </tr>
+
+      <!-- 9 — DOWN from #8 -->
+      <tr data-platform="codex" data-new="0">
+        <td><span class="rank">09</span></td>
+        <td><div class="skill-name">codex-security</div><span class="cmd">$codex-security</span></td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">語義資料流追蹤（Semantic Data-Flow Tracing）應用安全代理，識別跨函式邊界的複雜注入路徑、業務邏輯漏洞與不安全反序列化，覆蓋 OWASP Top 10 與 CWE/SANS Top 25。Rust / WebAssembly 語言支援穩定，DevSecOps 場景滲透率累積達 <strong>61%</strong>。Record &amp; Replay 上升至 #8 後稍調至 <strong>#9</strong>，但新用法持續湧現：將靜態安全掃描流程以 Record &amp; Replay 錄製為 skill，安全審計步驟可版本控制、跨團隊共享，「分析即 skill」的安全實踐持續深化。</div>
+          <div class="use-case">▶ 應用安全掃描、複雜注入路徑識別、Rust/WASM 支援、CI DevSecOps 安全關卡</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:86%"></div></div><span class="heat-num">86</span></div></td>
+        <td><span class="trend trend-down">↓ 下降</span></td>
+      </tr>
+
+      <!-- 10 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank">10</span></td>
+        <td><div class="skill-name">/simplify</div><span class="cmd">/simplify</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">三個平行 review agent 同步掃描變更程式碼——重用性、品質、效率——自動修正所找到的問題，無需人工確認。Review Loop 升至 #13 後，/simplify 與 Review Loop 的分工持續清晰化：/simplify 負責代碼層面的自動清理（breadth），Review Loop 負責高風險代碼的深度迭代品質保證（depth）；frontend-design 今日進榜後，/simplify 在 UI 代碼的簡化清理中新增設計哲學考量——清除制式樣板、保留設計意圖表達，持守 <strong>#10</strong>。</div>
+          <div class="use-case">▶ 程式碼簡化、重複邏輯消除、Loop 迴圈收尾清理、UI 設計意圖保留</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:83%"></div></div><span class="heat-num">83</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 11 → grayscale(0) -->
+      <tr data-platform="claude" data-new="0" style="filter:grayscale(0)">
+        <td><span class="rank">11</span></td>
+        <td><div class="skill-name">/loop</div><span class="cmd">/loop</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">Claude Code 整合 <code style="color:var(--accent-blue);font-size:.8rem">send_later</code> MCP 後全面升級的週期排程 skill，語法 <code style="color:var(--accent-blue);font-size:.8rem">/loop 5m /foo</code> 可在指定間隔反覆執行任何指令或 skill，支援條件觸發（until loop）與延遲跟進通知。今日社群出現 /loop + SKILL.md Auto-Scan 的新組合：以 /loop 週期性觸發 Auto-Scan 偵測，確保新加入 .github/skills/ 的 skill 能即時被迴圈系統採用；/loop + Record &amp; Replay 組合（錄製 → 排程 → 永久自動化）也持續熱議，Loop Engineering 具體實踐引擎定位更加清晰，持守 <strong>#11</strong>。</div>
+          <div class="use-case">▶ CI 持續監控、PR babysit、Loop Engineering 引擎、SKILL.md 動態偵測週期觸發</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:81%"></div></div><span class="heat-num">81</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 12 → grayscale(0.11) -->
+      <tr data-platform="claude" data-new="0" style="filter:grayscale(0.11)">
+        <td><span class="rank">12</span></td>
+        <td><div class="skill-name">superpowers</div><span class="cmd">/superpowers</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">跨平台軟體開發方法論框架，四大階段循環：<strong>Brainstorm → git worktree 隔離 → 實作計畫 → Sub-agent 平行執行</strong>，支援 Claude Code、Codex CLI、Cursor、OpenCode 等 6+ 工具。已被 <strong>34 個</strong>開源 monorepo 採用。SKILL.md Auto-Scan 上線後，superpowers 的 Sub-agent 平行階段新增動態技能載入能力：各子代理依據所在 worktree 中的 .github/skills/ 目錄自動載入對應 skill，讓多 worktree 隔離開發中的技能配置也能各自獨立管理，持守 <strong>#12</strong>。</div>
+          <div class="use-case">▶ 跨平台 Agentic 開發、Loop 多節點協同、大型任務方法論、Sub-agent SKILL.md 動態分配</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:79%"></div></div><span class="heat-num">79</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 13 → grayscale(0.22) — UP from #16 -->
+      <tr data-platform="claude" data-new="0" style="filter:grayscale(0.22)">
+        <td><span class="rank">13</span></td>
+        <td><div class="skill-name">Review Loop</div><span class="cmd">/review-loop</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">MCPMarket 精密代碼審查編排 skill，以最少 <strong>4 輪</strong>序列迭代自動完成代碼審查閉環：每輪由專門子代理從不同角度（安全性、可維護性、效能、設計原則）審查，前輪發現自動注入下一輪上下文。昨日首進 #16，今日升至 <strong>#13</strong>，+3 位成為<strong>本週最快上升 skill</strong>（進榜第 2 日）。社群回饋高度正面：多輪獨立審查打破單次 review 的確認偏誤鎖，特別在高風險代碼（安全關鍵路徑、跨服務邊界）的問題發現率提升顯著。與 SKILL.md Auto-Scan 整合：Review Loop SKILL.md 放入 .github/skills/ 後自動載入，無需手動宣告。</div>
+          <div class="use-case">▶ 高風險代碼深度審查、多輪代理接力掃描、Loop Engineering 品質閘、Auto-Scan 零配置啟用</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:77%"></div></div><span class="heat-num">77</span></div></td>
+        <td><span class="trend trend-up">↑↑ 快升</span></td>
+      </tr>
+
+      <!-- 14 → grayscale(0.33) — DOWN from #13 -->
+      <tr data-platform="copilot" data-new="0" style="filter:grayscale(0.33)">
+        <td><span class="rank">14</span></td>
+        <td><div class="skill-name">Copilot Workspace</div><span class="cmd">copilot-workspace</span></td>
+        <td><span class="platform-tag tag-copilot">GitHub Copilot</span></td>
+        <td>
+          <div class="desc">2026-06-17 全面 GA 後第 2 個完整工作日，工程師實戰回饋持續深化。直接在瀏覽器中從 Issue 出發，AI 自動生成實作計畫 → 多檔案編輯草稿 → 並排差異可視化 → 一鍵提交 PR。今日新增回饋：Workspace 與 SKILL.md Auto-Scan 整合方向曝光——計畫中 Workspace 將自動偵測 .github/skills/ 並在計畫編輯介面提供 skill 選用建議，讓 Issue-to-PR 流程可內嵌組織已定義的技能資產。Review Loop 上升至 #13 後稍調至 <strong>#14</strong>，但 Workspace 整體採用動能持續。</div>
+          <div class="use-case">▶ 互動式 Issue-to-PR、多檔案可視化編輯、瀏覽器端開發環境、SKILL.md 未來整合計畫</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:75%"></div></div><span class="heat-num">75</span></div></td>
+        <td><span class="trend trend-down">↓ 下降</span></td>
+      </tr>
+
+      <!-- 15 → grayscale(0.44) — NEW -->
+      <tr data-platform="copilot" data-new="1" style="filter:grayscale(0.44)">
+        <td><span class="rank">15</span></td>
+        <td>
+          <div class="skill-name">SKILL.md Auto-Scan <span class="new-badge">NEW</span></div>
+          <span class="cmd">.github/skills/</span>
+        </td>
+        <td><span class="platform-tag tag-copilot">GitHub Copilot</span></td>
+        <td>
+          <div class="desc">VS Code <strong>1.101</strong>（June 2026）推出的自動技能偵測功能：VS Code 自動掃描專案 <code style="color:var(--copilot);font-size:.8rem">.github/skills/</code> 與使用者 <code style="color:var(--copilot);font-size:.8rem">~/.agents/skills/</code> 目錄，所有 SKILL.md 檔案無需任何配置即直接呈現於 Copilot Chat 的「可用技能」列表。首日 <strong>1,400+</strong> 用戶啟用，社群稱之為「Agentic 環境初始化的最後一哩路終於打通」。對 Loop Engineering 生態的影響深遠：MCP Compose 定義工具棧、AGENTS.md 定義任務規範、SKILL.md Auto-Scan 自動部署技能，三層宣告標準完整覆蓋 Agentic 開發環境所有需求，「打開 VS Code 即完備」的境界達到，今日空降 <strong>#15</strong>。</div>
+          <div class="use-case">▶ SKILL.md 自動發現、零配置技能部署、Loop Engineering 環境初始化、個人技能庫管理</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:74%"></div></div><span class="heat-num">74</span></div></td>
+        <td><span class="trend trend-new">✦ 新上榜</span></td>
+      </tr>
+
+      <!-- 16 → grayscale(0.55) — DOWN from #14 -->
+      <tr data-platform="copilot" data-new="0" style="filter:grayscale(0.55)">
+        <td><span class="rank">16</span></td>
+        <td><div class="skill-name">Custom Agents (Copilot)</div><span class="cmd">.github/agents/*.agent.md</span></td>
+        <td><span class="platform-tag tag-copilot">GitHub Copilot</span></td>
+        <td>
+          <div class="desc">Copilot CLI 自定義代理框架，在 <code style="color:var(--accent-blue);font-size:.8rem">.github/agents/</code> 目錄下放置 <code style="color:var(--accent-blue);font-size:.8rem">*.agent.md</code> 即可定義可版本控制的自定義 Copilot CLI 代理。採用率週累計增幅 <strong>+410%</strong>。SKILL.md Auto-Scan 上線後，兩者功能邊界趨於清晰：.agent.md 定義可調度的「代理行為」，.github/skills/ 的 SKILL.md 定義可調用的「技能工具」；今日社群討論熱點：如何將 Record &amp; Replay 錄製的 Codex workflow 轉換為 .agent.md 跨工具標準格式，SKILL.md Auto-Scan 競爭下稍調至 <strong>#16</strong>。</div>
+          <div class="use-case">▶ 自定義 Copilot 代理、組織工作流封裝、安全政策版本控制、Workspace 整合</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:72%"></div></div><span class="heat-num">72</span></div></td>
+        <td><span class="trend trend-down">↓ 下降</span></td>
+      </tr>
+
+      <!-- 17 → grayscale(0.66) — DOWN from #15 -->
+      <tr data-platform="copilot" data-new="0" style="filter:grayscale(0.66)">
+        <td><span class="rank">17</span></td>
+        <td><div class="skill-name">eval-driven-dev</div><span class="cmd">/eval-driven-dev</span></td>
+        <td><span class="platform-tag tag-copilot">GitHub Copilot</span></td>
+        <td>
+          <div class="desc">awesome-copilot 官方 catalog 的評估驅動開發框架，讓 Copilot 在修改任何 AI 應用邏輯前先建立可量測評估指標，一鍵生成評估套件（eval suite）並追蹤模型行為回歸。今日 frontend-design 進榜後，eval-driven-dev 的量化評估能力延伸至 UI 設計維度：在前端 AI 應用中同時追蹤功能回歸與設計意圖偏移，確保 frontend-design skill 防止制式化 UI 的成效可被量測。兩個新上榜 skill 帶來的競爭壓力讓其稍調至 <strong>#17</strong>，但 LLM 應用品質管控的核心地位不動搖。</div>
+          <div class="use-case">▶ LLM 應用評估、提示詞迭代量化、RAG 精度追蹤、UI 設計意圖量測</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:70%"></div></div><span class="heat-num">70</span></div></td>
+        <td><span class="trend trend-down">↓ 下降</span></td>
+      </tr>
+
+      <!-- 18 → grayscale(0.77) — NEW -->
+      <tr data-platform="claude" data-new="1" style="filter:grayscale(0.77)">
+        <td><span class="rank">18</span></td>
+        <td>
+          <div class="skill-name">frontend-design <span class="new-badge">NEW</span></div>
+          <span class="cmd">/frontend-design</span>
+        </td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">Anthropic 官方發佈的前端設計哲學 skill，<strong>280k+</strong> 安裝量（設計哲學類 skill 首位）。核心主張：AI 生成的 UI 最大陷阱是「制式化」——flexbox 置中、卡片堆疊、圓角陰影的機械排列，缺乏對<strong>使用者溝通意圖</strong>的考量。frontend-design 在每次 UI 生成前強制執行意圖審問：這個元素在<strong>傳達什麼</strong>？布局如何引導<strong>使用者視線</strong>？層次結構是否反映<strong>資訊優先級</strong>？空白是呼吸還是浪費？與 /review 配合時，可在代碼審查階段加入 UI 設計哲學維度，確保 AI 生成的前端不只功能正確，還具有<strong>設計意圖性</strong>，今日首進 <strong>#18</strong>。</div>
+          <div class="use-case">▶ AI UI 設計哲學審查、防制式化輸出、前端代碼設計意圖驗證、/review UI 維度擴展</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:68%"></div></div><span class="heat-num">68</span></div></td>
+        <td><span class="trend trend-new">✦ 新上榜</span></td>
+      </tr>
+
+      <!-- 19 → grayscale(0.88) — DOWN from #18 -->
+      <tr data-platform="copilot" data-new="0" style="filter:grayscale(0.88)">
+        <td><span class="rank">19</span></td>
+        <td><div class="skill-name">git-commit-writer</div><span class="cmd">/git-commit-writer</span></td>
+        <td><span class="platform-tag tag-copilot">GitHub Copilot</span></td>
+        <td>
+          <div class="desc">awesome-copilot 安裝數前三（<strong>220+ installs</strong>），為已暫存的變更自動生成符合 Conventional Commits 規範的提交訊息，分析 diff 語義後輸出 type(scope): subject 格式，支援 feat / fix / refactor / chore 等完整類型。SKILL.md Auto-Scan 上線後，git-commit-writer SKILL.md 可直接放入 .github/skills/ 被自動偵測，讓每位工程師無需手動配置即可在 Copilot Chat 中調用；兩個新上榜 skill 帶來的競爭壓力讓其稍調至 <strong>#19</strong>，但 Git 歷史品質自動化的基礎設施定位穩固。</div>
+          <div class="use-case">▶ Conventional Commits 自動化、Git 歷史可讀性、Auto-Scan 零配置啟用、Workspace PR 記錄品質</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:65%"></div></div><span class="heat-num">65</span></div></td>
+        <td><span class="trend trend-down">↓ 下降</span></td>
+      </tr>
+
+      <!-- 20 → grayscale(1.0) — DOWN from #19 -->
+      <tr data-platform="claude" data-new="0" style="filter:grayscale(1)">
+        <td><span class="rank">20</span></td>
+        <td><div class="skill-name">/tdd</div><span class="cmd">/tdd</span></td>
+        <td>
+          <span class="platform-tag tag-claude">Claude Code</span>
+          <span class="platform-tag tag-codex" style="margin-left:.3rem">Codex</span>
+        </td>
+        <td>
+          <div class="desc">從 mattpocock/skills（<strong>54k ⭐</strong>）提取的跨平台 TDD skill，完整實現 Test → Implement → Verify 閉環，在任何實作前強制先寫測試，自動執行直到全部通過。SKILL.md Auto-Scan 上線後，/tdd skill 可放入 .github/skills/ 被自動偵測，TDD 工作流在支援 Auto-Scan 的工具中零摩擦啟用。兩個今日新上榜 skill 帶來的整體競爭讓其稍調至 <strong>#20</strong>，但測試驅動開發作為 Loop Engineering 品質驗收節點的角色不變——/tdd 確保功能正確性、Review Loop 確保代碼品質深度，分別在「迴圈內」與「迴圈後」發揮作用。</div>
+          <div class="use-case">▶ 測試驅動開發、Loop 品質驗收節點、Auto-Scan 零配置啟用、Agentic TDD 工作流</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:63%"></div></div><span class="heat-num">63</span></div></td>
+        <td><span class="trend trend-down">↓ 下降</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title" style="color:var(--accent-purple)">⚙ 軟體設計哲學 Skills 精選</div>
+<div style="max-width:1100px;margin:0 auto .75rem;padding:0 1.5rem;color:var(--text-muted);font-size:.85rem;">
+  實質幫助工程師產出良好程式碼的設計哲學型技能 — 強調可讀性、可維護性、低耦合與高內聚，以書籍智慧與行為準則為代理引擎注入工程靈魂。
+</div>
+<div class="phi-grid">
+
+  <div class="phi-card phi-review-loop">
+    <div class="phi-title">
+      Review Loop 多輪品質哲學
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-gate">Quality Gates</span>
+      <span class="phi-principle pp-gate">Iterative Review</span>
+      <span class="phi-principle">Multi-Agent</span>
+    </div>
+    <div class="phi-body">
+      今日升至 <strong>#13</strong>（進榜第 2 日即 +3 位）的 Review Loop，帶來的不只是一個工具，更是「代碼品質保障」的哲學重新定義：<strong>單次審查的局限性</strong>——即使是最好的 reviewer 也有認知盲點，每一輪審查角度都受前一輪發現影響，形成「確認偏誤鎖」。Review Loop 的多輪代理接力打破這個局限：<strong>每個子代理獨立啟動、不繼承前輪偏見</strong>，從不同視角切入（安全 / 效能 / 設計 / 可維護性），直到多輪迭代都無新發現，才判定審查完整。<br><br>
+      這與<strong>審計原則</strong>深度對齊：重要系統不由單一審計者審查，而是多輪獨立稽核。SKILL.md Auto-Scan 進榜後可自動載入，零摩擦成為品質標準閘。
+    </div>
+  </div>
+
+  <div class="phi-card phi-frontend">
+    <div class="phi-title">
+      frontend-design — UI 意圖性哲學
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Anthropic 官方</span>
+      <span class="new-badge" style="font-size:.6rem">NEW</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-ui">UI Intentionality</span>
+      <span class="phi-principle pp-ui">Anti-Formulaic</span>
+      <span class="phi-principle">Design Communication</span>
+    </div>
+    <div class="phi-body">
+      Anthropic 官方發佈的前端設計哲學 skill（<strong>280k+ 安裝</strong>），填補了 AI 工具鏈長期缺失的一塊拼圖：工具鏈有充分的能力幫助工程師寫出<strong>功能正確</strong>的 UI，卻幾乎沒有工具問「這個 UI 是否具有<strong>設計意圖</strong>」。<br><br>
+      <strong>制式化陷阱：</strong>AI 生成的前端往往是 flexbox 置中 + 卡片堆疊 + 圓角陰影的機械組合，看似整齊，實則缺乏對「這個介面在向使用者傳達什麼」的思考。frontend-design 強制在每次 UI 生成前執行<strong>意圖審問</strong>：元素的視覺重量是否反映資訊優先級？布局節奏是否引導正確視線路徑？空白是呼吸還是浪費？<br><br>
+      與 /review 配合時加入 UI 哲學審查維度，與 /simplify 配合時確保清理後仍保留設計意圖。<strong>設計不是裝飾，是溝通。</strong>
+    </div>
+  </div>
+
+  <div class="phi-card phi-loop">
+    <div class="phi-title">
+      Loop Engineering + SKILL.md Auto-Scan 生態成熟
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+      <span class="platform-tag tag-copilot" style="font-size:.65rem">Copilot</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-loop">Repeatable Loops</span>
+      <span class="phi-principle pp-loop">Zero-Friction Init</span>
+      <span class="phi-principle pp-loop">Memory Anchors</span>
+    </div>
+    <div class="phi-body">
+      今日 SKILL.md Auto-Scan 進榜標誌著 Loop Engineering 生態的成熟里程碑。三層宣告標準完整確立：<strong>① MCP Compose（mcp-compose.yaml）</strong>管理 MCP 工具伺服器；<strong>② AGENTS.md</strong> 管理跨工具任務規範與記憶錨點；<strong>③ SKILL.md Auto-Scan（.github/skills/）</strong>自動部署可調用技能。<br><br>
+      三者協作讓 Agentic 開發環境的初始化達到「<strong>打開 VS Code 即完備</strong>」的境界——工具棧自動啟動（MCP Compose）、任務規範自動載入（AGENTS.md）、技能清單自動呈現（Auto-Scan）。工程師只需專注設計<strong>良好的迴圈邏輯</strong>，環境準備摩擦降至歷史新低。
+    </div>
+  </div>
+
+  <div class="phi-card phi-karpathy">
+    <div class="phi-title">
+      Karpathy Behavioral
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-karp">Goal Clarity</span>
+      <span class="phi-principle pp-karp">Self-Doubt Loop</span>
+      <span class="phi-principle pp-karp">Minimal Footprint</span>
+    </div>
+    <div class="phi-body">
+      Andrej Karpathy 提出的 AI agent 行為哲學，直接對應工程師最常遭遇的代理失效模式。四大規則讓代理在執行前停下來問：「<strong>我真的理解這個目標嗎？</strong>」（Goal Clarity）、「<strong>我的每一步是否偏離了最初意圖？</strong>」（Self-Doubt Loop）、「<strong>我只動了必要的範圍嗎？</strong>」（Minimal Footprint）、「<strong>我能清楚說明我做了什麼嗎？</strong>」（Explicit Handoff）。<br><br>
+      今日在 SKILL.md 設計場景下獲新詮釋：<strong>Minimal Footprint 延伸至 skill 設計哲學</strong>——Auto-Scan 自動發現的每個 SKILL.md 應精確定義單一職責，不攜帶超出任務範圍的副作用，讓「精確而非貪婪」在 skill 設計層面得以實踐。144k ⭐，Loop Engineering 生態核心行為護欄地位持續鞏固。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      agent-rules-books
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+      <span class="platform-tag tag-codex" style="font-size:.65rem">Codex</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-clean">Clean Code</span>
+      <span class="phi-principle pp-ddd">DDD</span>
+      <span class="phi-principle">Refactoring</span>
+      <span class="phi-principle">DDIA</span>
+    </div>
+    <div class="phi-body">
+      由 Matt Pocock（mattpocock/agent-rules-books）發起的規則集，直接從《Clean Code》《Refactoring》《Clean Architecture》《DDD》《DDIA》《A Philosophy of Software Design》等六大經典提煉可執行代理規則。<br><br>
+      <strong>核心理念：</strong>讓 AI 代理在生成任何程式碼前，先內化幾十年軟體工程智慧，而非只是完成眼前任務。支援所有 AGENTS.md 相容工具，SKILL.md Auto-Scan 上線後，agent-rules-books 規則集可以 SKILL.md 形式放入 .github/skills/ 被自動載入，讓六大書籍智慧在每位工程師的 VS Code 環境中默默守護代碼品質。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      clean-architecture-skills
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-solid">SOLID</span>
+      <span class="phi-principle">Clean Arch</span>
+      <span class="phi-principle">Dependency Rule</span>
+    </div>
+    <div class="phi-body">
+      審查程式碼是否符合 <strong>Clean Architecture</strong> 的依賴規則與層次結構（Domain → Application → Infrastructure），識別跨層違規、God Class 與貧血模型。基於 Robert C. Martin 的架構理論，搭配 /review 的 <code style="font-size:.8rem;color:var(--accent-blue)">--effort=high</code> 效果最佳。Review Loop 升至 #13 後，clean-architecture-skills 可作為 Review Loop 多輪審查中的「架構角度」專責子代理規則集，讓架構問題在 code review 階段即被攔截，MCPMarket 設計哲學類長期 <strong>#2</strong>。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      SOLID Principles &amp; Clean Code Architect
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-solid">SOLID</span>
+      <span class="phi-principle pp-clean">Clean Code</span>
+      <span class="phi-principle">SRP · OCP · LSP</span>
+    </div>
+    <div class="phi-body">
+      將 SOLID 五大原則（SRP、OCP、LSP、ISP、DIP）具體化為審查清單，搭配 Clean Code 最佳實踐（命名、早返回、消除魔術數字）形成雙軸規範。MCPMarket 累計下載突破 <strong>13k</strong>，設計哲學類最廣泛採用的 skill 之一。<br><br>
+      可直接嵌入 AGENTS.md，讓所有 AI 代理在輸出程式碼前自動套用 SOLID 審查門檻。SKILL.md Auto-Scan 上線後，SOLID 規則集放入 .github/skills/ 後自動呈現，搭配 Review Loop 使用：每輪迭代都以 SOLID 原則驗收，確保設計品質在多輪代理審查中得到系統性保障。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      code-smell-detector
+      <span class="platform-tag tag-copilot" style="font-size:.65rem">GitHub Copilot</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle">Cognitive Load</span>
+      <span class="phi-principle pp-clean">Readability</span>
+      <span class="phi-principle">God Class</span>
+    </div>
+    <div class="phi-body">
+      透過認知負荷分析識別 God Class、Feature Envy、Shotgun Surgery、Data Clumps 等常見壞味道，提供具體重構路徑與替代設計模式建議。<br><br>
+      今日 frontend-design 進榜後，code-smell-detector 延伸至 UI 層的「設計壞味道」偵測：過度巢狀的 JSX 組件、responsibility 不明確的 styled-components、混合業務邏輯與布局的 React hooks，都可被識別並提供重構建議。與 Review Loop 使用時，code-smell-detector 可作為一輪專責「結構壞味道」的審查子代理，讓架構問題在 review 階段即被攔截。
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div style="margin-bottom:.4rem">
+    <strong>f2e-research</strong> · 前端暨 AI 工具趨勢每日分析
+    &nbsp;|&nbsp; 報告產生：2026-06-20 08:32:47
+    &nbsp;|&nbsp; 資料來源：
+    <a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">Claude Code Docs</a>、
+    <a href="https://docs.github.com/en/copilot/concepts/agents/about-agent-skills" target="_blank" rel="noopener">GitHub Copilot Docs</a>、
+    <a href="https://openai.com/codex/" target="_blank" rel="noopener">OpenAI Codex</a>、
+    <a href="https://github.com/github/awesome-copilot" target="_blank" rel="noopener">awesome-copilot</a>、
+    <a href="https://github.com/mattpocock/agent-rules-books" target="_blank" rel="noopener">mattpocock/agent-rules-books</a>、
+    <a href="https://mcpmarket.com/tools/skills/software-design-philosophy" target="_blank" rel="noopener">MCPMarket Skills</a>
+  </div>
+  <div style="color:#484f58">TOP 20 熱度公式：社群熱度 × 3 + 文件引用 × 1 + 跨平台提及 × 2 &nbsp;|&nbsp; 灰度遞增：第 11 名 grayscale(0) → 第 20 名 grayscale(1)</div>
+</footer>
+
+<script>
+  let activeFilter = 'all';
+  function applyFilter(btn) {
+    const filter = btn.dataset.filter;
+    if (filter !== 'all' && filter === activeFilter) {
+      activeFilter = 'all';
+    } else {
+      activeFilter = filter;
+    }
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (activeFilter === 'all') {
+      document.querySelector('[data-filter="all"]').classList.add('active');
+    } else {
+      document.querySelector(`[data-filter="${activeFilter}"]`).classList.add('active');
+    }
+    document.querySelectorAll('#ranking-table tbody tr').forEach(row => {
+      const platform = row.dataset.platform;
+      const isNew    = row.dataset.new === '1';
+      let show = false;
+      if (activeFilter === 'all')      show = true;
+      else if (activeFilter === 'new') show = isNew;
+      else                             show = platform === activeFilter;
+      row.classList.toggle('hidden-row', !show);
+    });
+  }
+</script>
+
+</body>
+</html>
