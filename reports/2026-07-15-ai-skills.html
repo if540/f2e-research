@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Skills 熱門排行 — 2026-07-15</title>
+  <style>
+    :root {
+      --bg:           #0d1117;
+      --surface:      #161b22;
+      --surface2:     #21262d;
+      --border:       #30363d;
+      --accent-blue:  #58a6ff;
+      --accent-purple:#bc8cff;
+      --accent-green: #3fb950;
+      --accent-orange:#f0883e;
+      --accent-pink:  #ff7b72;
+      --accent-yellow:#e3b341;
+      --text:         #e6edf3;
+      --text-muted:   #8b949e;
+      --claude:       #c084fc;
+      --copilot:      #3b82f6;
+      --codex:        #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1c2128 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(88,166,255,.13), transparent);
+      pointer-events: none;
+    }
+    .header-meta { display: flex; justify-content: center; gap: 1rem; margin-bottom: .8rem; flex-wrap: wrap; }
+    .badge { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: .25rem .65rem; border-radius: 999px; border: 1px solid; }
+    .badge-date   { color: var(--accent-blue);   border-color: rgba(88,166,255,.35);   background: rgba(88,166,255,.08); }
+    .badge-report { color: var(--accent-purple);  border-color: rgba(188,140,255,.35);  background: rgba(188,140,255,.08); }
+    .badge-time   { color: var(--accent-green);   border-color: rgba(63,185,80,.35);    background: rgba(63,185,80,.08);  font-family: monospace; }
+    .badge-theme  { color: var(--accent-orange);  border-color: rgba(240,136,62,.35);   background: rgba(240,136,62,.08); }
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      margin-bottom: .5rem;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-muted); font-size: .95rem; }
+
+    .filter-bar { display: flex; justify-content: center; align-items: center; gap: .6rem; padding: .9rem 1.5rem; background: var(--surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .filter-label { font-size: .72rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin-right: .3rem; }
+    .filter-btn { font-size: .74rem; font-weight: 700; padding: .28rem .75rem; border-radius: 999px; border: 1px solid var(--border); background: var(--surface2); color: var(--text-muted); cursor: pointer; transition: all .18s; letter-spacing: .03em; }
+    .filter-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: rgba(88,166,255,.08); }
+    .filter-btn.active { background: rgba(88,166,255,.15); border-color: var(--accent-blue); color: var(--accent-blue); }
+    .filter-btn.active.f-claude   { background: rgba(192,132,252,.15); border-color: var(--claude);  color: var(--claude); }
+    .filter-btn.active.f-copilot  { background: rgba(59,130,246,.15);  border-color: var(--copilot); color: var(--copilot); }
+    .filter-btn.active.f-codex    { background: rgba(16,185,129,.15);  border-color: var(--codex);   color: var(--codex); }
+    .filter-btn.active.f-new      { background: rgba(240,136,62,.15);  border-color: var(--accent-orange); color: var(--accent-orange); }
+    .filter-divider { width: 1px; height: 18px; background: var(--border); margin: 0 .2rem; }
+
+    .legend { display: flex; justify-content: center; gap: 1.5rem; padding: .7rem 1.5rem; background: var(--surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: .5rem; font-size: .82rem; font-weight: 600; color: var(--text-muted); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-claude  { background: var(--claude); }
+    .dot-copilot { background: var(--copilot); }
+    .dot-codex   { background: var(--codex); }
+
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.4rem; text-align: center; }
+    .card-num { font-size: 2rem; font-weight: 700; line-height: 1; margin-bottom: .3rem; }
+    .card-label { color: var(--text-muted); font-size: .82rem; }
+
+    .section-title { max-width: 1100px; margin: 0 auto; padding: .5rem 1.5rem 1rem; font-size: 1rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; border-top: 1px solid var(--border); margin-top: .5rem; }
+
+    .highlights { max-width: 1100px; margin: 0 auto 1.5rem; padding: 0 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+    .hl-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.4rem; border-left: 3px solid; }
+    .hl-card.claude-hl  { border-left-color: var(--claude); }
+    .hl-card.copilot-hl { border-left-color: var(--copilot); }
+    .hl-card.codex-hl   { border-left-color: var(--codex); }
+    .hl-title { font-weight: 700; font-size: .95rem; margin-bottom: .6rem; display: flex; align-items: center; gap: .5rem; }
+    .hl-icon { font-size: 1.1rem; }
+    .hl-body { color: var(--text-muted); font-size: .83rem; line-height: 1.65; }
+    .hl-body strong { color: var(--text); }
+
+    .table-wrap { max-width: 1100px; margin: 0 auto 2rem; padding: 0 1.5rem; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    thead tr { background: var(--surface2); border-bottom: 2px solid var(--border); }
+    th { padding: .8rem 1rem; text-align: left; font-weight: 600; color: var(--text-muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:hover { background: rgba(255,255,255,.03); }
+    td { padding: .85rem 1rem; vertical-align: top; }
+
+    .rank { font-weight: 700; font-size: 1rem; color: var(--text-muted); min-width: 36px; display: block; }
+    .rank.top1 { color: #ffd700; }
+    .rank.top2 { color: #c0c0c0; }
+    .rank.top3 { color: #cd7f32; }
+
+    .skill-name { font-weight: 700; font-size: .95rem; color: var(--text); white-space: nowrap; }
+    .cmd { display: inline-block; font-family: 'SFMono-Regular', Consolas, monospace; font-size: .78rem; background: rgba(110,118,129,.15); border: 1px solid var(--border); border-radius: 4px; padding: .1rem .4rem; color: var(--accent-blue); margin-top: .2rem; }
+    .new-badge { display: inline-block; font-size: .62rem; font-weight: 700; padding: .08rem .38rem; border-radius: 4px; background: rgba(240,136,62,.18); color: var(--accent-orange); border: 1px solid rgba(240,136,62,.4); margin-left: 5px; vertical-align: middle; letter-spacing: .04em; }
+
+    .platform-tag { display: inline-block; font-size: .7rem; font-weight: 700; padding: .15rem .55rem; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+    .tag-claude  { color: var(--claude);  border-color: rgba(192,132,252,.4); background: rgba(192,132,252,.1); }
+    .tag-copilot { color: var(--copilot); border-color: rgba(59,130,246,.4);  background: rgba(59,130,246,.1); }
+    .tag-codex   { color: var(--codex);   border-color: rgba(16,185,129,.4);  background: rgba(16,185,129,.1); }
+
+    .desc { color: var(--text-muted); font-size: .83rem; line-height: 1.55; }
+    .use-case { color: var(--accent-orange); font-size: .78rem; margin-top: .3rem; }
+
+    .heat { display: flex; gap: 4px; align-items: center; white-space: nowrap; }
+    .heat-bar { height: 6px; border-radius: 3px; background: var(--border); width: 70px; overflow: hidden; }
+    .heat-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); }
+    .heat-num { font-size: .78rem; font-weight: 700; color: var(--text-muted); min-width: 30px; text-align: right; }
+
+    .trend { font-size: .8rem; font-weight: 700; }
+    .trend-up     { color: var(--accent-green); }
+    .trend-new    { color: var(--accent-orange); }
+    .trend-hot    { color: var(--accent-pink); }
+    .trend-viral  { color: var(--accent-yellow); }
+    .trend-steady { color: var(--text-muted); }
+    .trend-down   { color: #6e7681; }
+
+    .phi-grid { max-width: 1100px; margin: 0 auto 2rem; padding: 0 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1rem; }
+    .phi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.4rem; position: relative; overflow: hidden; }
+    .phi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); }
+    .phi-card.phi-copilot::before    { background: linear-gradient(90deg, var(--copilot), #7dd3fc); }
+    .phi-card.phi-codex::before      { background: linear-gradient(90deg, var(--codex), #6ee7b7); }
+    .phi-card.phi-harness::before    { background: linear-gradient(90deg, var(--accent-orange), var(--accent-yellow)); }
+    .phi-title { font-weight: 700; font-size: .92rem; margin-bottom: .4rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .phi-principle { display: inline-block; font-size: .65rem; font-weight: 700; padding: .1rem .4rem; border-radius: 4px; background: rgba(88,166,255,.12); color: var(--accent-blue); border: 1px solid rgba(88,166,255,.3); letter-spacing: .04em; text-transform: uppercase; }
+    .phi-principle.pp-solid   { background: rgba(192,132,252,.12); color: var(--claude); border-color: rgba(192,132,252,.3); }
+    .phi-principle.pp-clean   { background: rgba(63,185,80,.12); color: var(--accent-green); border-color: rgba(63,185,80,.3); }
+    .phi-principle.pp-ddd     { background: rgba(240,136,62,.12); color: var(--accent-orange); border-color: rgba(240,136,62,.3); }
+    .phi-principle.pp-design  { background: rgba(227,179,65,.12); color: var(--accent-yellow); border-color: rgba(227,179,65,.3); }
+    .phi-principle.pp-harness { background: rgba(240,136,62,.12); color: var(--accent-orange); border-color: rgba(240,136,62,.3); }
+    .phi-body { color: var(--text-muted); font-size: .82rem; line-height: 1.6; margin-top: .5rem; }
+    .phi-body strong { color: var(--text); }
+
+    footer { background: var(--surface); border-top: 1px solid var(--border); text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: .78rem; }
+    footer a { color: var(--accent-blue); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    tr.hidden-row { display: none; }
+
+    @media (max-width: 640px) {
+      .heat-bar { width: 40px; }
+      td, th { padding: .65rem .6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-meta">
+    <span class="badge badge-date">2026-07-15</span>
+    <span class="badge badge-report">Daily AI Skills Report</span>
+    <span class="badge badge-time">&#9679; 產生時間 19:11:14</span>
+    <span class="badge badge-theme">Claude Code 2.1.210 穩定性大修 · Codex 0.144.2 Guardian 回滾修復 · 生態系轉入收斂期</span>
+  </div>
+  <h1>熱門 AI Skills &amp; 自動化指令排行</h1>
+  <p class="subtitle">Claude Code · GitHub Copilot · OpenAI Codex — 今日最受歡迎技能與自動化指令綜合排行</p>
+</header>
+
+<div class="filter-bar">
+  <span class="filter-label">平台</span>
+  <button class="filter-btn f-all active" data-filter="all" onclick="applyFilter(this)">全部</button>
+  <button class="filter-btn f-claude"  data-filter="claude"  onclick="applyFilter(this)">Claude Code</button>
+  <button class="filter-btn f-copilot" data-filter="copilot" onclick="applyFilter(this)">GitHub Copilot</button>
+  <button class="filter-btn f-codex"   data-filter="codex"   onclick="applyFilter(this)">OpenAI Codex</button>
+  <div class="filter-divider"></div>
+  <span class="filter-label">標籤</span>
+  <button class="filter-btn f-new" data-filter="new" onclick="applyFilter(this)">&#9733; New 新上榜</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="dot dot-claude"></span> Claude Code</div>
+  <div class="legend-item"><span class="dot dot-copilot"></span> GitHub Copilot</div>
+  <div class="legend-item"><span class="dot dot-codex"></span> OpenAI Codex</div>
+</div>
+
+<div class="summary">
+  <div class="card"><div class="card-num" style="color:var(--accent-blue)">20</div><div class="card-label">精選 Skills</div></div>
+  <div class="card"><div class="card-num" style="color:var(--claude)">3</div><div class="card-label">平台覆蓋</div></div>
+  <div class="card"><div class="card-num" style="color:var(--accent-green)">0</div><div class="card-label">今日新晉上榜</div></div>
+  <div class="card"><div class="card-num" style="color:var(--accent-yellow)">38<span style="font-size:1rem">日</span></div><div class="card-label">/review 連冠天數</div></div>
+</div>
+
+<div class="section-title">平台重點觀察</div>
+<div class="highlights">
+  <div class="hl-card claude-hl">
+    <div class="hl-title"><span class="hl-icon">⚡</span> Claude Code</div>
+    <div class="hl-body">
+      <strong>2.1.210</strong>（7/14）是本月最大一波穩定性修復：新增工具呼叫<strong>即時運算計時器</strong>避免長任務誤判卡死、修復 <code style="font-size:.8rem;color:var(--accent-blue)">claude agents --effort ultracode</code> 參數未生效的問題、<strong>強化 Agent tool 防禦間接提示注入</strong>攻擊、修復 <code style="font-size:.8rem;color:var(--accent-blue)">isolation: 'worktree'</code> subagent 誤觸主倉庫 git 指令的隔離漏洞，並讓螢幕報讀器模式在切換權限模式時語音播報。今日未見全新旗艦 skill 上線，官方明顯把資源投入既有工作流的可靠度打磨；<strong>/review</strong> 也順勢蟬聯 #1 邁入連續第 <strong>38 日</strong>。
+    </div>
+  </div>
+  <div class="hl-card copilot-hl">
+    <div class="hl-title"><span class="hl-icon">🤖</span> GitHub Copilot</div>
+    <div class="hl-body">
+      awesome-copilot 生態系維持 <strong>208+ skills／175+ agents／48+ 外掛</strong>規模，今日無新上榜黑馬，安裝榜仍由 <strong>code-reviewer（447 installs）</strong>穩守第一，其後依序為 <strong>git-commit-writer（170）</strong>、<strong>readme-generator（117）</strong>。本週唯一實質更新是 7/1 上線的 <strong>C++ language server config skill</strong>（Copilot CLI），可用「regenerate compile commands」語音／文字指令自動刷新 compile_commands.json，屬於維護性補強而非榜單級變動。
+    </div>
+  </div>
+  <div class="hl-card codex-hl">
+    <div class="hl-title"><span class="hl-icon">🛠</span> OpenAI Codex</div>
+    <div class="hl-body">
+      Codex CLI 連續三個 patch 版本進入收斂期：<strong>0.144.2</strong>（7/13）回滾先前的 prompting regression，恢復 <strong>Guardian auto-review</strong> 政策與工具行為正確性；<strong>0.144.3</strong>（7/13）、<strong>0.144.4</strong>（7/14）皆為版本號更新、無使用者可見變更。生態系基礎建設持續補強：<strong>MCP tool search 預設開啟</strong>、Amazon Bedrock 新增 <strong>GPT-5.6 Sol／Terra／Luna</strong> 模型與 max reasoning effort 支援、新增 <code style="font-size:.8rem;color:var(--accent-blue)">codex remote-control pair</code> 手動配對指令。GPT-5.6 三階模型全面上線後，本週明顯進入穩定收斂而非功能衝刺階段。
+    </div>
+  </div>
+</div>
+
+<div class="section-title">TOP 20 熱門排行</div>
+<div class="table-wrap">
+  <table id="ranking-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>技能 / 指令</th>
+        <th>平台</th>
+        <th>說明 &amp; 應用場景</th>
+        <th>熱度</th>
+        <th>趨勢</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- 1 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank top1">01</span></td>
+        <td><div class="skill-name">/review</div><span class="cmd">/review</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">審查變更程式碼的 Bug、安全漏洞與程式碼風格。<strong>2.1.202（7/6）</strong>將 <code style="color:var(--accent-blue);font-size:.8rem">/review &lt;pr&gt;</code> 改回快速單輪審查，深度多代理審查改由 <code style="color:var(--accent-blue);font-size:.8rem">/code-review &lt;level&gt; &lt;pr#&gt;</code> 承接。速度優化後日常呼叫頻率不減反增，<strong>2.1.210（7/14）</strong>的即時運算計時器讓長任務等待體感更透明，蟬聯全平台 <strong>#1 連續第 38 日</strong>，續創報告啟動以來最長連冠紀錄。</div>
+          <div class="use-case">▶ PR 品質把關、Code Review 自動化、快速單輪審查、安全漏洞掃描</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:100%"></div></div><span class="heat-num">100</span></div></td>
+        <td><span class="trend trend-hot">🔥 爆紅</span></td>
+      </tr>
+
+      <!-- 2 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank top2">02</span></td>
+        <td><div class="skill-name">ultracode</div><span class="cmd">ultracode</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">Dynamic Workflows 的自動編排觸發詞，輸入含有 <code style="color:var(--accent-blue);font-size:.8rem">ultracode</code> 的任務會自動套用 xhigh 推理力度並扇出數十至數百個 sub-agent 並行驗證。<strong>2.1.210（7/14）</strong>修復了 <code style="color:var(--accent-blue);font-size:.8rem">claude agents --effort ultracode</code> 參數在派送至背景 session 時被靜默丟棄的問題，同時修復了該觸發詞會被 webhook payload 或轉發 PR 留言等非人類輸入誤觸發的漏洞，讓大規模並行編排更可控。</div>
+          <div class="use-case">▶ 大型程式碼遷移、全庫安全審計、複雜重構自動化、超大規模並行 sub-agent 協調</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:97%"></div></div><span class="heat-num">97</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 3 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank top3">03</span></td>
+        <td><div class="skill-name">/code-review</div><span class="cmd">/code-review &lt;level&gt; &lt;pr#&gt;</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc"><strong>2.1.202（7/6）</strong>從 <code style="color:var(--accent-blue);font-size:.8rem">/review</code> 拆分出的獨立多代理深度審查指令，可選擇 low／medium／high／ultra 等效力等級，多個平行 review agent 分頭掃描正確性、安全性與程式碼風格。自 7/14 首度躋身前三後持續守住第三名，已連續 <strong>2 日</strong>穩坐榜內前段班。</div>
+          <div class="use-case">▶ 大型 PR 深度審查、安全與正確性雙軌掃描、可調審查力度</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:95%"></div></div><span class="heat-num">95</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 4 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank">04</span></td>
+        <td><div class="skill-name">/doctor</div><span class="cmd">/doctor</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">官方環境健檢指令（別名 <code style="color:var(--accent-blue);font-size:.8rem">/checkup</code>），一鍵診斷專案設定問題並可自動修復。<strong>2.1.206（7/9）</strong>新增檢查項目：自動偵測並提示修剪過度膨脹的已提交 <code style="color:var(--accent-blue);font-size:.8rem">CLAUDE.md</code> 檔案，持續鞏固「開發環境健康度」把關地位。</div>
+          <div class="use-case">▶ 專案環境健檢、CLAUDE.md 精簡建議、MCP／Hook／權限故障排除、新機器 onboarding</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:93%"></div></div><span class="heat-num">93</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 5 -->
+      <tr data-platform="copilot" data-new="0">
+        <td><span class="rank">05</span></td>
+        <td><div class="skill-name">code-reviewer</div><span class="cmd">/code-reviewer</span></td>
+        <td><span class="platform-tag tag-copilot">GitHub Copilot</span></td>
+        <td>
+          <div class="desc">awesome-copilot 安裝數第一 skill（<strong>447 installs</strong>），審查程式碼的 Bug、安全漏洞、效能問題與風格違規，按嚴重度分級並提供具體修復建議，輸出結構化 Markdown 審查報告直接附在 PR 討論串。倉庫規模穩定維持 208+ skills／175+ agents，code-reviewer 持續穩坐生態系安裝榜首位。</div>
+          <div class="use-case">▶ PR 自動化審查、嚴重度分級報告、Issue-to-Merge 流水線</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:91%"></div></div><span class="heat-num">91</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 6 -->
+      <tr data-platform="codex" data-new="0">
+        <td><span class="rank">06</span></td>
+        <td><div class="skill-name">GPT-5.6 Sol</div><span class="cmd">codex --model gpt-5.6-sol</span></td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">7/9 發布的三階模型家族之首，Terminal-Bench 2.1 拿下 <strong>91.9%</strong>，主打複雜推理與長任務。<strong>7/13</strong> 起 Amazon Bedrock 正式接入 <strong>GPT-5.6 Sol／Terra／Luna</strong> 全系列並支援 max reasoning effort，讓企業雲端部署與本地 CLI 使用體驗一致，全系列持續取代 GPT-5.5 成為 Codex 模型選單首選。</div>
+          <div class="use-case">▶ 複雜推理編碼任務、長任務多代理加速、企業 Bedrock 雲端部署</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:88%"></div></div><span class="heat-num">88</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 7 -->
+      <tr data-platform="codex" data-new="0">
+        <td><span class="rank">07</span></td>
+        <td><div class="skill-name">ChatGPT Work Sites</div><span class="cmd">codex sites</span></td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">原 Codex Sites 外掛已於 7/9 併入 <strong>ChatGPT Work</strong> 統一桌面應用（Chat／Work／Codex 三模式），可建立、儲存、部署並檢視代管網站、儀表板與內部工具，並支援串接 Slack、Teams、Google Drive、SharePoint、信箱與行事曆等企業系統的上下文蒐集能力。「對話生成 → 直接部署 → 跨系統情境彙整」的路線持續擴大企業級應用場景。</div>
+          <div class="use-case">▶ 企業內部工具建置、跨系統情境彙整、對話式網站生成、儀表板快速部署</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:86%"></div></div><span class="heat-num">86</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 8 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank">08</span></td>
+        <td><div class="skill-name">Caveman</div><span class="cmd">caveman</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">Claude Code 技能市集熱門 skill，剝除輸出中的旁白、贅字與客套話，同時逐字保留每個技術事實與程式碼區塊，平均可將輸出 token 減少 <strong>65%</strong>，累計 <strong>68.1k</strong> GitHub stars。在長時間 ultracode / Dynamic Workflows 大規模並行任務中，作為降低回報成本的實用搭配廣受採用。</div>
+          <div class="use-case">▶ 降低輸出 token 成本、長任務摘要精簡、CI 日誌節流、ultracode 大規模任務搭配</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:84%"></div></div><span class="heat-num">84</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 9 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank">09</span></td>
+        <td><div class="skill-name">Screen Reader Mode</div><span class="cmd">claude --ax-screen-reader</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">2.1.208（7/11）推出的選用式純文字渲染模式，讓螢幕報讀器使用者能順暢操作 Claude Code 終端介面，可透過 CLI 旗標、環境變數 <code style="color:var(--accent-blue);font-size:.8rem">CLAUDE_AX_SCREEN_READER=1</code> 或設定檔 <code style="color:var(--accent-blue);font-size:.8rem">axScreenReader</code> 開啟。<strong>2.1.210（7/14）</strong>進一步強化：切換權限模式（Shift+Tab 循環）時會語音播報當前模式，無障礙體驗持續打磨。</div>
+          <div class="use-case">▶ 視障開發者終端操作、無障礙 CI／CLI 環境、企業合規無障礙需求</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:82%"></div></div><span class="heat-num">82</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 10 -->
+      <tr data-platform="claude" data-new="0">
+        <td><span class="rank">10</span></td>
+        <td><div class="skill-name">/simplify</div><span class="cmd">/simplify</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">由 Boris Cherny 親自推介的官方 skill，多個平行 review agent 同步掃描變更程式碼的重用性、品質與效率問題並自動套用修正。與 /code-review 並列「把 PR 送上 production」流程中最常見的收尾組合，日常搭配 /review 使用率持續維持高檔。</div>
+          <div class="use-case">▶ 程式碼簡化、重複邏輯消除、過度設計修正、PR 收尾品質確認</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:80%"></div></div><span class="heat-num">80</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 11 → grayscale(0) -->
+      <tr data-platform="claude" data-new="0" style="filter:grayscale(0)">
+        <td><span class="rank">11</span></td>
+        <td><div class="skill-name">Web App Testing</div><span class="cmd">web-app-testing</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">Anthropic 官方 skill，讓 Claude 操控真實瀏覽器實際操作並驗證 Web App，補上「Claude 寫完功能」到「功能真的能跑」之間的最後一哩路。常與 Computer Use 搭配，成為前端變更驗證的標準流程；Codex 同期在 Windows 版 Computer Use 也已正式可用，跨平台瀏覽器／桌面驗證能力持續補齊。</div>
+          <div class="use-case">▶ 前端功能端到端驗證、UI 迴歸測試、瀏覽器自動化操作</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:78%"></div></div><span class="heat-num">78</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 12 → grayscale(0.11) -->
+      <tr data-platform="claude" data-new="0" style="filter:grayscale(0.11)">
+        <td><span class="rank">12</span></td>
+        <td><div class="skill-name">Andrej Karpathy Skills</div><span class="cmd">karpathy-skills</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">累計 <strong>144k stars</strong>，是史上成長最快的 Agentic 工作流倉庫之一，鎖定代理行為漂移與程式碼品質衰退等常見痛點，提供一系列可直接套用的規範型 skill 與提示範本，全部濃縮於單一檔案且零執行期依賴。</div>
+          <div class="use-case">▶ 代理行為校準、程式碼品質守門、社群範本快速套用</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:76%"></div></div><span class="heat-num">76</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 13 → grayscale(0.22) -->
+      <tr data-platform="claude" data-new="0" style="filter:grayscale(0.22)">
+        <td><span class="rank">13</span></td>
+        <td>
+          <div class="skill-name">harness-engineering</div>
+          <span class="cmd">/harness-engineering</span>
+        </td>
+        <td>
+          <span class="platform-tag tag-copilot">Copilot</span>
+          <span class="platform-tag tag-codex" style="margin-left:.3rem">Codex</span>
+          <span class="platform-tag tag-claude" style="margin-left:.3rem">Claude</span>
+        </td>
+        <td>
+          <div class="desc">跨平台方法論 skill：主張與其不斷雕琢 prompt，不如形塑型別系統、測試覆蓋率、Lint 規則、CI 閘門與 Session 鷹架，讓代理「預設就能自我修正」。OpenAI 研究員 <strong>Lilian Weng</strong> 於 7/4 發表〈Harness Engineering for Self-Improvement〉一文，將此理念系統化為「前饋引導 + 回饋感測」雙迴路模型，為本月該理念最重磅的學術背書。</div>
+          <div class="use-case">▶ 開發環境鷹架設計、CI 品質閘門、跨代理一致行為、減少人工複檢</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:74%"></div></div><span class="heat-num">74</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 14 → grayscale(0.33) -->
+      <tr data-platform="copilot" data-new="0" style="filter:grayscale(0.33)">
+        <td><span class="rank">14</span></td>
+        <td><div class="skill-name">git-commit-writer</div><span class="cmd">/git-commit-writer</span></td>
+        <td><span class="platform-tag tag-copilot">GitHub Copilot</span></td>
+        <td>
+          <div class="desc">awesome-copilot 安裝數 <strong>170</strong>，為已暫存的變更自動生成符合 Conventional Commits 規範的提交訊息，分析 diff 語義後輸出 type(scope): subject 格式，支援 feat / fix / refactor / chore 等完整類型。</div>
+          <div class="use-case">▶ Conventional Commits 自動化、Git 歷史可讀性、PR 描述品質</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:72%"></div></div><span class="heat-num">72</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 15 → grayscale(0.44) -->
+      <tr data-platform="claude" data-new="0" style="filter:grayscale(0.44)">
+        <td><span class="rank">15</span></td>
+        <td><div class="skill-name">Firecrawl</div><span class="cmd">firecrawl</span></td>
+        <td><span class="platform-tag tag-claude">Claude Code</span></td>
+        <td>
+          <div class="desc">教會代理安裝並使用 Firecrawl CLI，取得可靠的網頁抓取、搜尋、爬取與瀏覽器自動化能力，補足 Claude 原生難以大規模穩定抓取網頁內容的缺口。</div>
+          <div class="use-case">▶ 大規模網頁資料蒐集、競品調查、內容彙整自動化</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:70%"></div></div><span class="heat-num">70</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 16 → grayscale(0.55) -->
+      <tr data-platform="codex" data-new="0" style="filter:grayscale(0.55)">
+        <td><span class="rank">16</span></td>
+        <td><div class="skill-name">codex-security</div><span class="cmd">$codex-security</span></td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">OpenAI 官方 application-security agent，分析儲存庫結構、繪製信任邊界、產出可編輯威脅模型並掃描漏洞。公測數據累計掃描 <strong>120 萬次 commit</strong>、揪出 <strong>792 個關鍵漏洞</strong>；Codex CLI 0.144.2（7/13）修復 Guardian auto-review 政策回滾問題後，掃描判準已恢復穩定。</div>
+          <div class="use-case">▶ 威脅建模、應用安全掃描、CI DevSecOps 安全關卡</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:68%"></div></div><span class="heat-num">68</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 17 → grayscale(0.66) -->
+      <tr data-platform="copilot" data-new="0" style="filter:grayscale(0.66)">
+        <td><span class="rank">17</span></td>
+        <td><div class="skill-name">readme-generator</div><span class="cmd">/readme-generator</span></td>
+        <td><span class="platform-tag tag-copilot">GitHub Copilot</span></td>
+        <td>
+          <div class="desc">awesome-copilot 安裝數 <strong>117</strong>，掃描整個專案後產出完整 README，特別適用於 README 是訪客第一印象的開源專案。</div>
+          <div class="use-case">▶ 開源專案文件自動化、新專案 onboarding 文件</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:66%"></div></div><span class="heat-num">66</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 18 → grayscale(0.77) -->
+      <tr data-platform="codex" data-new="0" style="filter:grayscale(0.77)">
+        <td><span class="rank">18</span></td>
+        <td><div class="skill-name">grill-me</div><span class="cmd">codex grill-me</span></td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">Matt Pocock 出品，在 Codex 動筆前先反過來面試你，逼問計畫細節、邊界條件與驗收標準，被視為史上安裝數最高的 Codex skill 之一。</div>
+          <div class="use-case">▶ 需求釐清、任務規劃品質把關、下筆前反覆確認</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:64%"></div></div><span class="heat-num">64</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 19 → grayscale(0.88) -->
+      <tr data-platform="copilot" data-new="0" style="filter:grayscale(0.88)">
+        <td><span class="rank">19</span></td>
+        <td><div class="skill-name">env-doctor</div><span class="cmd">/env-doctor</span></td>
+        <td><span class="platform-tag tag-copilot">GitHub Copilot</span></td>
+        <td>
+          <div class="desc">系統性診斷專案啟動失敗原因，逐層排查環境變數、依賴版本與設定檔衝突，與 Claude Code 的 /doctor 形成跨平台呼應。</div>
+          <div class="use-case">▶ 專案啟動失敗排查、環境變數與依賴診斷</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:62%"></div></div><span class="heat-num">62</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+      <!-- 20 → grayscale(1.0) -->
+      <tr data-platform="codex" data-new="0" style="filter:grayscale(1)">
+        <td><span class="rank">20</span></td>
+        <td><div class="skill-name">Codex for JetBrains</div><span class="cmd">codex (JetBrains)</span></td>
+        <td><span class="platform-tag tag-codex">OpenAI Codex</span></td>
+        <td>
+          <div class="desc">Codex 作為 JetBrains IDE 家族（IntelliJ、PyCharm、WebStorm 等）的原生 Agent Provider 選項，可直接在 IDE 內的代理選單切換使用，熱度隨 GPT-5.6 Bedrock 全面接入同步維持穩定水位。</div>
+          <div class="use-case">▶ JetBrains IDE 原生代理切換、跨編輯器一致代理體驗</div>
+        </td>
+        <td><div class="heat"><div class="heat-bar"><div class="heat-fill" style="width:60%"></div></div><span class="heat-num">60</span></div></td>
+        <td><span class="trend trend-steady">→ 持穩</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="section-title" style="color:var(--accent-purple)">⚙ 軟體設計哲學 Skills 精選</div>
+<div style="max-width:1100px;margin:0 auto .75rem;padding:0 1.5rem;color:var(--text-muted);font-size:.85rem;">
+  實質幫助工程師產出良好程式碼的設計哲學型技能 — 強調可讀性、可維護性、低耦合與高內聚，以書籍智慧與工程紀律為代理引擎注入工程靈魂。
+</div>
+<div class="phi-grid">
+
+  <div class="phi-card phi-harness">
+    <div class="phi-title">
+      Harness Engineering for Self-Improvement
+      <span class="platform-tag tag-codex" style="font-size:.65rem">跨平台研究</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-harness">Feedforward Guides</span>
+      <span class="phi-principle pp-harness">Feedback Sensors</span>
+    </div>
+    <div class="phi-body">
+      OpenAI 研究員 <strong>Lilian Weng</strong> 於 7/4 發表的重磅文章，將「鷹架工程」系統化為雙迴路模型：<strong>前饋引導（型別、Lint、CI 閘門等預先設限）</strong>與<strong>回饋感測（測試、審查代理等執行後偵錯）</strong>共同構成代理自我修正的完整迴路，被視為 harness-engineering 理念今年最具份量的學術梳理。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      software-design-philosophy-skill
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-design">Deep Modules</span>
+      <span class="phi-principle">Cognitive Load</span>
+      <span class="phi-principle">Change Amplification</span>
+    </div>
+    <div class="phi-body">
+      由 luoling8192 開發，直接基於 John Ousterhout《<strong>A Philosophy of Software Design</strong>》，讓 Claude 在寫作與審查程式碼前主動評估三大複雜度症狀：<strong>Change Amplification、Cognitive Load、Unknown Unknowns</strong>，並以「深模組、淺介面」作為預設審查基準。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      Clairvoyance
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle">Design Foresight</span>
+      <span class="phi-principle pp-clean">Interface Quality</span>
+    </div>
+    <div class="phi-body">
+      codybrom 開發的「AI 編碼 ESP」skill，把數十年工程經驗濃縮為具體提問：<strong>這個介面是否真的隱藏了複雜度，還是只是把東西傳來傳去？這段錯誤處理是否把工作丟給了呼叫者，而模組本可以自行處理？</strong>讓代理在寫下第一行程式碼前就能預見設計陷阱。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      agent-rules-books
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+      <span class="platform-tag tag-codex" style="font-size:.65rem">Codex</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-clean">Clean Code</span>
+      <span class="phi-principle pp-ddd">DDD</span>
+      <span class="phi-principle">Refactoring</span>
+      <span class="phi-principle">DDIA</span>
+    </div>
+    <div class="phi-body">
+      由 ciembor 發起的 AGENTS.md 規則集，直接從《Clean Code》《Refactoring》《Domain-Driven Design》《Clean Architecture》《Designing Data-Intensive Applications》五大經典提煉出可執行的代理規則，讓 Codex、Cursor、Claude Code 在生成程式碼前先內化前人的架構智慧，明確聲明「不複製書中原文，只作為輕量工作約定」。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      minimise-complexity
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle">Simplicity First</span>
+      <span class="phi-principle pp-clean">Readability</span>
+    </div>
+    <div class="phi-body">
+      Larry Hudson 開發，專注於在編碼過程中持續提醒 Claude「保持程式碼簡單」——避免不必要的抽象層、過早的通用化與防禦性程式碼，優先選擇讀者能一眼看懂的直白實作。
+    </div>
+  </div>
+
+  <div class="phi-card">
+    <div class="phi-title">
+      a-philosophy-of-software-design-skills
+      <span class="platform-tag tag-claude" style="font-size:.65rem">Claude Code</span>
+    </div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.4rem;">
+      <span class="phi-principle pp-design">Module Depth</span>
+      <span class="phi-principle">Complexity Mgmt</span>
+    </div>
+    <div class="phi-body">
+      markduan 開發的另一套 POSD 實踐 skill，聚焦於審查階段：檢視每個新增函式與模組是否真的降低了整體系統複雜度，或只是把複雜度搬移到呼叫端，作為 /code-review 的互補審查層。
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div style="margin-bottom:.4rem">
+    <strong>f2e-research</strong> · 前端暨 AI 工具趨勢每日分析
+    &nbsp;|&nbsp; 報告產生：2026-07-15 19:11:14
+    &nbsp;|&nbsp; 資料來源：
+    <a href="https://code.claude.com/docs/en/changelog" target="_blank" rel="noopener">Claude Code Changelog</a>、
+    <a href="https://code.claude.com/docs/en/whats-new" target="_blank" rel="noopener">Claude Code What's New</a>、
+    <a href="https://github.com/github/awesome-copilot" target="_blank" rel="noopener">awesome-copilot</a>、
+    <a href="https://learn.chatgpt.com/docs/changelog" target="_blank" rel="noopener">Codex Changelog</a>、
+    <a href="https://lilianweng.github.io/posts/2026-07-04-harness/" target="_blank" rel="noopener">Lilian Weng — Harness Engineering for Self-Improvement</a>、
+    <a href="https://github.com/luoling8192/software-design-philosophy-skill" target="_blank" rel="noopener">software-design-philosophy-skill</a>、
+    <a href="https://github.com/codybrom/clairvoyance" target="_blank" rel="noopener">Clairvoyance</a>、
+    <a href="https://github.com/ciembor/agent-rules-books" target="_blank" rel="noopener">agent-rules-books</a>
+  </div>
+  <div style="color:#484f58">TOP 20 熱度公式：社群熱度 × 3 + 文件引用 × 1 + 跨平台提及 × 2 &nbsp;|&nbsp; 灰度遞增：第 11 名 grayscale(0) → 第 20 名 grayscale(1)</div>
+</footer>
+
+<script>
+  let activeFilter = 'all';
+
+  function applyFilter(btn) {
+    const filter = btn.dataset.filter;
+
+    if (filter !== 'all' && filter === activeFilter) {
+      activeFilter = 'all';
+    } else {
+      activeFilter = filter;
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (activeFilter === 'all') {
+      document.querySelector('[data-filter="all"]').classList.add('active');
+    } else {
+      document.querySelector(`[data-filter="${activeFilter}"]`).classList.add('active');
+    }
+
+    const rows = document.querySelectorAll('#ranking-table tbody tr');
+    rows.forEach(row => {
+      if (activeFilter === 'all') {
+        row.classList.remove('hidden-row');
+      } else if (activeFilter === 'new') {
+        row.classList.toggle('hidden-row', row.dataset.new !== '1');
+      } else {
+        row.classList.toggle('hidden-row', row.dataset.platform !== activeFilter);
+      }
+    });
+  }
+</script>
+</body>
+</html>
