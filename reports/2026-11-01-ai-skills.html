@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Skills 熱門排行 — 2026-11-01</title>
+  <style>
+    :root {
+      --bg: #0d1117; --surface: #161b22; --surface2: #21262d; --border: #30363d;
+      --text: #e6edf3; --muted: #8b949e;
+      --blue: #58a6ff; --purple: #bc8cff; --green: #3fb950; --orange: #f0883e;
+      --claude: #c084fc; --copilot: #3b82f6; --codex: #10b981;
+    }
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) {
+        --bg: #f6f8fa; --surface: #ffffff; --surface2: #eef1f4; --border: #d0d7de;
+        --text: #1f2328; --muted: #57606a;
+        --blue: #0969da; --purple: #8250df; --green: #1a7f37; --orange: #bc4c00;
+        --claude: #7c3aed; --copilot: #1d4ed8; --codex: #047857;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0d1117; --surface: #161b22; --surface2: #21262d; --border: #30363d;
+      --text: #e6edf3; --muted: #8b949e;
+      --blue: #58a6ff; --purple: #bc8cff; --green: #3fb950; --orange: #f0883e;
+      --claude: #c084fc; --copilot: #3b82f6; --codex: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      line-height: 1.6; min-height: 100vh; padding-bottom: 3rem;
+    }
+    header {
+      border-bottom: 1px solid var(--border); padding: 2.4rem 1rem 1.8rem; text-align: center;
+      background: linear-gradient(135deg, var(--surface) 0%, var(--bg) 100%);
+    }
+    .meta { display: flex; justify-content: center; gap: .6rem; flex-wrap: wrap; margin-bottom: .9rem; }
+    .badge { font-size: .72rem; font-weight: 600; letter-spacing: .05em; padding: .25rem .65rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-family: ui-monospace, Menlo, monospace; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); font-weight: 800; letter-spacing: -.02em;
+         background: linear-gradient(135deg, var(--blue), var(--purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: var(--muted); font-size: .95rem; margin-top: .4rem; }
+
+    .toolbar { position: sticky; top: 0; z-index: 10; background: var(--surface); border-bottom: 1px solid var(--border);
+               padding: .75rem 1rem; display: flex; justify-content: center; gap: .5rem; flex-wrap: wrap; }
+    .btn { font: inherit; font-size: .78rem; font-weight: 700; padding: .35rem .85rem; border-radius: 999px; border: 1px solid var(--border);
+           background: var(--surface2); color: var(--muted); cursor: pointer; transition: all .15s; }
+    .btn:hover { color: var(--text); }
+    .btn[aria-pressed="true"] { color: var(--text); border-color: var(--blue); background: rgba(88,166,255,.14); }
+    .btn.p-claude[aria-pressed="true"]  { border-color: var(--claude);  background: rgba(192,132,252,.15); color: var(--claude); }
+    .btn.p-copilot[aria-pressed="true"] { border-color: var(--copilot); background: rgba(59,130,246,.15);  color: var(--copilot); }
+    .btn.p-codex[aria-pressed="true"]   { border-color: var(--codex);   background: rgba(16,185,129,.15);  color: var(--codex); }
+    .btn.p-new[aria-pressed="true"]     { border-color: var(--orange);  background: rgba(240,136,62,.15);  color: var(--orange); }
+    .sep { width: 1px; background: var(--border); margin: 0 .3rem; }
+
+    main { max-width: 1040px; margin: 0 auto; padding: 1.5rem 1rem; }
+    .section-title { font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 1.6rem 0 .8rem; display: flex; align-items: center; gap: .6rem; }
+    .section-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+    .note { color: var(--muted); font-size: .85rem; margin-bottom: .8rem; }
+
+    .list { display: grid; gap: .6rem; }
+    .row { display: grid; grid-template-columns: 3rem 1fr; gap: .9rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .9rem 1.1rem; }
+    .rank { font-size: 1.5rem; font-weight: 800; font-family: ui-monospace, Menlo, monospace; color: var(--blue); line-height: 1; padding-top: .2rem; }
+    .rank.top3 { color: var(--orange); }
+    .name-line { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .name { font-weight: 700; font-size: 1rem; font-family: ui-monospace, Menlo, monospace; }
+    .owner { color: var(--muted); font-size: .8rem; }
+    .tag { font-size: .66rem; font-weight: 700; padding: .12rem .45rem; border-radius: 4px; letter-spacing: .04em; border: 1px solid; }
+    .tag.claude  { color: var(--claude);  border-color: var(--claude); }
+    .tag.copilot { color: var(--copilot); border-color: var(--copilot); }
+    .tag.codex   { color: var(--codex);   border-color: var(--codex); }
+    .tag.new     { color: #fff; background: var(--orange); border-color: var(--orange); }
+    .tag.example { color: var(--muted); border-style: dashed; }
+    .desc { margin-top: .35rem; font-size: .9rem; }
+    .scene { margin-top: .3rem; font-size: .83rem; color: var(--muted); }
+    .scene b { color: var(--text); font-weight: 600; }
+    .metric { margin-top: .3rem; font-size: .78rem; color: var(--muted); font-family: ui-monospace, Menlo, monospace; }
+
+    .empty { text-align: center; color: var(--muted); padding: 2rem; display: none; }
+    footer { max-width: 1040px; margin: 1rem auto 0; padding: 1rem; color: var(--muted); font-size: .8rem; border-top: 1px solid var(--border); }
+    footer ul { padding-left: 1.1rem; }
+    footer li { margin-bottom: .25rem; }
+    footer a { color: var(--blue); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="meta">
+    <span class="badge">報告日期 2026-11-01</span>
+    <span class="badge">產生時間 2026-11-01 19:15:39 UTC</span>
+    <span class="badge">限 Claude Code · Copilot · Codex</span>
+  </div>
+  <h1>AI Skills 熱門排行</h1>
+  <p class="subtitle">每日蒐集的 AI skills 與自動化指令｜依熱度與實用性排序（不分類）</p>
+</header>
+
+<nav class="toolbar" aria-label="篩選">
+  <button class="btn" data-filter="all" aria-pressed="true">全部</button>
+  <span class="sep"></span>
+  <button class="btn p-claude" data-filter="claude" aria-pressed="false">Claude Code</button>
+  <button class="btn p-copilot" data-filter="copilot" aria-pressed="false">Copilot</button>
+  <button class="btn p-codex" data-filter="codex" aria-pressed="false">Codex</button>
+  <span class="sep"></span>
+  <button class="btn p-new" data-new="1" aria-pressed="false">新上榜 (New)</button>
+</nav>
+
+<main>
+  <h2 class="section-title">TOP 20 熱門排行</h2>
+  <p class="note">排名 11–20 依序漸進灰階（第 11 名為灰度 0，第 20 名為灰度 1）。「新上榜」指前一期（10-25）TOP 20 未出現者。</p>
+  <div class="list" id="top-list"></div>
+
+  <h2 class="section-title">重視軟體設計哲學的 Skills</h2>
+  <p class="note">協助工程師產出良好程式碼：測試驅動、重構規劃、需求與設計釐清、流程規劃。</p>
+  <div class="list" id="design-list"></div>
+
+  <div class="empty" id="empty">目前篩選條件下沒有符合的項目。</div>
+</main>
+
+<footer>
+  <strong>資料來源與限制</strong>
+  <ul>
+    <li>安裝數與星數取自第三方聚合站快照（Skillselion、ClaudeMarketplaces、skills.sh 相關頁面），各站日期與計算口徑不一，數字僅供相對比較。</li>
+    <li>Copilot 與 Codex 的「熱度」多為定性判斷（官方文件、社群指南與 GitHub 星數），非統一的使用量數據。</li>
+    <li>排名 15–18 為 Codex 自動化典型範例，來自開發者指南的模式描述，不是量測排行。</li>
+    <li>來源：<a href="https://skillselion.com/skills/vercel-labs/skills/find-skills">Skillselion · find-skills</a>、
+        <a href="https://dev.to/skillselion/everything-claude-code-has-285000-github-stars-its-most-installed-skill-has-18189-installs-58e0">DEV · Everything Claude Code</a>、
+        <a href="https://claudemarketplaces.com/skills/vercel-labs/skills/find-skills">Claude Code Marketplaces</a>、
+        <a href="https://www.firecrawl.dev/blog/best-codex-skills">Firecrawl · Best Codex Skills 2026</a>、
+        <a href="https://github.com/topics/codex-skills">GitHub Topics · codex-skills</a>、
+        <a href="https://github.com/github/awesome-copilot">github/awesome-copilot</a>、
+        <a href="https://learn.microsoft.com/visualstudio/ide/copilot-agent-skills">Microsoft Learn · Copilot agent skills</a>。</li>
+  </ul>
+</footer>
+
+<script>
+  const SKILLS = [
+    { rank: 1,  name: "find-skills", owner: "vercel-labs/skills", p: ["claude","copilot","codex"], isNew: true,
+      desc: "搜尋並安裝所需的 skill，是整個 skill 生態的入口。",
+      scene: "<b>場景</b>：不確定有沒有現成 skill 時，先讓代理人查詢再安裝。",
+      metric: "Skillselion 目錄：約 414 萬安裝 · 3.7 萬星（11 月快照）" },
+    { rank: 2,  name: "superpowers", owner: "obra/superpowers", p: ["claude","codex"], isNew: false,
+      desc: "完整的開發流程 skill 組：腦力激盪 → 計畫 → TDD → 審查。",
+      scene: "<b>場景</b>：中大型功能開發，先規劃再實作，避免代理人直接亂寫。",
+      metric: "GitHub 約 24–27 萬星（各來源數字不一）" },
+    { rank: 3,  name: "frontend-design", owner: "Anthropic", p: ["claude"], isNew: false,
+      desc: "引導產出有設計品味的前端介面，避開千篇一律的 AI 風格。",
+      scene: "<b>場景</b>：從零做元件、頁面視覺調整與美化。",
+      metric: "約 100 萬安裝 · 17.5 萬星" },
+    { rank: 4,  name: "tdd", owner: "mattpocock/skills", p: ["claude"], isNew: true,
+      desc: "紅 → 綠 → 重構的測試驅動流程，先寫測試再讓代理人實作。",
+      scene: "<b>場景</b>：功能實作前定義行為，降低回歸風險。",
+      metric: "約 48.5 萬安裝（測試類榜首）" },
+    { rank: 5,  name: "azure-diagnostics", owner: "microsoft/azure-skills", p: ["copilot"], isNew: true,
+      desc: "Azure 故障診斷流程，已可在 Visual Studio Copilot 中選擇啟用。",
+      scene: "<b>場景</b>：雲端服務異常時，依診斷步驟逐項排查。",
+      metric: "約 46.5 萬安裝（除錯類榜首）" },
+    { rank: 6,  name: "security-review", owner: "ECC (Everything Claude Code)", p: ["claude","codex"], isNew: false,
+      desc: "針對待合併變更做安全審查：注入、認證、密鑰外洩等。",
+      scene: "<b>場景</b>：送 PR 前的自動安全檢查。",
+      metric: "ECC 內安裝數約 1.8 萬" },
+    { rank: 7,  name: "skill-creator", owner: "Anthropic", p: ["claude"], isNew: false,
+      desc: "建立、測試與改進 skill 的 meta-skill，附評測流程。",
+      scene: "<b>場景</b>：把團隊內部流程寫成專屬 skill。",
+      metric: "約 3.8 萬星（來源數字）" },
+    { rank: 8,  name: "mcp-builder", owner: "anthropics/skills", p: ["claude"], isNew: false,
+      desc: "協助建立 MCP server，把內部 API 包裝成代理人可用的工具。",
+      scene: "<b>場景</b>：串接內部系統、資料庫或第三方 API。",
+      metric: "約 9.2 萬安裝" },
+    { rank: 9,  name: "planning-files", owner: "社群 skill", p: ["claude","codex"], isNew: true,
+      desc: "以 markdown 檔案作為持久工作記憶，長任務不遺失脈絡。",
+      scene: "<b>場景</b>：跨多日、多步驟的任務，讓進度可追蹤。",
+      metric: "來源稱為 GitHub 上星數最高的單一 skill" },
+    { rank: 10, name: "request-refactor-plan", owner: "mattpocock/skills", p: ["claude"], isNew: true,
+      desc: "產出結構化重構計畫：拆分步驟、標示風險、降低一次改太多的風險。",
+      scene: "<b>場景</b>：大型重構前先與代理人對齊方案。",
+      metric: "約 15.8 萬安裝（重構類榜首）" },
+    { rank: 11, name: "gh-fix-ci", owner: "Codex 社群", p: ["codex"], isNew: false,
+      desc: "診斷並修復失敗的 GitHub Actions PR 檢查。",
+      scene: "<b>場景</b>：CI 紅燈時自動找原因並提出修正。",
+      metric: "來源以定性推薦為主" },
+    { rank: 12, name: "cli-creator", owner: "Codex 社群", p: ["codex"], isNew: false,
+      desc: "建立可組合的 CLI，讓 Codex 能在任何 repo 中執行。",
+      scene: "<b>場景</b>：把重複的維運腳本整理成可重用工具。",
+      metric: "來源以定性推薦為主" },
+    { rank: 13, name: "suggest-awesome-github-copilot-agents", owner: "github/awesome-copilot", p: ["copilot"], isNew: true,
+      desc: "依專案內容推薦 awesome-copilot 中合適的 custom agents。",
+      scene: "<b>場景</b>：新專案快速找到適合的 Copilot 代理人設定。",
+      metric: "官方社群目錄，星數以 GitHub 頁面為準" },
+    { rank: 14, name: "copilot-sdk", owner: "Copilot 生態", p: ["copilot"], isNew: true,
+      desc: "協助以 Copilot SDK 建構代理人應用。",
+      scene: "<b>場景</b>：把 Copilot 能力嵌入自製工具或服務。",
+      metric: "來源以定性推薦為主" },
+    { rank: 15, name: "PR 審查清單自動化", owner: "Codex 自動化範例", p: ["codex"], isNew: false, example: true,
+      desc: "每次開 PR 時依固定清單審查變更。",
+      scene: "<b>場景</b>：把審查標準固定下來，減少漏看。",
+      metric: "典型範例，非排行數據" },
+    { rank: 16, name: "CI 失敗巡檢自動化", owner: "Codex 自動化範例", p: ["codex"], isNew: false, example: true,
+      desc: "每次 CI 執行後檢查失敗項目並彙整原因。",
+      scene: "<b>場景</b>：搭配 gh-fix-ci 形成失敗後自動分析的流程。",
+      metric: "典型範例，非排行數據" },
+    { rank: 17, name: "Release notes 草稿自動化", owner: "Codex 自動化範例", p: ["codex"], isNew: false, example: true,
+      desc: "每次發版時依 commit 與 PR 草擬 release notes。",
+      scene: "<b>場景</b>：減少發版前手動整理變更的時間。",
+      metric: "典型範例，非排行數據" },
+    { rank: 18, name: "每日站會摘要自動化", owner: "Codex 自動化範例", p: ["codex"], isNew: false, example: true,
+      desc: "彙整前一日的 commit、PR 與任務狀態，產出站會摘要。",
+      scene: "<b>場景</b>：每天固定時間自動產生進度草稿。",
+      metric: "典型範例，非排行數據" },
+    { rank: 19, name: "grill-me", owner: "社群 skill", p: ["claude"], isNew: true,
+      desc: "透過連續追問把模糊需求與設計決策釐清，再開始動手。",
+      scene: "<b>場景</b>：開工前把需求與取捨談清楚，避免返工。",
+      metric: "近期討論度高，數據來源待驗證" },
+    { rank: 20, name: "suggest-awesome-github-copilot-prompts", owner: "github/awesome-copilot", p: ["copilot"], isNew: true,
+      desc: "依專案推薦 awesome-copilot 中的 prompt 檔案。",
+      scene: "<b>場景</b>：把常用提示詞沉澱為團隊可重用的 prompt。",
+      metric: "官方社群目錄，星數以 GitHub 頁面為準" }
+  ];
+
+  const DESIGN = [
+    { name: "tdd", owner: "mattpocock/skills", p: ["claude"], isNew: true,
+      desc: "先寫失敗測試再實作，讓設計由可測性驅動。", scene: "<b>場景</b>：新模組的介面設計與行為定義。" },
+    { name: "request-refactor-plan", owner: "mattpocock/skills", p: ["claude"], isNew: true,
+      desc: "把重構拆成可驗證的小步驟，避免大爆炸式改寫。", scene: "<b>場景</b>：技術債清理與模組拆分前的規劃。" },
+    { name: "grill-me", owner: "社群 skill", p: ["claude"], isNew: true,
+      desc: "以追問釐清設計假設與取捨，寫程式前先想清楚。", scene: "<b>場景</b>：需求模糊或架構方向有分歧時。" },
+    { name: "superpowers", owner: "obra/superpowers", p: ["claude","codex"], isNew: false,
+      desc: "把腦力激盪、計畫與 TDD 串成一條流程，強調先設計再實作。", scene: "<b>場景</b>：從想法到可交付功能的完整節奏。" }
+  ];
+
+  const LABEL = { claude: "Claude Code", copilot: "Copilot", codex: "Codex" };
+  let platform = "all", onlyNew = false;
+
+  function tags(item) {
+    let html = item.p.map(p => `<span class="tag ${p}">${LABEL[p]}</span>`).join("");
+    if (item.isNew) html += `<span class="tag new">NEW</span>`;
+    if (item.example) html += `<span class="tag example">範例</span>`;
+    return html;
+  }
+  function matches(item) {
+    if (platform !== "all" && !item.p.includes(platform)) return false;
+    if (onlyNew && !item.isNew) return false;
+    return true;
+  }
+  function render() {
+    const top = document.getElementById("top-list");
+    const design = document.getElementById("design-list");
+    let shown = 0;
+    top.innerHTML = SKILLS.filter(matches).map(s => {
+      shown++;
+      // 排名 11–20 灰階由 0 漸進至 1；1–10 維持全彩
+      const style = s.rank >= 11 ? ` style="filter: grayscale(${((s.rank - 11) / 9).toFixed(3)})"` : "";
+      return `<article class="row"${style}>
+        <div class="rank ${s.rank <= 3 ? "top3" : ""}">${String(s.rank).padStart(2, "0")}</div>
+        <div>
+          <div class="name-line"><span class="name">${s.name}</span>${tags(s)}</div>
+          <div class="owner">${s.owner}</div>
+          <div class="desc">${s.desc}</div>
+          <div class="scene">${s.scene}</div>
+          <div class="metric">${s.metric}</div>
+        </div></article>`;
+    }).join("");
+    const dItems = DESIGN.filter(matches);
+    shown += dItems.length;
+    design.innerHTML = dItems.map(s => `<article class="row">
+        <div class="rank">✦</div>
+        <div>
+          <div class="name-line"><span class="name">${s.name}</span>${tags(s)}</div>
+          <div class="owner">${s.owner}</div>
+          <div class="desc">${s.desc}</div>
+          <div class="scene">${s.scene}</div>
+        </div></article>`).join("");
+    document.getElementById("empty").style.display = shown ? "none" : "block";
+  }
+  document.querySelectorAll("[data-filter]").forEach(btn => btn.addEventListener("click", () => {
+    platform = btn.dataset.filter;
+    document.querySelectorAll("[data-filter]").forEach(b => b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
+    render();
+  }));
+  document.querySelector("[data-new]").addEventListener("click", e => {
+    onlyNew = !onlyNew;
+    e.currentTarget.setAttribute("aria-pressed", String(onlyNew));
+    render();
+  });
+  render();
+</script>
+</body>
+</html>
