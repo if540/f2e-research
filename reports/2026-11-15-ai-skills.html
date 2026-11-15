@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Skills 熱門排行 — 2026-11-15</title>
+<style>
+  :root{
+    --bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;
+    --blue:#58a6ff;--purple:#bc8cff;--green:#3fb950;--orange:#f0883e;--pink:#ff7b72;--teal:#39d5c5;
+    --text:#e6edf3;--muted:#8b949e;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#f6f8fa;--surface:#ffffff;--surface2:#eef1f5;--border:#d0d7de;
+      --blue:#0969da;--purple:#8250df;--green:#1a7f37;--orange:#bc4c00;--pink:#cf222e;--teal:#0f766e;
+      --text:#1f2328;--muted:#59636e;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#f6f8fa;--surface:#ffffff;--surface2:#eef1f5;--border:#d0d7de;
+    --blue:#0969da;--purple:#8250df;--green:#1a7f37;--orange:#bc4c00;--pink:#cf222e;--teal:#0f766e;
+    --text:#1f2328;--muted:#59636e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;line-height:1.6;padding:0 16px 48px}
+  .wrap{max-width:1100px;margin:0 auto}
+  header{padding:32px 0 20px;border-bottom:1px solid var(--border);margin-bottom:20px}
+  .eyebrow{color:var(--purple);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+  h1{font-size:clamp(24px,4vw,34px);margin:6px 0 8px}
+  .lead{color:var(--muted);font-size:15px}
+  .stamp{margin-top:12px;font-size:13px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+  .stamp b{color:var(--text);font-weight:600}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 8px}
+  .toolbar .label{color:var(--muted);font-size:13px;margin-right:4px}
+  .chip{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:999px;padding:6px 14px;font-size:14px;cursor:pointer;font-family:inherit}
+  .chip[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+  .chip.new-chip[aria-pressed="true"]{background:var(--orange);border-color:var(--orange)}
+  .count{color:var(--muted);font-size:13px;margin-left:auto}
+  .section-title{font-size:20px;margin:36px 0 6px;display:flex;align-items:center;gap:10px}
+  .section-title::before{content:"";width:4px;height:20px;background:var(--teal);border-radius:2px}
+  .section-note{color:var(--muted);font-size:13px;margin-bottom:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;position:relative;filter:grayscale(var(--g,0))}
+  .card.hidden{display:none}
+  .top{display:flex;align-items:flex-start;gap:12px}
+  .rank{flex:0 0 auto;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:700;font-family:ui-monospace,Menlo,monospace;background:var(--surface2);color:var(--text)}
+  .rank.r1{background:var(--orange);color:#fff}
+  .rank.r2{background:var(--purple);color:#fff}
+  .rank.r3{background:var(--teal);color:#fff}
+  .meta{flex:1;min-width:0}
+  .name{font-weight:600;font-size:15px;word-break:break-all}
+  .name a{color:var(--text);text-decoration:none}
+  .name a:hover{color:var(--blue);text-decoration:underline}
+  .stars{font-size:12px;color:var(--muted);font-family:ui-monospace,Menlo,monospace;margin-top:2px}
+  .desc{font-size:14px;color:var(--text);opacity:.92}
+  .use{font-size:13px;color:var(--muted);background:var(--surface2);border-radius:8px;padding:8px 10px}
+  .use b{color:var(--teal);font-weight:600}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-size:11px;border:1px solid var(--border);border-radius:6px;padding:2px 8px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+  .tag.cc{color:var(--orange);border-color:var(--orange)}
+  .tag.cx{color:var(--green);border-color:var(--green)}
+  .tag.cp{color:var(--blue);border-color:var(--blue)}
+  .tag.unk{color:var(--muted);border-style:dashed}
+  .badge-new{position:absolute;top:12px;right:12px;background:var(--orange);color:#fff;font-size:10px;font-weight:700;border-radius:4px;padding:1px 6px;letter-spacing:.05em}
+  .kind{font-size:11px;color:var(--purple);font-family:ui-monospace,Menlo,monospace}
+  .notes{margin-top:8px;font-size:13px;color:var(--muted)}
+  .notes li{margin:6px 0 6px 18px}
+  .notes h3{color:var(--text);font-size:15px;margin:18px 0 4px}
+  .notes a{color:var(--blue)}
+  .empty{display:none;color:var(--muted);padding:24px;text-align:center;border:1px dashed var(--border);border-radius:12px}
+  footer{margin-top:40px;color:var(--muted);font-size:12px;text-align:center;border-top:1px solid var(--border);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Daily AI Skills Ranking · Claude Code / GitHub Copilot / Codex</div>
+  <h1>AI Skills 熱門排行</h1>
+  <p class="lead">每日蒐集 Claude Code、GitHub Copilot、Codex 的熱門 skills 與自動化指令，依熱度與實用性排序。</p>
+  <div class="stamp">報告日期 <b>2026-11-15</b> · 生成時間 <b>2026-11-16 03:16:48</b> (Asia/Taipei)</div>
+</header>
+
+<div class="toolbar" role="group" aria-label="篩選">
+  <span class="label">平台</span>
+  <button class="chip" data-filter="all" aria-pressed="true">全部</button>
+  <button class="chip" data-filter="cc" aria-pressed="false">Claude Code</button>
+  <button class="chip" data-filter="cp" aria-pressed="false">Copilot</button>
+  <button class="chip" data-filter="cx" aria-pressed="false">Codex</button>
+  <span class="label" style="margin-left:10px">快篩</span>
+  <button class="chip new-chip" id="newToggle" aria-pressed="false">New 新上榜</button>
+  <span class="count" id="count"></span>
+</div>
+
+<h2 class="section-title">TOP 20 熱門排行</h2>
+<p class="section-note">熱度以 GitHub ★ 為主要依據，實用性微調排序。第 11–20 名依名次逐步灰階（第 11 名灰度 0 → 第 20 名灰度 1）。<span class="kind">New</span> 表示未出現在 2026-11-08 報告的排行中。</p>
+
+<div class="grid" id="ranking">
+
+  <!-- 1 -->
+  <article class="card" data-platforms="cc cx" data-new="0" style="--g:0">
+    <div class="top"><div class="rank r1">01</div>
+      <div class="meta"><div class="name"><a href="https://github.com/affaan-m/ECC" target="_blank" rel="noopener">affaan-m/ECC</a></div>
+      <div class="stars">★ 303,720</div></div></div>
+    <div class="desc">Agent harness 效能優化系統，整合 skills、instincts、記憶、安全檢查與研究優先的開發流程。</div>
+    <div class="use"><b>應用場景</b>　在 Claude Code 與 Codex 之間統一代理設定、累積長期記憶，並加上安全檢查。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span></div>
+  </article>
+
+  <!-- 2 -->
+  <article class="card" data-platforms="cc cx" data-new="0" style="--g:0">
+    <div class="top"><div class="rank r2">02</div>
+      <div class="meta"><div class="name"><a href="https://github.com/Graphify-Labs/graphify" target="_blank" rel="noopener">Graphify-Labs/graphify</a></div>
+      <div class="stars">★ 148,285</div></div></div>
+    <div class="desc">把程式碼、文件、SQL schema、設定檔與 PDF 轉成可查詢的知識圖譜；本地 AST 解析，不依賴向量資料庫。</div>
+    <div class="use"><b>應用場景</b>　接手陌生的大型 codebase，追蹤模組之間的依賴關係與文件脈絡。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span></div>
+  </article>
+
+  <!-- 3 -->
+  <article class="card" data-platforms="cc cx" data-new="0" style="--g:0">
+    <div class="top"><div class="rank r3">03</div>
+      <div class="meta"><div class="name"><a href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener">tt-a1i/archify</a></div>
+      <div class="stars">★ 96,721</div></div></div>
+    <div class="desc">將想法、計畫或程式碼轉為可互動的精美圖表。</div>
+    <div class="use"><b>應用場景</b>　架構設計討論、系統流程圖、把既有程式碼整理成文件化的視覺說明。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span></div>
+  </article>
+
+  <!-- 4 -->
+  <article class="card" data-platforms="cc" data-new="1" style="--g:0">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">04</div>
+      <div class="meta"><div class="name"><a href="https://github.com/coreyhaines31/marketingskills" target="_blank" rel="noopener">coreyhaines31/marketingskills</a></div>
+      <div class="stars">★ 60,535</div></div></div>
+    <div class="desc">行銷技能包，涵蓋 CRO、文案、SEO、數據分析與成長工程。</div>
+    <div class="use"><b>應用場景</b>　落地頁轉換率優化、文案改寫、SEO 內容檢查。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span></div>
+  </article>
+
+  <!-- 5 -->
+  <article class="card" data-platforms="cc" data-new="1" style="--g:0">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">05</div>
+      <div class="meta"><div class="name"><a href="https://github.com/hesreallyhim/awesome-claude-code" target="_blank" rel="noopener">hesreallyhim/awesome-claude-code</a></div>
+      <div class="stars">★ 58,068 · <span class="kind">資源索引</span></div></div></div>
+    <div class="desc">Claude Code 精選資源清單，收錄 skills、agents、status line、開發工具與 plugins。</div>
+    <div class="use"><b>應用場景</b>　尋找可安裝的技能與工具，作為挑選資源的入口。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span></div>
+  </article>
+
+  <!-- 6 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">06</div>
+      <div class="meta"><div class="name"><a href="https://github.com/K-Dense-AI/scientific-agent-skills" target="_blank" rel="noopener">K-Dense-AI/scientific-agent-skills</a></div>
+      <div class="stars">★ 57,300</div></div></div>
+    <div class="desc">科研技能庫，收錄 177 個經驗證的技能，並涵蓋生物、化學與醫藥等領域的科學資料庫。</div>
+    <div class="use"><b>應用場景</b>　科研資料分析、文獻與資料庫查詢、藥物研發相關的實驗流程輔助。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 7 -->
+  <article class="card" data-platforms="cc" data-new="1" style="--g:0">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">07</div>
+      <div class="meta"><div class="name"><a href="https://github.com/Imbad0202/academic-research-skills" target="_blank" rel="noopener">Imbad0202/academic-research-skills</a></div>
+      <div class="stars">★ 57,015</div></div></div>
+    <div class="desc">學術研究流程技能，依序涵蓋 research → write → review → revise → finalize。</div>
+    <div class="use"><b>應用場景</b>　論文撰寫、模擬審稿、依審查意見修訂並定稿。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span></div>
+  </article>
+
+  <!-- 8 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">08</div>
+      <div class="meta"><div class="name"><a href="https://github.com/seb1n/awesome-ai-agent-skills" target="_blank" rel="noopener">seb1n/awesome-ai-agent-skills</a></div>
+      <div class="stars">★ 255</div></div></div>
+    <div class="desc">103 個可直接使用的 SKILL.md 工作流（不是單純的連結目錄）。</div>
+    <div class="use"><b>應用場景</b>　跨工具快速導入現成的工作流，不必從零撰寫 SKILL.md。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 9 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">09</div>
+      <div class="meta"><div class="name"><a href="https://github.com/razr001/aligndev" target="_blank" rel="noopener">razr001/aligndev</a></div>
+      <div class="stars">★ 36</div></div></div>
+    <div class="desc">協助前端團隊產生共用的 coding standards 與 SKILL.md，讓多個 agent 的程式風格保持一致。</div>
+    <div class="use"><b>應用場景</b>　前端團隊統一程式規範，減少不同 agent 產出的風格落差。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 10 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">10</div>
+      <div class="meta"><div class="name"><a href="https://github.com/PyModel/css-pro-tips" target="_blank" rel="noopener">PyModel/css-pro-tips</a></div>
+      <div class="stars">★ 34</div></div></div>
+    <div class="desc">具備瀏覽器相容性意識的現代 CSS 技能，以 SKILL.md 路由配合按需載入的參考資料。</div>
+    <div class="use"><b>應用場景</b>　前端 CSS 實作，並判斷新特性在目標瀏覽器中是否可用。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 11 · g=0 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">11</div>
+      <div class="meta"><div class="name"><a href="https://github.com/Unknown-333/awesome-data-engineering-skills" target="_blank" rel="noopener">Unknown-333/awesome-data-engineering-skills</a></div>
+      <div class="stars">★ 27</div></div></div>
+    <div class="desc">36 個資料工程技能，涵蓋 dbt、Airflow、Dagster、Spark、Snowflake、BigQuery、Kafka 等。</div>
+    <div class="use"><b>應用場景</b>　資料管線開發，含冪等性、回填與資料品質檢查。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 12 · g=0.111 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0.111">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">12</div>
+      <div class="meta"><div class="name"><a href="https://github.com/shir-danishyar/humanize" target="_blank" rel="noopener">shir-danishyar/humanize</a></div>
+      <div class="stars">★ 23</div></div></div>
+    <div class="desc">移除文件中可辨識的 AI 寫作痕跡，提供兩種模式、語域感知與確定性的 linter。</div>
+    <div class="use"><b>應用場景</b>　修飾對外文案、部落格與說明文件，讓文字更自然。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 13 · g=0.222 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0.222">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">13</div>
+      <div class="meta"><div class="name"><a href="https://github.com/CodeAlive-AI/codealive-skills" target="_blank" rel="noopener">CodeAlive-AI/codealive-skills</a></div>
+      <div class="stars">★ 15</div></div></div>
+    <div class="desc">語意程式碼搜尋與 AI 驅動的 codebase 問答技能。</div>
+    <div class="use"><b>應用場景</b>　在大型專案中以自然語言定位程式碼與理解架構。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 14 · g=0.333 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0.333">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">14</div>
+      <div class="meta"><div class="name"><a href="https://github.com/DKeken/codex-skills-alternative" target="_blank" rel="noopener">DKeken/codex-skills-alternative</a></div>
+      <div class="stars">★ 15</div></div></div>
+    <div class="desc">17 個與廠商無關的 Agent Skills，重現 Codex 的創意製作與產品設計 plugin 流程。</div>
+    <div class="use"><b>應用場景</b>　在不同 agent 之間沿用同一套產品設計與製作流程。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 15 · g=0.444 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0.444">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">15</div>
+      <div class="meta"><div class="name"><a href="https://github.com/Brattlof/skillet" target="_blank" rel="noopener">Brattlof/skillet</a></div>
+      <div class="stars">★ 10</div></div></div>
+    <div class="desc">套件管理器，可安裝 MCP servers、Agent Skills 與 Claude Code 的指令、hooks、subagents。</div>
+    <div class="use"><b>應用場景</b>　團隊共用與版本化管理 agent 設定，跨 Claude Code、Codex、Copilot 安裝。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 16 · g=0.556 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0.556">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">16</div>
+      <div class="meta"><div class="name"><a href="https://github.com/vorlaxen-labs/agent-skills" target="_blank" rel="noopener">vorlaxen-labs/agent-skills</a></div>
+      <div class="stars">★ 9</div></div></div>
+    <div class="desc">Agent skills CLI：初始化 AGENTS.md、從任意 GitHub 倉庫安裝 SKILL.md，並提供 lock file 與 doctor 檢查。</div>
+    <div class="use"><b>應用場景</b>　管理專案內的技能版本，確認安裝狀態是否正常。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 17 · g=0.667 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0.667">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">17</div>
+      <div class="meta"><div class="name"><a href="https://github.com/yugasun/llm-wiki-skills" target="_blank" rel="noopener">yugasun/llm-wiki-skills</a></div>
+      <div class="stars">★ 7</div></div></div>
+    <div class="desc">跨平台的技能倉庫，可將 llm-wiki 技能安裝到 Claude Code、GitHub Copilot 與 Codex。</div>
+    <div class="use"><b>應用場景</b>　建立並維護個人或團隊的 LLM 知識庫（wiki）。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 18 · g=0.778 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0.778">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">18</div>
+      <div class="meta"><div class="name"><a href="https://github.com/Sagargupta16/awesome-skills" target="_blank" rel="noopener">Sagargupta16/awesome-skills</a></div>
+      <div class="stars">★ 6</div></div></div>
+    <div class="desc">經 CI 檢查的精選 Agent Skills 清單，適用於 Claude Code、Codex、Cursor、Gemini CLI 與 Copilot。</div>
+    <div class="use"><b>應用場景</b>　挑選經過格式驗證的技能，降低安裝後無法運作的風險。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 19 · g=0.889 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:0.889">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">19</div>
+      <div class="meta"><div class="name"><a href="https://github.com/Spoon94/skill-vault" target="_blank" rel="noopener">Spoon94/skill-vault</a></div>
+      <div class="stars">★ 5</div></div></div>
+    <div class="desc">精選的自含式 SKILL.md 技能庫，適用於 Claude Code、Codex CLI、Copilot CLI、Gemini CLI 與 OpenCode。</div>
+    <div class="use"><b>應用場景</b>　按需取用單一技能，不必安裝整套工具包。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+  <!-- 20 · g=1 -->
+  <article class="card" data-platforms="cc cx cp" data-new="1" style="--g:1">
+    <div class="badge-new">NEW</div>
+    <div class="top"><div class="rank">20</div>
+      <div class="meta"><div class="name"><a href="https://github.com/kryptophonik/SRE-Skills" target="_blank" rel="noopener">kryptophonik/SRE-Skills</a></div>
+      <div class="stars">★ 4</div></div></div>
+    <div class="desc">41 個 SRE（網站可靠性工程）技能，採 Agent Skills 格式，適用於 Claude Code、Codex 與 GitHub Copilot。</div>
+    <div class="use"><b>應用場景</b>　事故排查、可靠性設計與維運流程的 AI 輔助。</div>
+    <div class="tags"><span class="tag cc">Claude Code</span><span class="tag cx">Codex</span><span class="tag cp">Copilot</span></div>
+  </article>
+
+</div>
+
+<h2 class="section-title">特別專區：重視軟體設計哲學的 Skills</h2>
+<p class="section-note">收錄實質幫助工程師寫出良好程式碼的 skills。此區不混入 TOP 20 排行。</p>
+
+<div class="grid" id="design">
+  <article class="card" data-platforms="" data-new="0" style="--g:0">
+    <div class="top"><div class="rank r3">★</div>
+      <div class="meta"><div class="name"><a href="https://github.com/addyosmani/agent-skills" target="_blank" rel="noopener">addyosmani/agent-skills</a></div>
+      <div class="stars">★ 117,862</div></div></div>
+    <div class="desc">生產等級的工程技能，涵蓋從規劃、實作到審查的完整開發流程，強調品質與可維護性。</div>
+    <div class="use"><b>應用場景</b>　讓 agent 依工程流程產出可審查、可維護的程式碼。</div>
+    <div class="tags"><span class="tag unk">平台待驗證（描述未明列三平台）</span></div>
+  </article>
+</div>
+
+<div class="notes">
+  <h3>方法與限制</h3>
+  <ul>
+    <li><b>熱度</b>：以 GitHub API 於報告生成時的 ★ 數為主要依據（以 <code>search/repositories</code> 查詢 claude-code、skills、SKILL.md 相關倉庫），再依實用性與平台相容性調整。</li>
+    <li><b>平台限制</b>：只列描述中明確表示支援 Claude Code、GitHub Copilot 或 Codex 的項目；描述未提及平台者（例如 caveman、taste-skill、ui-ux-pro-max-skill、humanizer、last30days-skill）未納入排行。</li>
+    <li><b>New</b>：未出現在 2026-11-08 報告排行中的項目。</li>
+    <li><b>未能驗證的熱門項目</b>：anthropics/skills、obra/superpowers、mattpocock/skills、github/awesome-copilot、openai/skills 等常被引用的倉庫，本次 session 無權讀取其 GitHub 資料，僅見於二手文章，因此未列入排行，須另行確認。</li>
+    <li><b>未驗證的趨勢描述</b>：多篇「Karpathy 風格行為準則」與「Codex 採用 AGENTS.md 的平台數」等說法來自二手部落格，未直接核實，報告中未作為排序依據。</li>
+    <li><b>Copilot 生態</b>：GitHub 於 2025-12 推出 Agent Skills 支援，2026-07 公告 Copilot code review 支援 agent skills 與 MCP 已正式 GA（<a href="https://github.blog/changelog/2026-07-31-copilot-code-review-agent-skills-and-mcp-now-generally-available/" target="_blank" rel="noopener">GitHub Changelog</a>）。</li>
+    <li><b>Codex 生態</b>：OpenAI 於 2026-03 發表 Agents SDK 專案中使用 AGENTS.md 與 <code>.agents/skills/</code> 的實務（<a href="https://developers.openai.com/blog/skills-agents-sdk" target="_blank" rel="noopener">OpenAI Developers</a>）。</li>
+  </ul>
+  <h3>資料來源</h3>
+  <ul>
+    <li>GitHub REST API：<code>search/repositories</code>（2026-11-15 查詢結果）</li>
+    <li>網路搜尋：Claude Code 熱門 skills 整理文章、Copilot Agent Skills 相關公告、Codex skills 與 AGENTS.md 相關文章</li>
+  </ul>
+</div>
+
+<footer>f2e-research · AI Skills 日報 · 2026-11-15 2026-11-15 19:16:53 (UTC)</footer>
+
+</div>
+
+<script>
+(function(){
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#ranking .card'));
+  var platformBtns = Array.prototype.slice.call(document.querySelectorAll('.chip[data-filter]'));
+  var newBtn = document.getElementById('newToggle');
+  var countEl = document.getElementById('count');
+  var state = { platform: 'all', onlyNew: false };
+
+  function render(){
+    var shown = 0;
+    cards.forEach(function(c){
+      var okP = state.platform === 'all' || (c.getAttribute('data-platforms') || '').split(' ').indexOf(state.platform) !== -1;
+      var okN = !state.onlyNew || c.getAttribute('data-new') === '1';
+      var show = okP && okN;
+      c.classList.toggle('hidden', !show);
+      if (show) shown++;
+    });
+    countEl.textContent = '顯示 ' + shown + ' / ' + cards.length + ' 筆';
+  }
+
+  platformBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      state.platform = b.getAttribute('data-filter') === 'all' ? 'all' : b.getAttribute('data-filter');
+      platformBtns.forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      render();
+    });
+  });
+  newBtn.addEventListener('click', function(){
+    state.onlyNew = !state.onlyNew;
+    newBtn.setAttribute('aria-pressed', state.onlyNew ? 'true' : 'false');
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
