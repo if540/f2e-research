@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Skills 熱門排行 — 2026-11-22</title>
+<style>
+  :root{
+    --bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;
+    --blue:#58a6ff;--purple:#bc8cff;--green:#3fb950;--orange:#f0883e;--teal:#39d5c5;
+    --text:#e6edf3;--muted:#8b949e;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#f6f8fa;--surface:#ffffff;--surface2:#eef1f5;--border:#d0d7de;
+      --blue:#0969da;--purple:#8250df;--green:#1a7f37;--orange:#bc4c00;--teal:#0f766e;
+      --text:#1f2328;--muted:#59636e;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#f6f8fa;--surface:#ffffff;--surface2:#eef1f5;--border:#d0d7de;
+    --blue:#0969da;--purple:#8250df;--green:#1a7f37;--orange:#bc4c00;--teal:#0f766e;
+    --text:#1f2328;--muted:#59636e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;line-height:1.6;padding:0 16px 48px}
+  .wrap{max-width:1100px;margin:0 auto}
+  header{padding:32px 0 20px;border-bottom:1px solid var(--border);margin-bottom:20px}
+  .eyebrow{color:var(--purple);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+  h1{font-size:clamp(24px,4vw,34px);margin:6px 0 8px}
+  .lead{color:var(--muted);font-size:15px}
+  .stamp{margin-top:12px;font-size:13px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+  .stamp b{color:var(--text);font-weight:600}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 8px}
+  .toolbar .label{color:var(--muted);font-size:13px;margin-right:4px}
+  .chip{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:999px;padding:6px 14px;font-size:14px;cursor:pointer;font-family:inherit}
+  .chip[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+  .chip.new-chip[aria-pressed="true"]{background:var(--orange);border-color:var(--orange)}
+  .count{color:var(--muted);font-size:13px;margin-left:auto}
+  .section-title{font-size:20px;margin:36px 0 6px;display:flex;align-items:center;gap:10px}
+  .section-title::before{content:"";width:4px;height:20px;background:var(--teal);border-radius:2px}
+  .section-note{color:var(--muted);font-size:13px;margin-bottom:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;position:relative;filter:grayscale(var(--g,0))}
+  .card.hidden{display:none}
+  .top{display:flex;align-items:flex-start;gap:12px}
+  .rank{flex:0 0 auto;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:700;font-family:ui-monospace,Menlo,monospace;background:var(--surface2);color:var(--blue)}
+  .rank.top3{background:var(--orange);color:#fff}
+  .name{font-weight:600;font-size:16px;word-break:break-word;font-family:ui-monospace,Menlo,monospace}
+  .repo{color:var(--muted);font-size:12px;word-break:break-all}
+  .badges{display:flex;flex-wrap:wrap;gap:6px}
+  .badge{font-size:11px;padding:2px 8px;border-radius:6px;border:1px solid var(--border);color:var(--muted)}
+  .badge.cc{color:var(--orange);border-color:var(--orange)}
+  .badge.cp{color:var(--blue);border-color:var(--blue)}
+  .badge.cx{color:var(--green);border-color:var(--green)}
+  .badge.new{background:var(--orange);color:#fff;border-color:var(--orange);font-weight:700}
+  .desc{font-size:14px;color:var(--text)}
+  .use{font-size:13px;color:var(--muted);border-left:3px solid var(--border);padding-left:10px}
+  .use b{color:var(--teal);font-weight:600}
+  .metric{font-size:12px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+  .metric b{color:var(--text)}
+  .note{margin-top:28px;font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+  .note h3{font-size:14px;color:var(--text);margin-bottom:6px}
+  .note ul{padding-left:18px}
+  .note a{color:var(--blue)}
+  .empty{display:none;color:var(--muted);padding:24px 0}
+  .empty.show{display:block}
+  footer{margin-top:40px;color:var(--muted);font-size:12px;text-align:center}
+  @media (max-width:480px){ .count{margin-left:0;width:100%} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Daily AI Skills Report</div>
+  <h1>AI Skills 熱門排行</h1>
+  <p class="lead">Claude Code · GitHub Copilot · OpenAI Codex 之熱門 skills 與自動化指令，依熱度與實用性排序（不分類）。</p>
+  <div class="stamp">報告生成時間 <b>2026-11-22 19:15:06 UTC</b> ・ 資料窗口：當日快照（見文末說明）</div>
+</header>
+
+<div class="toolbar" role="group" aria-label="篩選">
+  <span class="label">平台</span>
+  <button class="chip" data-filter="platform" data-value="all" aria-pressed="true">全部</button>
+  <button class="chip" data-filter="platform" data-value="cc" aria-pressed="false">Claude Code</button>
+  <button class="chip" data-filter="platform" data-value="cp" aria-pressed="false">GitHub Copilot</button>
+  <button class="chip" data-filter="platform" data-value="cx" aria-pressed="false">Codex</button>
+  <span class="label" style="margin-left:12px">狀態</span>
+  <button class="chip new-chip" data-filter="new" data-value="new" aria-pressed="false">★ 新上榜 (New)</button>
+  <span class="count" id="count"></span>
+</div>
+
+<h2 class="section-title">TOP 20 熱門 Skills 排行</h2>
+<p class="section-note">排名依熱度（安裝數、成長速度）與實用性綜合判斷。第 11–20 名依序灰度遞增（#11 灰度 0 → #20 灰度 1）。</p>
+
+<div class="grid" id="main-grid">
+
+  <!-- 1 -->
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank top3">01</div><div>
+      <div class="name">find-skills</div><div class="repo">vercel-labs/skills</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">讓 agent 依任務自動搜尋並安裝合適的 skill，是 skills 生態的入口型工具。</div>
+    <div class="use"><b>應用場景：</b>不確定有哪些 skill 可用時，先讓 agent 搜尋再安裝。</div>
+    <div class="metric">全站安裝 <b>≈ 4.5M</b> ・ skills.sh All-Time</div>
+  </article>
+
+  <!-- 2 -->
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank top3">02</div><div>
+      <div class="name">hyperframes-cli</div><div class="repo">heygen-com/hyperframes</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">以 HTML 描述影片內容並由 CLI 轉譯為影片的工作流程 skill。</div>
+    <div class="use"><b>應用場景：</b>用程式化方式產生產品演示、社群短片、動態圖卡。</div>
+    <div class="metric">全站安裝 <b>≈ 1.7M</b> ・ skills.sh All-Time</div>
+  </article>
+
+  <!-- 3 -->
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank top3">03</div><div>
+      <div class="name">agent-browser</div><div class="repo">vercel-labs/agent-browser</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span><span class="badge cc">CC 90天 #1</span></div>
+    <div class="desc">讓 agent 操作真實瀏覽器：開頁、點擊、填表、擷取內容。</div>
+    <div class="use"><b>應用場景：</b>E2E 驗證、爬取需登入頁面、自動化網頁流程。</div>
+    <div class="metric">全站安裝 <b>≈ 1.6M</b> ・ CC 90天 <b>447</b></div>
+  </article>
+
+  <!-- 4 -->
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank top3">04</div><div>
+      <div class="name">hyperframes</div><div class="repo">heygen-com/hyperframes</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span><span class="badge cc">CC 90天 #2</span></div>
+    <div class="desc">hyperframes 主體 skill，涵蓋影片框架與製作流程。</div>
+    <div class="use"><b>應用場景：</b>搭配 CLI 版本，完成從腳本到成片的完整流程。</div>
+    <div class="metric">全站安裝 <b>≈ 1.6M</b> ・ CC 90天 <b>202</b></div>
+  </article>
+
+  <!-- 5 -->
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank top3">05</div><div>
+      <div class="name">grill-me</div><div class="repo">mattpocock/skills</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">在寫程式前，像面試官一樣逐一追問計畫中的假設與盲點，直到需求清楚。</div>
+    <div class="use"><b>應用場景：</b>開工前釐清需求、設計決策前壓力測試方案。</div>
+    <div class="metric">全站安裝 <b>≈ 1.6M</b> ・ skills.sh All-Time</div>
+  </article>
+
+  <!-- 6 -->
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank">06</div><div>
+      <div class="name">design-mobile-apps</div><div class="repo">designed-by-ai/skills</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">引導 agent 完成行動 App 的介面設計與版面規範。</div>
+    <div class="use"><b>應用場景：</b>從零開始設計 iOS / Android 介面、統一設計語言。</div>
+    <div class="metric">全站安裝 <b>≈ 1.6M</b> ・ skills.sh All-Time</div>
+  </article>
+
+  <!-- 7 -->
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank">07</div><div>
+      <div class="name">media-use</div><div class="repo">heygen-com/hyperframes</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">處理圖片、影音素材的擷取、轉換與組合流程。</div>
+    <div class="use"><b>應用場景：</b>為文章或產品頁批次準備媒體素材。</div>
+    <div class="metric">全站安裝 <b>≈ 1.5M</b> ・ skills.sh All-Time</div>
+  </article>
+
+  <!-- 8 -->
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank">08</div><div>
+      <div class="name">reddit-automation</div><div class="repo">flowkit-labs/skills</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">自動化 Reddit 的搜尋、監看與互動流程。</div>
+    <div class="use"><b>應用場景：</b>追蹤產品討論串、彙整社群回饋。</div>
+    <div class="metric">全站安裝 <b>≈ 1.5M</b> ・ skills.sh All-Time</div>
+  </article>
+
+  <!-- 9 -->
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank">09</div><div>
+      <div class="name">hyperframes-registry</div><div class="repo">heygen-com/hyperframes</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">管理 hyperframes 的元件與模板註冊表。</div>
+    <div class="use"><b>應用場景：</b>重複使用既有影片模板，減少重複設定。</div>
+    <div class="metric">全站安裝 <b>≈ 1.4M</b> ・ skills.sh All-Time</div>
+  </article>
+
+  <!-- 10 -->
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank">10</div><div>
+      <div class="name">grill-with-docs</div><div class="repo">mattpocock/skills</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">與 grill-me 相近，但會以既有文件作為追問依據，檢查設計文件與實作是否一致。</div>
+    <div class="use"><b>應用場景：</b>審閱 PRD / ADR 時，逐條比對文件與現況。</div>
+    <div class="metric">全站安裝 <b>≈ 1.4M</b> ・ skills.sh All-Time</div>
+  </article>
+
+  <!-- 11 灰度 0 -->
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank">11</div><div>
+      <div class="name">frontend-design</div><div class="repo">anthropics/skills</div></div></div>
+    <div class="badges"><span class="badge cc">Claude Code</span></div>
+    <div class="desc">Anthropic 官方前端設計 skill，引導產出有風格、不落俗套的介面。</div>
+    <div class="use"><b>應用場景：</b>快速產出具設計感的 landing page 與 UI 元件。</div>
+    <div class="metric">全站安裝 <b>≈ 742K</b> ・ 依第三方分析</div>
+  </article>
+
+  <!-- 12 灰度 0.11 -->
+  <article class="card" data-platform="cc" data-new="0" style="--g:0.11">
+    <div class="top"><div class="rank">12</div><div>
+      <div class="name">superpowers</div><div class="repo">obra/superpowers</div></div></div>
+    <div class="badges"><span class="badge cc">Claude Code</span></div>
+    <div class="desc">把 agent 由腦力激盪推進到規格、測試先行與分步實作的工作流程套件。</div>
+    <div class="use"><b>應用場景：</b>中大型功能開發，確保先設計、再測試、再實作。</div>
+    <div class="metric">GitHub Stars <b>高</b> ・ 社群廣泛引用</div>
+  </article>
+
+  <!-- 13 灰度 0.22 -->
+  <article class="card" data-platform="cc" data-new="0" style="--g:0.22">
+    <div class="top"><div class="rank">13</div><div>
+      <div class="name">caveman</div><div class="repo">社群熱門 skill</div></div></div>
+    <div class="badges"><span class="badge cc">Claude Code</span></div>
+    <div class="desc">讓 Claude 的散文回應精簡，但保留程式碼與指令原樣，大幅降低輸出 token。</div>
+    <div class="use"><b>應用場景：</b>長時間自動化任務，控制 token 成本與回應長度。</div>
+    <div class="metric">用途導向 ・ 依社群評價</div>
+  </article>
+
+  <!-- 14 灰度 0.33 -->
+  <article class="card" data-platform="cp" data-new="0" style="--g:0.33">
+    <div class="top"><div class="rank">14</div><div>
+      <div class="name">excalidraw-diagram-generator</div><div class="repo">github/awesome-copilot</div></div></div>
+    <div class="badges"><span class="badge cp">GitHub Copilot</span><span class="badge cc">CC 90天 #8</span></div>
+    <div class="desc">依文字描述產生 Excalidraw 架構圖與流程圖。</div>
+    <div class="use"><b>應用場景：</b>設計文件、架構評審時快速畫出系統圖。</div>
+    <div class="metric">CC 90天 <b>14</b> ・ 官方 awesome-copilot 收錄</div>
+  </article>
+
+  <!-- 15 灰度 0.44 -->
+  <article class="card" data-platform="cc" data-new="0" style="--g:0.44">
+    <div class="top"><div class="rank">15</div><div>
+      <div class="name">browser-use</div><div class="repo">browser-use/browser-use</div></div></div>
+    <div class="badges"><span class="badge cc">Claude Code</span></div>
+    <div class="desc">以自然語言驅動瀏覽器代理人完成網頁任務。</div>
+    <div class="use"><b>應用場景：</b>跨站比價、表單自動填寫、資料擷取。</div>
+    <div class="metric">CC 90天 <b>11</b></div>
+  </article>
+
+  <!-- 16 灰度 0.56 -->
+  <article class="card" data-platform="cc" data-new="0" style="--g:0.56">
+    <div class="top"><div class="rank">16</div><div>
+      <div class="name">orchestration</div><div class="repo">stablyai/orca</div></div></div>
+    <div class="badges"><span class="badge cc">Claude Code</span></div>
+    <div class="desc">協調多個 agent 平行工作並彙整結果的編排指令。</div>
+    <div class="use"><b>應用場景：</b>大型重構時分派子任務給多個 agent 並行處理。</div>
+    <div class="metric">CC 90天 <b>7</b></div>
+  </article>
+
+  <!-- 17 灰度 0.67 — 新上榜 -->
+  <article class="card" data-platform="cc" data-new="1" style="--g:0.67">
+    <div class="top"><div class="rank">17</div><div>
+      <div class="name">security-audit-skill</div><div class="repo">cloudflare</div></div></div>
+    <div class="badges"><span class="badge cc">Claude Code</span><span class="badge new">NEW</span></div>
+    <div class="desc">依安全檢查清單審核程式碼，找出常見漏洞與設定風險。</div>
+    <div class="use"><b>應用場景：</b>合併前安全審查、弱點初篩。</div>
+    <div class="metric">本週星數成長最快（週報統計）</div>
+  </article>
+
+  <!-- 18 灰度 0.78 -->
+  <article class="card" data-platform="cc" data-new="0" style="--g:0.78">
+    <div class="top"><div class="rank">18</div><div>
+      <div class="name">chief-of-staff</div><div class="repo">alirezarezvani/claude-skills</div></div></div>
+    <div class="badges"><span class="badge cc">Claude Code</span></div>
+    <div class="desc">以幕僚角色整理待辦、會議與決策紀錄的工作流程 skill。</div>
+    <div class="use"><b>應用場景：</b>每日站會前彙整進度、追蹤待決事項。</div>
+    <div class="metric">CC 90天 <b>18</b></div>
+  </article>
+
+  <!-- 19 灰度 0.89 -->
+  <article class="card" data-platform="cc" data-new="0" style="--g:0.89">
+    <div class="top"><div class="rank">19</div><div>
+      <div class="name">logo-generator</div><div class="repo">op7418/logo-generator-skill</div></div></div>
+    <div class="badges"><span class="badge cc">Claude Code</span></div>
+    <div class="desc">依品牌描述產生 logo 草稿與變體。</div>
+    <div class="use"><b>應用場景：</b>原型階段快速產出品牌視覺方向。</div>
+    <div class="metric">CC 90天 <b>9</b></div>
+  </article>
+
+  <!-- 20 灰度 1 -->
+  <article class="card" data-platform="cc" data-new="0" style="--g:1">
+    <div class="top"><div class="rank">20</div><div>
+      <div class="name">instagram-automation</div><div class="repo">sickn33/antigravity-awesome-skills</div></div></div>
+    <div class="badges"><span class="badge cc">Claude Code</span></div>
+    <div class="desc">自動化 Instagram 內容的發布與排程流程。</div>
+    <div class="use"><b>應用場景：</b>批次排程社群貼文、整理素材與文案。</div>
+    <div class="metric">CC 90天 <b>6</b></div>
+  </article>
+
+</div>
+<p class="empty" id="empty-main">沒有符合條件的項目。</p>
+
+<h2 class="section-title">特別區：重視軟體設計哲學的 Skills</h2>
+<p class="section-note">實質幫助工程師產出良好程式碼的 skills（設計原則、命名、複雜度控制）。此區獨立排序，不計入 TOP 20。</p>
+
+<div class="grid">
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank top3">D1</div><div>
+      <div class="name">software-design-philosophy</div><div class="repo">wondelai/skills</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">以 John Ousterhout《A Philosophy of Software Design》為基礎：深模組、資訊隱藏、策略性程式設計，並列出複雜度的警訊。</div>
+    <div class="use"><b>應用場景：</b>設計模組邊界、檢視介面是否過度暴露實作細節。</div>
+  </article>
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank top3">D2</div><div>
+      <div class="name">philosophy-software-design</div><div class="repo">handxr/skills</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">同樣取材 Ousterhout 的觀點，但採務實取向：優先處理影響最大的問題，而非教條式套用。</div>
+    <div class="use"><b>應用場景：</b>日常 code review 中快速抓出高影響的設計問題。</div>
+  </article>
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank">D3</div><div>
+      <div class="name">clean-code</div><div class="repo">bsene/skills</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">主張「程式碼是給人讀、改、刪的」，涵蓋設計、命名、複雜度與註解檢查。</div>
+    <div class="use"><b>應用場景：</b>新功能完成後的自我審查清單。</div>
+  </article>
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank">D4</div><div>
+      <div class="name">clean-code-principles</div><div class="repo">asyrafhussin/agent-skills</div></div></div>
+    <div class="badges"><span class="badge cc">Claude Code</span></div>
+    <div class="desc">整理 SOLID、DRY、KISS、YAGNI 與常見設計模式的實務指引。</div>
+    <div class="use"><b>應用場景：</b>重構舊程式碼時，依原則逐項判斷。</div>
+    <div class="metric">約 1.2k 安裝 ・ 62 Stars（列表資料）</div>
+  </article>
+  <article class="card" data-platform="gen" data-new="0" style="--g:0">
+    <div class="top"><div class="rank">D5</div><div>
+      <div class="name">clean-code</div><div class="repo">wondelai/clean-code</div></div></div>
+    <div class="badges"><span class="badge">通用 SKILL.md</span></div>
+    <div class="desc">著重命名的紀律、小函式與清楚的錯誤處理。</div>
+    <div class="use"><b>應用場景：</b>讓 agent 產出的程式碼可讀性更穩定。</div>
+  </article>
+</div>
+
+<section class="note">
+  <h3>資料說明與限制</h3>
+  <ul>
+    <li><b>排名方式：</b>TOP 20 為熱度與實用性的綜合判斷，不分類；Top 10 以 skills.sh 全站安裝數為主要依據，第 11 名起以 Claude Marketplaces 90 天安裝數與第三方週報補充。兩種計數口徑不同，數字不可直接比較。</li>
+  <li><b>平台覆蓋：</b>Claude Code 資料最完整。GitHub Copilot 與 Codex 本次可靠的排行數據不足，僅收錄可明確驗證的項目；Copilot 與 Codex 皆支援 SKILL.md 格式，故標示「通用」者未逐一驗證其相容性。</li>
+  <li><b>新上榜 (New)：</b>依週報「本週星數成長最快」之描述標示，無法確認是否首次出現於榜單。</li>
+  <li><b>參考來源：</b><a href="https://skills.sh/">skills.sh</a>、<a href="https://claudemarketplaces.com/best/skills/automation">Claude Marketplaces · Automation</a>、<a href="https://github.com/wondelai/skills">wondelai/skills</a>、<a href="https://developers.openai.com/codex/skills">OpenAI Codex · Agent Skills</a>、<a href="https://docs.github.com/en/copilot/concepts/agents/about-agent-skills">GitHub Copilot · About agent skills</a>。</li>
+  </ul>
+</section>
+
+<footer>AI Skills Daily Report · 2026-11-22 19:15:06 UTC</footer>
+
+</div>
+
+<script>
+(function(){
+  var state = { platform: 'all', onlyNew: false };
+  var chips = document.querySelectorAll('.chip');
+  var cards = document.querySelectorAll('#main-grid .card');
+  var count = document.getElementById('count');
+  var empty = document.getElementById('empty-main');
+  function apply(){
+    var shown = 0;
+    cards.forEach(function(c){
+      var okP = state.platform === 'all' || c.dataset.platform === state.platform || c.dataset.platform === 'gen';
+      var okN = !state.onlyNew || c.dataset.new === '1';
+      var ok = okP && okN;
+      c.classList.toggle('hidden', !ok);
+      if(ok) shown++;
+    });
+    count.textContent = '顯示 ' + shown + ' / ' + cards.length;
+    empty.classList.toggle('show', shown === 0);
+  }
+  chips.forEach(function(ch){
+    ch.addEventListener('click', function(){
+      var f = ch.dataset.filter, v = ch.dataset.value;
+      if(f === 'platform'){
+        state.platform = v;
+        document.querySelectorAll('.chip[data-filter="platform"]').forEach(function(x){
+          x.setAttribute('aria-pressed', x === ch ? 'true' : 'false');
+        });
+      } else if(f === 'new'){
+        state.onlyNew = !state.onlyNew;
+        ch.setAttribute('aria-pressed', state.onlyNew ? 'true' : 'false');
+      }
+      apply();
+    });
+  });
+  apply();
+})();
+</script>
+</body>
+</html>
